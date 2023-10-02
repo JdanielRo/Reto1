@@ -3,10 +3,10 @@ package com.txurdinaga.reto1
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class LogInActivity : AppCompatActivity() {
+class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.login)
 
     }
 }
