@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "496714475823",
+    "project_id": "reto1-d31c7",
+    "storage_bucket": "reto1-d31c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496714475823:android:a8d3bf30091c3aaf5f19da",
+        "android_client_info": {
+          "package_name": "com.txurdinaga.reto1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "496714475823-tghpsatsp5t6sr1a79v41j17jmkkkijp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgdlTfUf5pkG2HEh7uUBr97o7fs0MV2-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "496714475823-tghpsatsp5t6sr1a79v41j17jmkkkijp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
