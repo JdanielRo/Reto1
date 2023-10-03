@@ -1,3 +1,4 @@
+
 package com.txurdinaga.reto1
 
 import android.content.Intent
@@ -5,40 +6,40 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 
-class Home : AppCompatActivity() {
+class Carrito : AppCompatActivity() {
 
-    private lateinit var home_home: ImageView
-    private lateinit var home_pedidos: ImageView
-    private lateinit var home_carrito: ImageView
-    private lateinit var home_mi_cuenta: ImageView
 
+    private lateinit var carrito_home: ImageView
+    private lateinit var carrito_pedidos: ImageView
+    private lateinit var carrito_carrito: ImageView
+    private lateinit var carrito_mi_cuenta: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home)
+        setContentView(R.layout.carrito)
 
         // Asignar vistas a las variables
-        home_home = findViewById(R.id.home_home)
-        home_pedidos = findViewById(R.id.home_pedidos)
-        home_carrito = findViewById(R.id.home_carrito)
-        home_mi_cuenta = findViewById(R.id.home_mi_cuenta)
+        carrito_home = findViewById(R.id.carrito_home)
+        carrito_pedidos = findViewById(R.id.carrito_pedidos)
+        carrito_carrito = findViewById(R.id.carrito_carrito)
+        carrito_mi_cuenta = findViewById(R.id.carrito_mi_cuenta)
 
         // Configurar clics en las imágenes
-        home_home.setOnClickListener {
+        carrito_home.setOnClickListener {
             abrirHome()
         }
-        home_pedidos.setOnClickListener {
+        carrito_pedidos.setOnClickListener {
             abrirPedidos()
         }
-        home_carrito.setOnClickListener {
+        carrito_carrito.setOnClickListener {
             abrirCarrito()
         }
-        home_mi_cuenta.setOnClickListener {
+        carrito_mi_cuenta.setOnClickListener {
             abrirCuenta()
         }
     }
 
     private fun abrirHome() {
-        // Reemplazar Home::class.java con la actividad de inicio deseada
+        // Reemplazar carrito::class.java con la actividad de inicio deseada
         val intent = Intent(this, Home::class.java)
         startActivity(intent)
     }

@@ -29,11 +29,11 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/home_home"
+                android:id="@+id/carrito_home"
                 android:layout_width="60dp"
                 android:layout_height="49dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/home_verde" />
+                app:srcCompat="@drawable/home_blanco" />
 
             <Space
                 android:layout_width="50dp"
@@ -41,7 +41,7 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/home_pedidos"
+                android:id="@+id/carrito_pedidos"
                 android:layout_width="56dp"
                 android:layout_height="49dp"
                 android:layout_weight="1"
@@ -53,11 +53,11 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/home_carrito"
+                android:id="@+id/carrito_carrito"
                 android:layout_width="61dp"
                 android:layout_height="49dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/carrito_blanco" />
+                app:srcCompat="@drawable/carrito_verde" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -86,12 +86,12 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/textView_home_home"
+            android:id="@+id/textView_carrito_carrito"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/home"
+            android:text="@string/carrito"
             android:textColor="@color/light_green"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -103,7 +103,7 @@
             android:layout_weight="1" />
 
         <ImageView
-            android:id="@+id/home_mi_cuenta"
+            android:id="@+id/carrito_mi_cuenta"
             android:layout_width="34dp"
             android:layout_height="35dp"
             android:layout_weight="1"

@@ -1,3 +1,4 @@
+
 package com.txurdinaga.reto1
 
 import android.content.Intent
@@ -5,40 +6,41 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 
-class Home : AppCompatActivity() {
+class Mi_cuenta : AppCompatActivity() {
 
-    private lateinit var home_home: ImageView
-    private lateinit var home_pedidos: ImageView
-    private lateinit var home_carrito: ImageView
-    private lateinit var home_mi_cuenta: ImageView
 
+    private lateinit var mi_cuenta_home: ImageView
+    private lateinit var mi_cuenta_pedidos: ImageView
+    private lateinit var mi_cuenta_carrito: ImageView
+    private lateinit var mi_cuenta_mi_cuenta: ImageView
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home)
+        setContentView(R.layout.mi_cuenta)
 
         // Asignar vistas a las variables
-        home_home = findViewById(R.id.home_home)
-        home_pedidos = findViewById(R.id.home_pedidos)
-        home_carrito = findViewById(R.id.home_carrito)
-        home_mi_cuenta = findViewById(R.id.home_mi_cuenta)
+        mi_cuenta_home = findViewById(R.id.mi_cuenta_home)
+        mi_cuenta_pedidos = findViewById(R.id.mi_cuenta_pedidos)
+        mi_cuenta_carrito = findViewById(R.id.mi_cuenta_carrito)
+        mi_cuenta_mi_cuenta = findViewById(R.id.mi_cuenta_mi_cuenta)
 
         // Configurar clics en las imágenes
-        home_home.setOnClickListener {
+        mi_cuenta_home.setOnClickListener {
             abrirHome()
         }
-        home_pedidos.setOnClickListener {
+        mi_cuenta_pedidos.setOnClickListener {
             abrirPedidos()
         }
-        home_carrito.setOnClickListener {
+        mi_cuenta_carrito.setOnClickListener {
             abrirCarrito()
         }
-        home_mi_cuenta.setOnClickListener {
+        mi_cuenta_mi_cuenta.setOnClickListener {
             abrirCuenta()
         }
     }
 
     private fun abrirHome() {
-        // Reemplazar Home::class.java con la actividad de inicio deseada
+        // Reemplazar mi_cuenta::class.java con la actividad de inicio deseada
         val intent = Intent(this, Home::class.java)
         startActivity(intent)
     }

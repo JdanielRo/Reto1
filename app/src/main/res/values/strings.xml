@@ -4,4 +4,21 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="register">REGISTRARSE</string>
+    <string name="email">Correo</string>
+    <string name="password">Contraseña</string>
+    <string name="repeatPassword">Repetir contraseña</string>
+    <string name="description">Logo</string>
+    <!--<string name="errorRegistroContraseñaNoIgual">Error las contraseñas no son iguales</string>
+    <string name="errorRegistroParametroVacio">Error, no puede haber ningún campo vacio</string>-->
+    <string name="credenciales_no_validas">Las credenciales proporcionadas no son válidas o tienen un formato incorrecto.</string>
+    <string name="registration_failed">El registro ha fallado. Por favor, verifica tus datos.</string>
+    <string name="weak_password">La contraseña es débil. Debe tener al menos 6 caracteres.</string>
+    <string name="invalid_email">El correo electrónico no es válido.</string>
+    <string name="registroCompletado">El registro ha sido completado.</string>
+    <string name="emailDuplicado">Este correo electronico ya está registrado.</string>
+    <string name="home">Home</string>
+    <string name="carrito">Carrito</string>
+    <string name="pedido">Pedido</string>
+    <string name="mi_cuenta">Mi Cuenta</string>
 </resources>
