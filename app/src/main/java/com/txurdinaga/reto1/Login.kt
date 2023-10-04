@@ -96,9 +96,9 @@ class Login : AppCompatActivity() {
 
             // Si el usuario no está autenticado con correo electrónico,
             // inicia sesión o regístrate con la cuenta de Google.
-            auth.signInWithCredential(credential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
 
 
                         // esto vincula el usuario
@@ -120,14 +120,14 @@ class Login : AppCompatActivity() {
 
 
 
-                        val user = auth.currentUser
-                        Toast.makeText(this, "Inició sesión como ${user?.displayName}", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, Home::class.java))
-                        finish()
-                    } else {
-                        Toast.makeText(this, "Error de autenticación", Toast.LENGTH_SHORT).show()
-                    }
+                    val user = auth.currentUser
+                    Toast.makeText(this, "Inició sesión como ${user?.displayName}", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, Home::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this, "Error de autenticación", Toast.LENGTH_SHORT).show()
                 }
+            }
 
     }
 
