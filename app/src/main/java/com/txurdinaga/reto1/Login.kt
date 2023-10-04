@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -13,6 +14,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+
 
 class Login : AppCompatActivity() {
 
