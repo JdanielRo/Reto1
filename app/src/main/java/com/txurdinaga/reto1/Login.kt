@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
@@ -101,11 +102,10 @@ class Login : AppCompatActivity() {
                 if (task.isSuccessful) {
 
 
-                        // esto vincula el usuario
-                        // El usuario ya está autenticado con correo electrónico,
-                        // vincula la cuenta de Google a la cuenta existente.
-                        /*
-                        currentUser.linkWithCredential(credential)
+                        val correo = editTextCorreo.text.toString()
+                        val contrasena = editTextContraseña.text.toString()
+                        val credential1 = EmailAuthProvider.getCredential(correo, contrasena)
+                        currentUser!!.linkWithCredential(credential1)
                             .addOnCompleteListener(this) { task ->
                                 if (task.isSuccessful) {
                                     val user = task.result?.user
@@ -115,8 +115,7 @@ class Login : AppCompatActivity() {
                                 } else {
                                     Toast.makeText(this, "Error al vincular la cuenta de Google", Toast.LENGTH_SHORT).show()
                                 }
-                            }*/
-                         // hasta aqui
+                            }
 
 
 
@@ -136,6 +135,8 @@ class Login : AppCompatActivity() {
         val contraseña = editTextContraseña.text.toString()
 
         if (correo.isNotEmpty() && contraseña.isNotEmpty()) {
+            //val credential = GoogleAuthProvider.getCredential(googleIdToken, null)
+
             FirebaseAuth.getInstance().signInWithEmailAndPassword(correo, contraseña)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
