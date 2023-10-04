@@ -34,7 +34,7 @@ class Login : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            startActivity(Intent(this, Home::class.java))
+            startActivity(Intent(this, Main::class.java))
             finish()
         }
 
@@ -110,7 +110,7 @@ class Login : AppCompatActivity() {
                                 if (task.isSuccessful) {
                                     val user = task.result?.user
                                     Toast.makeText(this, "Cuenta de Google vinculada a ${user?.displayName}", Toast.LENGTH_SHORT).show()
-                                    startActivity(Intent(this, Home::class.java))
+                                    startActivity(Intent(this, Main::class.java))
                                     finish()
                                 } else {
                                     Toast.makeText(this, "Error al vincular la cuenta de Google", Toast.LENGTH_SHORT).show()
@@ -121,7 +121,7 @@ class Login : AppCompatActivity() {
 
                     val user = auth.currentUser
                     Toast.makeText(this, "Inició sesión como ${user?.displayName}", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, Home::class.java))
+                    startActivity(Intent(this, Main::class.java))
                     finish()
                 } else {
                     Toast.makeText(this, "Error de autenticación", Toast.LENGTH_SHORT).show()
@@ -142,7 +142,7 @@ class Login : AppCompatActivity() {
                     if (task.isSuccessful) {
 
                         // Inicio de sesión exitoso, redirige al usuario a la pantalla Home.
-                        val intent = Intent(this, Home::class.java)
+                        val intent = Intent(this, Main::class.java)
                         startActivity(intent)
                     } else {
                         // Fallo el inicio de sesión, muestra un mensaje de error al usuario.

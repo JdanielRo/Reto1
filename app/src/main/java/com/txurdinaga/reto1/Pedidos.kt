@@ -1,60 +1,59 @@
 package com.txurdinaga.reto1
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 
-class Pedidos : AppCompatActivity() {
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
 
-    private lateinit var pedidos_home: ImageView
-    private lateinit var pedidos_pedidos: ImageView
-    private lateinit var pedidos_carrito: ImageView
-    private lateinit var pedidos_mi_cuenta: ImageView
-    
+/**
+ * A simple [Fragment] subclass.
+ * Use the [Pedidos.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+class Pedidos : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.pedidos)
-
-        // Asignar vistas a las variables
-        pedidos_home = findViewById(R.id.pedidos_home)
-        pedidos_pedidos = findViewById(R.id.pedidos_pedidos)
-        pedidos_carrito = findViewById(R.id.pedidos_carrito)
-        pedidos_mi_cuenta = findViewById(R.id.pedidos_mi_cuenta)
-
-        // Configurar clics en las imágenes
-        pedidos_home.setOnClickListener {
-            abrirHome()
-        }
-        pedidos_pedidos.setOnClickListener {
-            abrirPedidos()
-        }
-        pedidos_carrito.setOnClickListener {
-            abrirCarrito()
-        }
-        pedidos_mi_cuenta.setOnClickListener {
-            abrirCuenta()
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
         }
     }
 
-    private fun abrirHome() {
-        // Reemplazar pedidos::class.java con la actividad de inicio deseada
-        val intent = Intent(this, Home::class.java)
-        startActivity(intent)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_pedidos, container, false)
     }
 
-    private fun abrirPedidos() {
-        val intent = Intent(this, Pedidos::class.java)
-        startActivity(intent)
-    }
-
-    private fun abrirCarrito() {
-        val intent = Intent(this, Carrito::class.java)
-        startActivity(intent)
-    }
-
-    private fun abrirCuenta() {
-        val intent = Intent(this, Mi_cuenta::class.java)
-        startActivity(intent)
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment Pedidos.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            Pedidos().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 }
