@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Definición de dimensiones -->
+    <dimen name="space_height">15dp</dimen>
+    <dimen name="space_height_ultima">100dp</dimen>
+    <!-- Otras dimensiones -->
+</resources>
