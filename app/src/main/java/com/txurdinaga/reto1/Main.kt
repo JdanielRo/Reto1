@@ -1,66 +1,46 @@
 package com.txurdinaga.reto1
 
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Resources
 import android.os.Bundle
 import android.widget.ImageView
-import androidx.fragment.app.commit
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Locale
 
-
 class Main : AppCompatActivity() {
 
-
     lateinit var navigation: BottomNavigationView
+    private lateinit var sharedPref: SharedPreferences
+    private var currentFragment: Fragment? = null
 
     private val onNavMenuListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
-        when (item.itemId) {
-
-            R.id.itemHome -> {
-                supportFragmentManager.commit{
-                    replace(R.id.frameContainer, Home())
-                    addToBackStack(null)
-
+            when (item.itemId) {
+                R.id.itemHome -> {
+                    showFragment(Home())
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
-            }
-
-
-            R.id.itemPedidos -> {
-                supportFragmentManager.commit {
-                    replace(R.id.frameContainer, Pedidos())
-                    addToBackStack(null)
-
+                R.id.itemPedidos -> {
+                    showFragment(Pedidos())
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
-            }
-
-
-            R.id.itemCarrito -> {
-                supportFragmentManager.commit {
-                    replace(R.id.frameContainer, Carrito())
-                    addToBackStack(null)
+                R.id.itemCarrito -> {
+                    showFragment(Carrito())
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
-            }
-
-            R.id.itemMiCuenta -> {
-                supportFragmentManager.commit{
-                    replace(R.id.frameContainer, MiCuenta())
-                    addToBackStack(null)
-
+                R.id.itemMiCuenta -> {
+                    showFragment(MiCuenta())
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
+                // Agrega más casos para otros elementos del menú de navegación si es necesario
             }
-
-            // Agrega más casos para otros elementos del menú de navegación si es necesario
-
+            false
         }
-        false
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,9 +49,14 @@ class Main : AppCompatActivity() {
         navigation = findViewById(R.id.navMenu)
         navigation.setOnNavigationItemSelectedListener(onNavMenuListener)
 
-        supportFragmentManager.commit {
-            replace(R.id.frameContainer, Home())
-            addToBackStack(null)
+        sharedPref = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+
+        val savedLanguage = sharedPref.getString("language", "es") ?: "es"
+        setAppLocale(savedLanguage)//muestra el idioma guardado
+
+        //Que por defecto la app se abra en home
+        if (savedInstanceState == null) {
+            showFragment(Home())
         }
 
         val englishButton = findViewById<ImageView>(R.id.imageViewEnglish)
@@ -79,25 +64,19 @@ class Main : AppCompatActivity() {
         val euskeraButton = findViewById<ImageView>(R.id.imageViewEuskera)
 
         englishButton.setOnClickListener {
-            // Cambiar el idioma a inglés
-            setAppLocale("en")
-            recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+            setAndApplyLanguage("en")
         }
 
         spanishButton.setOnClickListener {
-            // Cambiar el idioma a español
-            setAppLocale("es")
-            recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+            setAndApplyLanguage("es")
         }
 
         euskeraButton.setOnClickListener {
-            // Cambiar el idioma a euskera
-            setAppLocale("eu")
-            recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+            setAndApplyLanguage("eu")
         }
-
     }
 
+    //Configurar el idioma
     private fun setAppLocale(languageCode: String) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
@@ -105,4 +84,35 @@ class Main : AppCompatActivity() {
         config.locale = locale
         baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
     }
+
+    //Cambia el idioma de la aplicacion y lo confirma
+    private fun setAndApplyLanguage(languageCode: String) {
+        sharedPref.edit().putString("language", languageCode).apply()
+        setAppLocale(languageCode)
+        updateResources(languageCode)
+        recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+    }
+
+    //Actualizar los recursos string al idioma que selecciones
+    private fun updateResources(languageCode: String) {
+        val locale = Locale(languageCode)
+        val resources: Resources = resources
+        val configuration = Configuration(resources.configuration)
+        configuration.setLocale(locale)
+        baseContext.createConfigurationContext(configuration)
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+    }
+
+    //Esta función se utiliza para mostrar un fragmento en la actividad, para que no cambie al cambiar el idioma
+    private fun showFragment(fragment: Fragment) {
+        if (currentFragment != null) {
+            supportFragmentManager.beginTransaction().remove(currentFragment!!).commit()
+        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frameContainer, fragment)
+            .addToBackStack(null)
+            .commit()
+        currentFragment = fragment
+    }
 }
+
