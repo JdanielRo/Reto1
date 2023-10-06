@@ -28,9 +28,6 @@
             android:name=".Pedidos"
             android:exported="false" />
         <activity
-            android:name=".Registro"
-            android:exported="false" />
-        <activity
             android:name=".Home"
             android:exported="false" />
         <activity
