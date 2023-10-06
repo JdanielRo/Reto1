@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Reto1</string>
-    <string name="title_activity_home">Home</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <!--TITULOS DEL MENU-->
+    <string name="home">Home</string>
+    <string name="carrito">Cart</string>
+    <string name="pedido">Order</string>
+    <string name="mi_cuenta">My Account</string>
+
+    <!--INPUTS Y TITULOS DE BOTONES-->
     <string name="register">REGISTER</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
+    <string name="iniciar_sesion">SIGN IN</string>
+    <string name="email">Email</string><!--HINT-->
+    <string name="password">Password</string><!--HINT-->
+
+    <!--GOOGLE-->
     <string name="repeatPassword">Repeat Password</string>
     <string name="description">Logo</string>
     <string name="credenciales_no_validas">The provided credentials are not valid or have an incorrect format.</string>
@@ -16,9 +23,6 @@
     <string name="invalid_email">The email address is not valid.</string>
     <string name="registroCompletado">Registration completed.</string>
     <string name="emailDuplicado">This email address is already registered.</string>
-    <string name="home">Home</string>
-    <string name="carrito">Cart</string>
-    <string name="pedido">Order</string>
-    <string name="mi_cuenta">My Account</string>
     <string name="sign_up_with_google">Sign up with Google</string>
+
 </resources>

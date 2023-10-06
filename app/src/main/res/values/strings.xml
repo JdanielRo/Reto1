@@ -1,12 +1,19 @@
 <resources>
     <string name="app_name" translatable="false">Reto1</string>
-    <string name="title_activity_home">Home</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <!--TITULOS DEL MENU-->
+    <string name="home">Inicio</string>
+    <string name="carrito">Carrito</string>
+    <string name="pedido">Pedido</string>
+    <string name="mi_cuenta">Mi Cuenta</string>
+
+    <!--INPUTS Y TITULOS DE BOTONES-->
     <string name="register">REGISTRARSE</string>
-    <string name="email">Correo</string>
-    <string name="password">Contraseña</string>
+    <string name="iniciar_sesion">INICIAR SESIÓN</string>
+    <string name="email">Correo Electrónico</string><!--HINT-->
+    <string name="password">Contraseña</string><!--HINT-->
+
+    <!--GOOGLE-->
     <string name="repeatPassword">Repetir contraseña</string>
     <string name="description">Logo</string>
     <!--<string name="errorRegistroContraseñaNoIgual">Error las contraseñas no son iguales</string>
@@ -17,9 +24,6 @@
     <string name="invalid_email">El correo electrónico no es válido.</string>
     <string name="registroCompletado">El registro ha sido completado.</string>
     <string name="emailDuplicado">Este correo electronico ya está registrado.</string>
-    <string name="home">Home</string>
-    <string name="carrito">Carrito</string>
-    <string name="pedido">Pedido</string>
-    <string name="mi_cuenta">Mi Cuenta</string>
-    <string name="sign_up_with_google">Sign up with Google</string>
+    <string name="sign_up_with_google">Registarse con Google</string>
+
 </resources>

@@ -1,18 +1,23 @@
 package com.txurdinaga.reto1
 
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.commit
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import java.util.Locale
 
 
 class Login : AppCompatActivity() {
@@ -27,6 +32,8 @@ class Login : AppCompatActivity() {
     private lateinit var editTextContraseña: EditText
     private lateinit var txtRegistro: TextView
     private lateinit var botonRegisterGoogle: Button
+
+    lateinit var navigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +51,6 @@ class Login : AppCompatActivity() {
         btnInicioSesion = findViewById(R.id.btnInicioSesion)
         editTextCorreo = findViewById(R.id.editTextTextEmailAddress)
         editTextContraseña = findViewById(R.id.editTextTextPassword)
-        txtRegistro = findViewById(R.id.textView)
         botonRegisterGoogle = findViewById(R.id.signInWithGoogleButton)
 
         // Inicializar campos con valores de ejemplo (puedes eliminarlos en producción)
@@ -61,12 +67,34 @@ class Login : AppCompatActivity() {
             inicioSesion()
         }
 
-        // Configurar clic en el texto de registro
-        txtRegistro.setOnClickListener {
-            val intent = Intent(this, Registro::class.java)
-            startActivity(intent)
-        }
         botonRegisterGoogle.setOnClickListener { iniciarSesionGoogle() }
+
+
+        //CAMBIO DE IDIOMA
+
+        val englishButton = findViewById<ImageView>(R.id.imageViewEnglish)
+        val spanishButton = findViewById<ImageView>(R.id.imageViewEspañol)
+        val euskeraButton = findViewById<ImageView>(R.id.imageViewEuskera)
+
+        englishButton.setOnClickListener {
+            // Cambiar el idioma a inglés
+            setAppLocale("en")
+            recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+        }
+
+        spanishButton.setOnClickListener {
+            // Cambiar el idioma a español
+            setAppLocale("es")
+            recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+        }
+
+        euskeraButton.setOnClickListener {
+            // Cambiar el idioma a euskera
+            setAppLocale("eu")
+            recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+        }
+
+
     }
 
     private fun iniciarSesionGoogle() {
@@ -79,6 +107,7 @@ class Login : AppCompatActivity() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -92,16 +121,16 @@ class Login : AppCompatActivity() {
             }
         }
     }
+
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         val currentUser = auth.currentUser
 
-            // Si el usuario no está autenticado con correo electrónico,
-            // inicia sesión o regístrate con la cuenta de Google.
+        // Si el usuario no está autenticado con correo electrónico,
+        // inicia sesión o regístrate con la cuenta de Google.
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-
 
                         val correo = editTextCorreo.text.toString()
                         val contrasena = editTextContraseña.text.toString()
@@ -117,8 +146,6 @@ class Login : AppCompatActivity() {
                                     Toast.makeText(this, "Error al vincular la cuenta de Google", Toast.LENGTH_SHORT).show()
                                 }
                             }
-
-
 
                     val user = auth.currentUser
                     Toast.makeText(this, "Inició sesión como ${user?.displayName}", Toast.LENGTH_SHORT).show()
@@ -153,8 +180,16 @@ class Login : AppCompatActivity() {
                 }
         } else {
             // Asegúrate de que se ingresen tanto el correo como la contraseña.
-            Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    //Función para el cambio de idiomas
+    private fun setAppLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
     }
 }

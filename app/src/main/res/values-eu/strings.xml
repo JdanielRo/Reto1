@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Reto1</string>
-    <string name="title_activity_home">Hasiera</string>
-    <string name="title_home">Hasiera</string>
-    <string name="title_dashboard">Kanpoilera</string>
-    <string name="title_notifications">Jakinarazpenak</string>
+
+    <!--TITULOS DEL MENU-->
+    <string name="home">Hasiera</string>
+    <string name="carrito">Saskia</string>
+    <string name="pedido">Eskaera</string>
+    <string name="mi_cuenta">Nire Kontua</string>
+
+    <!--INPUTS Y TITULOS DE BOTONES-->
     <string name="register">ERREGISTRATU</string>
-    <string name="email">Posta</string>
-    <string name="password">Pasahitza</string>
+    <string name="iniciar_sesion">HASI SAIOA</string>
+    <string name="email">Posta Elektronikoa</string><!--HINT-->
+    <string name="password">Pasahitza</string><!--HINT-->
+
+
+    <!--GOOGLE-->
     <string name="repeatPassword">Pasahitzaren Errepikapena</string>
     <string name="description">Logoa</string>
     <string name="credenciales_no_validas">Eskainitako kredentzialak ez dira baliozkoak edo formatu okerrak dituzte.</string>
@@ -16,9 +24,6 @@
     <string name="invalid_email">Posta elektronikoa ez da baliozkoa.</string>
     <string name="registroCompletado">Erregistroa amaitu da.</string>
     <string name="emailDuplicado">Posta elektroniko hau dagoeneko erregistratuta dago.</string>
-    <string name="home">Etxea</string>
-    <string name="carrito">Saskia</string>
-    <string name="pedido">Eskaera</string>
-    <string name="mi_cuenta">Nire Kontua</string>
+
     <string name="sign_up_with_google">Google-rekin Erregistratu</string>
 </resources>
