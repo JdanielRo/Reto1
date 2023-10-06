@@ -3,16 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".Home">
+    tools:context=".MiCuenta">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/home"
+        android:text="@string/mi_cuenta"
         android:textColor="@color/black"
         android:textSize="25sp" />
-
 </androidx.core.widget.NestedScrollView>

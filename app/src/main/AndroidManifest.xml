@@ -19,7 +19,7 @@
             android:name=".Login"
             android:exported="false" />
         <activity
-            android:name=".Mi_cuenta"
+            android:name=".MiCuenta"
             android:exported="false" />
         <activity
             android:name=".Carrito"

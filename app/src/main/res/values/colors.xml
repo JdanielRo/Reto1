@@ -5,4 +5,5 @@
     <color name="light_green">#54C242</color>
     <color name="google_blue">#4285F4</color>
     <color name="azul_enlace">#03A9F4</color>
+    <color name="color_transparent">#00FFFFFF</color>
 </resources>

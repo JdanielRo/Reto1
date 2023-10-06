@@ -4,17 +4,20 @@
     <item
         android:id="@+id/itemHome"
         android:icon="@drawable/home_blanco"
-        android:title="Home" />
+        android:title="@string/home" />
 
     <item
         android:id="@+id/itemPedidos"
         android:icon="@drawable/pedidos_blanco"
-        android:title="Pedidos" />
+        android:title="@string/pedido" />
 
     <item
         android:id="@+id/itemCarrito"
         android:icon="@drawable/carrito_blanco"
-        android:title="Carrito" />
+        android:title="@string/carrito" />
 
-
+    <item
+        android:id="@+id/itemMiCuenta"
+        android:icon="@drawable/mi_cuenta"
+        android:title="@string/mi_cuenta" />
 </menu>
