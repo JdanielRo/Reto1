@@ -94,6 +94,7 @@ class Pedidos : Fragment() {
 
             linearLayout.addView(itemLayout)
         }
+
     }
 
     companion object {

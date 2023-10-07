@@ -19,6 +19,7 @@
 
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="300dp"
         android:layout_height="70dp"
         android:background="@color/black"
@@ -124,5 +125,12 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <Space
+        android:layout_width="300dp"
+        android:layout_height="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
