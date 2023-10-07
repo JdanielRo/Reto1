@@ -11,6 +11,9 @@ import android.widget.TextView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.DocumentReference // Importa la clase DocumentReference
 import android.util.Log // Importa Log para el manejo de errores
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -82,20 +85,42 @@ class Pedidos : Fragment() {
     }
 
     private fun mostrarPlatos(inflater: LayoutInflater, container: ViewGroup?) {
+        // Genera una lista de números del 1 al 50 como cadenas de texto
+        val numbers = (1..50).map { it.toString() }
+
         for (plato in listaPlatos) {
             val itemLayout = inflater.inflate(R.layout.layout_pedidos_platos, container, false)
             val txtNombrePlato = itemLayout.findViewById<TextView>(R.id.txtNombrePlatos)
             val txtCaloriaPlato = itemLayout.findViewById<TextView>(R.id.txtCaloriaPlato)
             val txtPrecioPlato = itemLayout.findViewById<TextView>(R.id.txtPrecioPlatos)
+            val spinner = itemLayout.findViewById<Spinner>(R.id.spinnerNumbers)
 
             txtNombrePlato.text = plato.nombre
             txtCaloriaPlato.text = plato.calorias.toString()
             txtPrecioPlato.text = "${plato.precio}€"
 
+            // Configura el Adapter para el Spinner
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, numbers)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+
+            // Agrega un listener para el Spinner
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedNumber = parent?.getItemAtPosition(position).toString()
+                    // Haz algo con el número seleccionado, por ejemplo, imprimirlo
+                    Log.d(TAG, "Número seleccionado: $selectedNumber")
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Maneja la situación en la que no se ha seleccionado nada
+                }
+            }
+
             linearLayout.addView(itemLayout)
         }
-
     }
+
 
     companion object {
         @JvmStatic

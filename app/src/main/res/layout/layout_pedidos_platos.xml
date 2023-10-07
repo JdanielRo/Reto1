@@ -3,134 +3,127 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/img_platos"
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="200dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.047"
-        app:srcCompat="@drawable/ensalada_de_pollo_y_aguacate" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="300dp"
-        android:layout_height="70dp"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
         android:background="@color/black"
+        android:elevation="2dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_platos">
 
         <LinearLayout
-            android:layout_width="313dp"
-            android:layout_height="match_parent"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtNombrePlatos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
+                android:text="Ensalada de Pollo y Aguacate"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                tools:text="Ensalada de Pollo y Aguacate" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp">
 
                 <TextView
-                    android:id="@+id/txtNombrePlatos"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txtCaloriaPlato"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:paddingLeft="7dp"
-                    android:paddingTop="2.5dp"
-                    android:text="Ensalada de Pollo y Aguacate"
-                    android:textColor="@color/white"
-                    android:textSize="15dp" />
-            </LinearLayout>
+                    android:layout_gravity="bottom"
+                    android:text="1000 cal"
+                    android:textColor="#B3B3B3"
+                    android:textSize="14sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:id="@+id/txtCaloriaPlato"
-                        android:layout_width="73dp"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom"
-                        android:paddingLeft="7dp"
-                        android:paddingBottom="7dp"
-                        android:text="1000cal"
-                        android:textColor="#B3B3B3" />
-
-                    <TextView
-                        android:id="@+id/txtVerMasPlatos"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom"
-                        android:paddingBottom="7dp"
-                        android:text="Ver mas >"
-                        android:textColor="@color/light_green"
-                        android:textStyle="italic" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/txtVerMasPlatos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="17.5dp"
+                    android:text="Ver más >"
+                    android:textColor="@color/light_green"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
 
                 <TextView
                     android:id="@+id/txtPrecioPlatos"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="20dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
                     android:text="7,00€"
                     android:textColor="@color/white"
-                    android:textSize="23dp" />
-                " />
+                    android:textSize="18sp"
+                    tools:text="7,00€" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="126dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/btnAñadirCarritoPedidos"
-                android:layout_width="match_parent"
-                android:layout_height="12.5dp"
-                android:layout_weight="1"
-                android:insetLeft="5dp"
-                android:insetTop="5dp"
-                android:insetRight="5dp"
-                android:insetBottom="5dp"
-                android:paddingLeft="15.5dp"
-                app:icon="@drawable/carrito_blanco"
-                app:iconPadding="0dp"
-                app:iconSize="18dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_background"
+                android:drawableStart="@drawable/carrito_blanco"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:icon="@drawable/carrito_blanco" />
+
 
             <Spinner
                 android:id="@+id/spinnerNumbers"
                 android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:layout_weight="1" />
-
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp" />
         </LinearLayout>
     </LinearLayout>
-
-    <Space
-        android:layout_width="300dp"
-        android:layout_height="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
