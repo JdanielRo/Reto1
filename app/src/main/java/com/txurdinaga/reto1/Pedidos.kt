@@ -1,16 +1,16 @@
 package com.txurdinaga.reto1
 
-import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Space
 import android.widget.TextView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.DocumentReference // Importa la clase DocumentReference
+import android.util.Log // Importa Log para el manejo de errores
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -21,6 +21,10 @@ class Pedidos : Fragment() {
 
     private val db = FirebaseFirestore.getInstance()
 
+    private lateinit var linearLayout: LinearLayout
+
+    private val listaPlatos: MutableList<Plato> = mutableListOf() // Lista para almacenar los platos
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -29,40 +33,67 @@ class Pedidos : Fragment() {
         }
     }
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pedidos, container, false)
-        val linearLayout = view.findViewById<LinearLayout>(R.id.linearLayoutScrollPedidos)
+        linearLayout = view.findViewById(R.id.linearLayoutScrollPedidos)
 
-        // Repite la inclusión del diseño 5 veces
-        for (i in 1..7) {
-            // Infla el diseño item_layout.xml
-            val itemLayout = inflater.inflate(R.layout.fragment_pedidos_platos, container, false)
-
-            // Agrega el diseño al LinearLayout
-            linearLayout.addView(itemLayout)
-            val space = Space(requireContext())
-            if(i==7){
-                space.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    resources.getDimensionPixelSize(R.dimen.space_height_ultima) // Cambia esto según tu altura deseada
-                )
-            }else{
-                // Agrega un espacio entre cada diseño
-
-                space.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    resources.getDimensionPixelSize(R.dimen.space_height) // Cambia esto según tu altura deseada
-                )
-            }
-
-            linearLayout.addView(space)
-        }
+        // Llamar a la función para obtener y mostrar los platos
+        obtenerPlatos(inflater, container)
 
         return view
+    }
+
+    private fun obtenerPlatos(inflater: LayoutInflater, container: ViewGroup?) {
+        db.collection("Platos")
+            .get()
+            .addOnSuccessListener { result ->
+                // Limpia el linearLayout antes de agregar nuevos elementos
+                linearLayout.removeAllViews()
+
+                for (document in result) {
+                    // Obtener el nombre del plato desde el documento
+                    val nombre = document.getString("nombre") ?: ""
+                    val descripcion = document.getString("descripcion") ?: ""
+                    val idMenuReference = document.get("id_menu") as DocumentReference? // Obtener la referencia como DocumentReference
+                    val celiaco = document.getBoolean("celiaco") ?: false
+                    val calorias = document.getLong("calorias")?.toInt() ?: 0
+                    val precio = document.getDouble("precio") ?: 0.0
+                    val cantidad = document.getLong("cantidad")?.toInt() ?: 0
+
+                    // Obtener el id del menú si la referencia no es nula
+                    var id_menu: String = ""
+                    if (idMenuReference != null) {
+                        id_menu = idMenuReference.id
+                    }
+
+                    val plato = Plato(nombre, descripcion, id_menu, celiaco, calorias, precio, cantidad)
+
+                    listaPlatos.add(plato)
+                }
+                mostrarPlatos(inflater, container)
+            }
+            .addOnFailureListener { e ->
+                // Maneja errores aquí, por ejemplo, imprime el mensaje de error
+                Log.e(TAG, "Error al obtener platos: ${e.message}", e)
+            }
+    }
+
+    private fun mostrarPlatos(inflater: LayoutInflater, container: ViewGroup?) {
+        for (plato in listaPlatos) {
+            val itemLayout = inflater.inflate(R.layout.layout_pedidos_platos, container, false)
+            val txtNombrePlato = itemLayout.findViewById<TextView>(R.id.txtNombrePlatos)
+            val txtCaloriaPlato = itemLayout.findViewById<TextView>(R.id.txtCaloriaPlato)
+            val txtPrecioPlato = itemLayout.findViewById<TextView>(R.id.txtPrecioPlatos)
+
+            txtNombrePlato.text = plato.nombre
+            txtCaloriaPlato.text = plato.calorias.toString()
+            txtPrecioPlato.text = "${plato.precio}€"
+
+            linearLayout.addView(itemLayout)
+        }
     }
 
     companion object {
@@ -76,4 +107,3 @@ class Pedidos : Fragment() {
             }
     }
 }
-
