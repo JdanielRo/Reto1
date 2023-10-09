@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/itemHome"
+        android:icon="@drawable/home_blanco"
+        android:title="Hasiera" />
+
+    <item
+        android:id="@+id/itemPedidos"
+        android:icon="@drawable/pedidos_blanco"
+        android:title="Eskaera" />
+
+    <item
+        android:id="@+id/itemCarrito"
+        android:icon="@drawable/carrito_blanco"
+        android:title="Saskia" />
+
+    <item
+        android:id="@+id/itemMiCuenta"
+        android:icon="@drawable/mi_cuenta"
+        android:title="Nire Kontua" />
+</menu>

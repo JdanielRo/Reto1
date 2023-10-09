@@ -1,6 +1,5 @@
 package com.txurdinaga.reto1
 
-
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -14,69 +13,76 @@ import java.util.Locale
 
 class Main : AppCompatActivity() {
 
-    lateinit var navigation: BottomNavigationView
-    private lateinit var sharedPref: SharedPreferences
-    private var currentFragment: Fragment? = null
+    lateinit var navigation: BottomNavigationView // Declaración de la vista BottomNavigationView
+    private lateinit var sharedPref: SharedPreferences // Declaración de SharedPreferences para guardar el idioma
+    private var currentFragment: Fragment? = null // Declaración de un Fragmento actual
 
+    // Listener para las selecciones de elementos del menú de navegación
     private val onNavMenuListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-
-            when (item.itemId) {
-                R.id.itemHome -> {
-                    showFragment(Home())
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.itemPedidos -> {
-                    showFragment(Pedidos())
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.itemCarrito -> {
-                    showFragment(Carrito())
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.itemMiCuenta -> {
-                    showFragment(MiCuenta())
-                    return@OnNavigationItemSelectedListener true
-                }
-                // Agrega más casos para otros elementos del menú de navegación si es necesario
+        when (item.itemId) {
+            R.id.itemHome -> {
+                showFragment(Home()) // Mostrar el fragmento "Home" al seleccionar el elemento correspondiente
+                return@OnNavigationItemSelectedListener true
             }
-            false
+            R.id.itemPedidos -> {
+                showFragment(Pedidos()) // Mostrar el fragmento "Pedidos" al seleccionar el elemento correspondiente
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.itemCarrito -> {
+                showFragment(Carrito()) // Mostrar el fragmento "Carrito" al seleccionar el elemento correspondiente
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.itemMiCuenta -> {
+                showFragment(MiCuenta()) // Mostrar el fragmento "MiCuenta" al seleccionar el elemento correspondiente
+                return@OnNavigationItemSelectedListener true
+            }
+            // Puedes agregar más casos para otros elementos del menú de navegación aquí si es necesario
         }
+        false // Devolver falso por defecto si no se maneja el elemento seleccionado
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main)
+        setContentView(R.layout.main) // Establecer el diseño de la actividad
 
-        navigation = findViewById(R.id.navMenu)
-        navigation.setOnNavigationItemSelectedListener(onNavMenuListener)
+        navigation = findViewById(R.id.navMenu) // Inicializar la vista BottomNavigationView
+        navigation.setOnNavigationItemSelectedListener(onNavMenuListener) // Configurar el listener para elementos de navegación
 
-        sharedPref = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        sharedPref = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE) // Inicializar SharedPreferences para almacenar el idioma
 
+        // Obtener el idioma guardado o utilizar "es" (español) como idioma predeterminado si no se ha guardado uno
         val savedLanguage = sharedPref.getString("language", "es") ?: "es"
-        setAppLocale(savedLanguage)//muestra el idioma guardado
 
-        //Que por defecto la app se abra en home
+        setAppLocale(savedLanguage) // Configurar el idioma de la aplicación
+
+        // Llamar a la función para configurar el idioma de los elementos del menú
+        setMenuItemsLanguage(savedLanguage)
+
+        // Establecer el fragmento "Home" como fragmento inicial si no hay estado previo
         if (savedInstanceState == null) {
             showFragment(Home())
         }
 
+        // Inicialización de botones para cambiar el idioma
         val englishButton = findViewById<ImageView>(R.id.imageViewEnglish)
         val spanishButton = findViewById<ImageView>(R.id.imageViewEspañol)
         val euskeraButton = findViewById<ImageView>(R.id.imageViewEuskera)
 
+        // Configurar listeners para los botones de cambio de idioma
         englishButton.setOnClickListener {
-            setAndApplyLanguage("en")
+            setAndApplyLanguage("en") // Cambiar y aplicar el idioma a inglés
         }
 
         spanishButton.setOnClickListener {
-            setAndApplyLanguage("es")
+            setAndApplyLanguage("es") // Cambiar y aplicar el idioma a español
         }
 
         euskeraButton.setOnClickListener {
-            setAndApplyLanguage("eu")
+            setAndApplyLanguage("eu") // Cambiar y aplicar el idioma a euskera
         }
     }
 
-    //Configurar el idioma
+    // Función para configurar el idioma de la aplicación
     private fun setAppLocale(languageCode: String) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
@@ -85,15 +91,15 @@ class Main : AppCompatActivity() {
         baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
     }
 
-    //Cambia el idioma de la aplicacion y lo confirma
+    // Función para cambiar y aplicar el idioma
     private fun setAndApplyLanguage(languageCode: String) {
-        sharedPref.edit().putString("language", languageCode).apply()
-        setAppLocale(languageCode)
-        updateResources(languageCode)
+        sharedPref.edit().putString("language", languageCode).apply() // Guardar el idioma en SharedPreferences
+        setAppLocale(languageCode) // Configurar el idioma de la aplicación
+        updateResources(languageCode) // Actualizar los recursos en el idioma seleccionado
         recreate() // Reiniciar la actividad para aplicar el cambio de idioma
     }
 
-    //Actualizar los recursos string al idioma que selecciones
+    // Función para actualizar los recursos al idioma seleccionado
     private fun updateResources(languageCode: String) {
         val locale = Locale(languageCode)
         val resources: Resources = resources
@@ -103,7 +109,7 @@ class Main : AppCompatActivity() {
         resources.updateConfiguration(configuration, resources.displayMetrics)
     }
 
-    //Esta función se utiliza para mostrar un fragmento en la actividad, para que no cambie al cambiar el idioma
+    // Función para mostrar un fragmento en la actividad
     private fun showFragment(fragment: Fragment) {
         if (currentFragment != null) {
             supportFragmentManager.beginTransaction().remove(currentFragment!!).commit()
@@ -114,5 +120,22 @@ class Main : AppCompatActivity() {
             .commit()
         currentFragment = fragment
     }
-}
 
+    // Función para configurar el idioma de los elementos del menú
+    private fun setMenuItemsLanguage(languageCode: String) {
+        val resources = getResourcesForLocale(this, languageCode)
+        navigation.menu.findItem(R.id.itemHome).title = resources.getString(R.string.home)
+        navigation.menu.findItem(R.id.itemPedidos).title = resources.getString(R.string.pedido)
+        navigation.menu.findItem(R.id.itemCarrito).title = resources.getString(R.string.carrito)
+        navigation.menu.findItem(R.id.itemMiCuenta).title = resources.getString(R.string.mi_cuenta)
+        // Puedes agregar más elementos del menú aquí si es necesario
+    }
+
+    // Función para obtener los recursos en el idioma deseado
+    private fun getResourcesForLocale(context: Context, languageCode: String): Resources {
+        val locale = Locale(languageCode)
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(locale)
+        return context.createConfigurationContext(config).resources
+    }
+}
