@@ -24,6 +24,17 @@
     <string name="invalid_email">Posta elektronikoa ez da baliozkoa.</string>
     <string name="registroCompletado">Erregistroa amaitu da.</string>
     <string name="emailDuplicado">Posta elektroniko hau dagoeneko erregistratuta dago.</string>
-
     <string name="sign_up_with_google">Google-rekin Erregistratu</string>
+
+    <!--FORMULARIO MI CUENTA-->
+    <string name="nombre">Izena</string>
+    <string name="apellidos">Abizenak</string>
+    <!--<string name="email">Helbide Elektronikoa</string>-->
+    <string name="telefono">Telefonoa</string>
+    <string name="direccion">Helbidea</string>
+    <string name="fecha_nacimiento">Jaiotze Data</string>
+    <string name="guardar">ALDATU EGIN</string>
+    <string name="olvidar_contra">Pasahitza ahaztu duzu? </string>
+    <string name="cerrar">SAIOA ITXI</string>
+
 </resources>

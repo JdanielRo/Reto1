@@ -25,4 +25,16 @@
     <string name="emailDuplicado">This email address is already registered.</string>
     <string name="sign_up_with_google">Sign up with Google</string>
 
+    <!--FORMULARIO MI CUENTA-->
+    <string name="nombre">Name</string>
+    <string name="apellidos">Last Name</string>
+    <!--<string name="email">Email</string>-->
+    <string name="telefono">Phone</string>
+    <string name="direccion">Postal Address</string>
+    <string name="fecha_nacimiento">Date of Birth</string>
+    <string name="guardar">SAVE CHANGES</string>
+    <string name="olvidar_contra">Forgot your password?</string>
+    <string name="cerrar">LOG OUT</string>
+
+
 </resources>
