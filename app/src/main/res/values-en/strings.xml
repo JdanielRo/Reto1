@@ -14,6 +14,10 @@
     <string name="email">Email</string><!--HINT-->
     <string name="password">Password</string><!--HINT-->
 
+    <!--Fragment Orders-->
+    <string name="menus" >Menus</string>
+    <string name="platos">Dishes</string>
+
     <!--GOOGLE-->
     <string name="repeatPassword">Repeat Password</string>
     <string name="description">Logo</string>
