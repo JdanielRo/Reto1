@@ -2,16 +2,19 @@ package com.txurdinaga.reto1
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 private const val ARG_PARAM1 = "param1"
@@ -37,6 +40,71 @@ class MiCuenta : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_mi_cuenta, container, false)
 
+        // Inicializa Firebase Authentication
+        val auth = FirebaseAuth.getInstance()
+
+        // Obtén el usuario actualmente autenticado
+        val user = auth.currentUser
+
+        // Declara una variable para almacenar el UID del usuario
+        var uid: String? = null
+
+        // Verifica si el usuario está autenticado
+        if (user != null) {
+            // Obtén el UID del usuario autenticado
+            uid = user.uid
+        }
+
+        val db = FirebaseFirestore.getInstance()
+
+        val editTextNombre = view.findViewById<EditText>(R.id.editTextNombre)
+        val editTextApellidos = view.findViewById<EditText>(R.id.editTextApellidos)
+        val editTextCorreoElectronico = view.findViewById<EditText>(R.id.editTextEmailAddress)
+        val editTextFechaNacimiento = view.findViewById<EditText>(R.id.editTextDate)
+        val editTextTelefono = view.findViewById<EditText>(R.id.editTextPhone)
+        val editTextDireccion = view.findViewById<EditText>(R.id.editTextPostalAddress)
+
+        db.collection("Usuarios")
+            .document("$uid")
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+
+                if (documentSnapshot.exists()) {
+                    // El documento existe, obtén los datos
+                    val datos = documentSnapshot.data
+
+
+                    // Ahora puedes acceder a los campos de datos como un mapa
+                    val nombre = datos?.get("Nombre") as? String
+                    val apellidos = datos?.get("Apellidos") as? String
+                    val correo = datos?.get("Correo") as? String
+                    val direccion = datos?.get("Direccion") as? String
+                    val fechaNacimiento = datos?.get("FechaNacimiento") as? String
+                    val telefono = datos?.get("Telefono") as? String
+
+                    // Establece los valores en los EditText
+                    editTextNombre.setText(nombre)
+                    editTextApellidos.setText(apellidos)
+                    editTextCorreoElectronico.setText(correo)
+                    editTextDireccion.setText(direccion)
+                    editTextFechaNacimiento.setText(fechaNacimiento)
+                    editTextTelefono.setText(telefono)
+
+                    // Haz lo que necesites con los datos
+                } else {
+                    // El documento no existe
+                    // Puedes mostrar un mensaje o tomar alguna acción apropiada
+                    Log.d("MiCuenta", "El documento no existe.")
+                }
+            }
+            .addOnFailureListener { e ->
+                // Manejar errores si ocurre alguno al obtener el documento
+                // Puedes mostrar un mensaje de error o realizar una acción apropiada
+                Log.e("MiCuenta", "Error al obtener el documento: $e")
+            }
+
+
+        //LOG OUT
         mAuth = Firebase.auth
         val buttonLogOut = view.findViewById<Button>(R.id.buttonLogOut)
         buttonLogOut.setOnClickListener{
