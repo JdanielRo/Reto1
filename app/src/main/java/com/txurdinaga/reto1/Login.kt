@@ -131,7 +131,7 @@ class Login : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-
+                        /*
                         val correo = editTextCorreo.text.toString()
                         val contrasena = editTextContraseña.text.toString()
                         val credential1 = EmailAuthProvider.getCredential(correo, contrasena)
@@ -146,7 +146,7 @@ class Login : AppCompatActivity() {
                                     Toast.makeText(this, "Error al vincular la cuenta de Google", Toast.LENGTH_SHORT).show()
                                 }
                             }
-
+                            */
                     val user = auth.currentUser
                     Toast.makeText(this, "Inició sesión como ${user?.displayName}", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, Main::class.java))
