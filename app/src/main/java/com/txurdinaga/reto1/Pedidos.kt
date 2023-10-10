@@ -43,6 +43,13 @@ class Pedidos : Fragment() {
         val view = inflater.inflate(R.layout.fragment_pedidos, container, false)
         linearLayout = view.findViewById(R.id.linearLayoutScrollPedidos)
 
+
+        // Limpia el linearLayout antes de agregar nuevos elementos
+        linearLayout.removeAllViews()
+
+        val itemLayout = inflater.inflate(R.layout.layout_pedidos_menu_superior, container, false)
+        linearLayout.addView(itemLayout)
+
         // Llamar a la función para obtener y mostrar los platos
         obtenerPlatos(inflater, container)
 
@@ -53,8 +60,6 @@ class Pedidos : Fragment() {
         db.collection("Platos")
             .get()
             .addOnSuccessListener { result ->
-                // Limpia el linearLayout antes de agregar nuevos elementos
-                linearLayout.removeAllViews()
 
                 for (document in result) {
                     // Obtener el nombre del plato desde el documento
@@ -86,7 +91,6 @@ class Pedidos : Fragment() {
 
     private fun mostrarPlatos(inflater: LayoutInflater, container: ViewGroup?) {
         // Genera una lista de números del 1 al 50 como cadenas de texto
-        val numbers = (1..50).map { it.toString() }
 
         for (plato in listaPlatos) {
             val itemLayout = inflater.inflate(R.layout.layout_pedidos_platos, container, false)
@@ -100,7 +104,7 @@ class Pedidos : Fragment() {
             txtPrecioPlato.text = "${plato.precio}€"
 
             // Configura el Adapter para el Spinner
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, numbers)
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, (1..plato.cantidad).map { it.toString() })
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
 

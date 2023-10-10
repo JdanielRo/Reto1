@@ -13,6 +13,9 @@
     <string name="email">Correo Electrónico</string><!--HINT-->
     <string name="password">Contraseña</string><!--HINT-->
 
+    <!--Fragment Pedidos-->
+    <string name="menus" >Menus</string>
+
     <!--GOOGLE-->
     <string name="repeatPassword">Repetir contraseña</string>
     <string name="description">Logo</string>
@@ -25,5 +28,19 @@
     <string name="registroCompletado">El registro ha sido completado.</string>
     <string name="emailDuplicado">Este correo electronico ya está registrado.</string>
     <string name="sign_up_with_google">Registarse con Google</string>
+    <string name="platos">Platos</string>
+
+
+    <!--FORMULARIO MI CUENTA-->
+    <string name="nombre">Nombre</string>
+    <string name="apellidos">Apellidos</string>
+    <!--<string name="email">Correo Electrónico</string>-->
+    <string name="telefono">Teléfono</string>
+    <string name="direccion">Dirección Postal</string>
+    <string name="fecha_nacimiento">Fecha de Nacimiento</string>
+    <string name="guardar">GUARDAR CAMBIOS</string>
+    <string name="olvidar_contra">¿Has olvidado tu contraseña? </string>
+    <string name="cerrar">CERRAR SESIÓN</string>
+
 
 </resources>
