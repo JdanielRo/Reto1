@@ -47,20 +47,29 @@ class Pedidos : Fragment() {
         val view = inflater.inflate(R.layout.fragment_pedidos, container, false)
         linearLayout = view.findViewById(R.id.linearLayoutScrollPedidos)
 
-        obtenerPlatos()
-        obtenerMenus()
-
         val itemLayout = inflater.inflate(R.layout.layout_pedidos_menu_superior, container, false)
         linearLayout.addView(itemLayout)
 
-        var btnMostrarMenus = itemLayout.findViewById<Button>(R.id.btnPedidosMenus)
+        val btnMostrarMenus = itemLayout.findViewById<Button>(R.id.btnPedidosMenus)
+        val btnMostrarPlatos = itemLayout.findViewById<Button>(R.id.btnPedidosPlatos)
+
+        obtenerPlatos()
+        obtenerMenus()
+
         btnMostrarMenus.setOnClickListener {
-            mostrarMenus(inflater, container)
+            if (listaMenus.isNotEmpty()) {
+                mostrarMenus(inflater, container)
+            }
         }
-        var btnMostrarPlatos = itemLayout.findViewById<Button>(R.id.btnPedidosPlatos)
+
+        btnMostrarMenus.performClick()
+
         btnMostrarPlatos.setOnClickListener {
-            mostrarPlatos(inflater, container)
+            if (listaPlatos.isNotEmpty()) {
+                mostrarPlatos(inflater, container)
+            }
         }
+
 
         return view
     }
@@ -77,11 +86,13 @@ class Pedidos : Fragment() {
                     val precio = document.getDouble("precio") ?: 0.0
                     val cantidad = document.getLong("cantidad")?.toInt() ?: 0
                     val id_plato = document.id.toIntOrNull() ?: 0
-                    val plato = Plato(nombre, descripcion, celiaco, calorias, precio, cantidad, id_plato)
+                    val plato =
+                        Plato(nombre, descripcion, celiaco, calorias, precio, cantidad, id_plato)
                     listaPlatos.add(plato)
                 }
             }
             .addOnFailureListener { e ->
+                // Maneja el error apropiadamente, por ejemplo, muestra un mensaje al usuario.
                 Log.e(TAG, "Error al obtener platos: ${e.message}", e)
             }
     }
@@ -101,16 +112,26 @@ class Pedidos : Fragment() {
                             val cantidad: Int = calcularCantidadMenu(resultPlatos, platos)
                             val id_menu = document.id
                             val tipo_comida = document.getString("tipo_comida") ?: ""
-                            val menu = Menu(celiaco, calorias, precio, cantidad, id_menu, tipo_comida, platos)
-                            println(menu)
+                            val menu = Menu(
+                                celiaco,
+                                calorias,
+                                precio,
+                                cantidad,
+                                id_menu,
+                                tipo_comida,
+                                platos
+                            )
+
                             listaMenus.add(menu)
                         }
                     }
                     .addOnFailureListener { e ->
+                        // Maneja el error apropiadamente, por ejemplo, muestra un mensaje al usuario.
                         Log.e(TAG, "Error al obtener platos: ${e.message}", e)
                     }
             }
             .addOnFailureListener { e ->
+                // Maneja el error apropiadamente, por ejemplo, muestra un mensaje al usuario.
                 Log.e(TAG, "Error al obtener menús: ${e.message}", e)
             }
     }
@@ -172,7 +193,12 @@ class Pedidos : Fragment() {
             spinner.adapter = adapter
 
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
                     val selectedNumber = parent?.getItemAtPosition(position).toString()
                     Log.d(TAG, "Número seleccionado: $selectedNumber")
                 }
@@ -186,30 +212,47 @@ class Pedidos : Fragment() {
     }
 
     private fun mostrarMenus(inflater: LayoutInflater, container: ViewGroup?) {
-        /*linearLayout.removeAllViews()
+        linearLayout.removeAllViews()
         val itemLayout = inflater.inflate(R.layout.layout_pedidos_menu_superior, container, false)
         linearLayout.addView(itemLayout)
+
         for (menu in listaMenus) {
-            val itemLayout = inflater.inflate(R.layout.layout_pedidos_menus, container, false)
-            val txtTipoComida = itemLayout.findViewById<TextView>(R.id.txtTipoComida)
+            val itemLayout =
+                inflater.inflate(R.layout.layout_pedidos_menus, container, false)
+
+            val txtMenu1plato = itemLayout.findViewById<TextView>(R.id.txtMenu1plato)
+            val txtMenu2plato = itemLayout.findViewById<TextView>(R.id.txtMenu2plato)
+            val txtMenu3plato = itemLayout.findViewById<TextView>(R.id.txtMenu3plato)
+            /*val imgMenu1plato = itemLayout.findViewById<TextView>(R.id.imgMenu1plato)
+            val imgMenu2plato = itemLayout.findViewById<TextView>(R.id.imgMenu2plato)
+            val imgMenu3plato = itemLayout.findViewById<TextView>(R.id.imgMenu3plato)*/
             val txtCaloriaMenu = itemLayout.findViewById<TextView>(R.id.txtCaloriaMenu)
             val txtPrecioMenu = itemLayout.findViewById<TextView>(R.id.txtPrecioMenu)
 
-            txtTipoComida.text = menu.tipo_comida
             txtCaloriaMenu.text = menu.calorias.toString()
             txtPrecioMenu.text = "${menu.precio}€"
-
+            txtMenu1plato.text = "Primer Plato: ${cogerTextoMenu(1)}"
+            txtMenu2plato.text = "Segundo Plato: ${cogerTextoMenu(2)}"
+            txtMenu3plato.text = "Postre: ${cogerTextoMenu(3)}"
+            /*imgMenu1plato.text = cogerImgMenu(1, resultPlatos)
+            imgMenu2plato.text = cogerImgMenu(2, resultPlatos)
+            imgMenu3plato.text = cogerImgMenu(3, resultPlatos)*/
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
                 (1..menu.cantidad).map { it.toString() }
             )
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            val spinner = itemLayout.findViewById<Spinner>(R.id.spinnerNumbers)
+            val spinner = itemLayout.findViewById<Spinner>(R.id.spinnerNumbersMenu)
             spinner.adapter = adapter
 
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
                     val selectedNumber = parent?.getItemAtPosition(position).toString()
                     Log.d(TAG, "Número seleccionado: $selectedNumber")
                 }
@@ -219,7 +262,19 @@ class Pedidos : Fragment() {
             }
 
             linearLayout.addView(itemLayout)
-        }*/
+        }
+
+    }
+
+    private fun cogerTextoMenu(idPlato: Int): String {
+        var texto: String = ""
+        for (plato in listaPlatos) {
+            if (plato.id_plato == idPlato) {
+                texto = plato.nombre
+                break
+            }
+        }
+        return texto
     }
 
     companion object {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Definición de dimensiones -->
-    <dimen name="space_height">15dp</dimen>
+    <dimen name="space_height">20dp</dimen>
     <dimen name="space_height_ultima">100dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <!-- Otras dimensiones -->
