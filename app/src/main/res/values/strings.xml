@@ -14,7 +14,7 @@
     <string name="password">Contraseña</string><!--HINT-->
 
     <!--Fragment Pedidos-->
-    <string name="menus" >Menus</string>
+    <string name="menus">Menus</string>
 
     <!--GOOGLE-->
     <string name="repeatPassword">Repetir contraseña</string>

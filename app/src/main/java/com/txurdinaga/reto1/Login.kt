@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -17,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 
 
@@ -123,38 +125,81 @@ class Login : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
+
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         val currentUser = auth.currentUser
 
-        // Si el usuario no está autenticado con correo electrónico,
-        // inicia sesión o regístrate con la cuenta de Google.
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                        /*
-                        val correo = editTextCorreo.text.toString()
-                        val contrasena = editTextContraseña.text.toString()
-                        val credential1 = EmailAuthProvider.getCredential(correo, contrasena)
-                        currentUser!!.linkWithCredential(credential1)
-                            .addOnCompleteListener(this) { task ->
-                                if (task.isSuccessful) {
-                                    val user = task.result?.user
-                                    Toast.makeText(this, "Cuenta de Google vinculada a ${user?.displayName}", Toast.LENGTH_SHORT).show()
-                                    startActivity(Intent(this, Main::class.java))
-                                    finish()
-                                } else {
-                                    Toast.makeText(this, "Error al vincular la cuenta de Google", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                            */
+
+                    if (currentUser == null || currentUser.providerData.none { it.providerId == EmailAuthProvider.PROVIDER_ID }) {
+                        Toast.makeText(this, "prueba correoNuevo/Contraseña", Toast.LENGTH_SHORT)
+                            .show()
+                        startActivity(Intent(this, ConfirmacionCorreoPopUp::class.java))
+                    }else{
+
+                    // Obtén el usuario actualmente autenticado
                     val user = auth.currentUser
-                    Toast.makeText(this, "Inició sesión como ${user?.displayName}", Toast.LENGTH_SHORT).show()
+                    val uid = user?.uid
+                    val email = user?.email
+                    val displayName = user?.displayName
+                    val partes = displayName!!.split(" ")
+                    val nombre: String? = partes[0]
+                    val apellidos: String? = partes.subList(1, partes.size).joinToString(" ")
+
+
+                    // Define los datos que deseas agregar al documento
+                    val datos = hashMapOf(
+                        "Nombre" to "$nombre",
+                        "Apellidos" to "$apellidos",
+                        "Correo" to "$email",
+                        "Telefono" to "",
+                        "FechaNacimiento" to "",
+                        "Direccion" to "",
+                        // Agrega más campos y valores según sea necesario
+                    )
+
+
+
+                    FirebaseFirestore.getInstance()
+                        .collection("Usuarios")
+                        .document("$uid")
+                        .set(datos)
+                        .addOnSuccessListener {
+                            // Los datos se han agregado exitosamente
+                            // Realiza las acciones necesarias en caso de éxito
+                            Log.d(
+                                "Firestore",
+                                "Datos agregados con éxito al documento $uid"
+                            )
+                        }
+                        .addOnFailureListener { e ->
+                            // Maneja los errores en caso de que ocurra algún problema
+                            // Puedes obtener información adicional sobre el error a través de 'e'
+                            Log.e(
+                                "Firestore",
+                                "Error al agregar datos al documento $uid: $e"
+                            )
+                        }
+
+
+
+                    Toast.makeText(
+                        this,
+                        "Inició sesión como ${user?.displayName}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     startActivity(Intent(this, Main::class.java))
                     finish()
+
+                }
                 } else {
                     Toast.makeText(this, "Error de autenticación", Toast.LENGTH_SHORT).show()
                 }
             }
+
+
 
     }
 
