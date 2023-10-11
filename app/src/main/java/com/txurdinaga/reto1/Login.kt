@@ -132,62 +132,12 @@ class Login : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-
-                    if (currentUser == null || currentUser.providerData.none { it.providerId == EmailAuthProvider.PROVIDER_ID }) {
-                        Toast.makeText(this, "prueba correoNuevo/Contraseña", Toast.LENGTH_SHORT)
-                            .show()
+                    val user = auth.currentUser
+                    guardarDatosUsuario()
+                    if (user == null || user.providerData.none { it.providerId == EmailAuthProvider.PROVIDER_ID }) {
                         startActivity(Intent(this, ConfirmacionCorreoPopUp::class.java))
                     }else{
-
-                    // Obtén el usuario actualmente autenticado
-                    val user = auth.currentUser
-                    val uid = user?.uid
-                    val email = user?.email
-                    val displayName = user?.displayName
-                    val partes = displayName!!.split(" ")
-                    val nombre: String? = partes[0]
-                    val apellidos: String? = partes.subList(1, partes.size).joinToString(" ")
-
-
-                    // Define los datos que deseas agregar al documento
-                    val datos = hashMapOf(
-                        "Nombre" to "$nombre",
-                        "Apellidos" to "$apellidos",
-                        "Correo" to "$email",
-                        "Telefono" to "",
-                        "FechaNacimiento" to "",
-                        "Direccion" to "",
-                        // Agrega más campos y valores según sea necesario
-                    )
-
-
-
-                    FirebaseFirestore.getInstance()
-                        .collection("Usuarios")
-                        .document("$uid")
-                        .set(datos)
-                        .addOnSuccessListener {
-                            // Los datos se han agregado exitosamente
-                            // Realiza las acciones necesarias en caso de éxito
-                            Log.d(
-                                "Firestore",
-                                "Datos agregados con éxito al documento $uid"
-                            )
-                        }
-                        .addOnFailureListener { e ->
-                            // Maneja los errores en caso de que ocurra algún problema
-                            // Puedes obtener información adicional sobre el error a través de 'e'
-                            Log.e(
-                                "Firestore",
-                                "Error al agregar datos al documento $uid: $e"
-                            )
-                        }
-
-
-
-                    Toast.makeText(
-                        this,
-                        "Inició sesión como ${user?.displayName}",
+                    Toast.makeText(this, "Inició sesión como ${user?.displayName}",
                         Toast.LENGTH_SHORT
                     ).show()
                     startActivity(Intent(this, Main::class.java))
@@ -201,6 +151,52 @@ class Login : AppCompatActivity() {
 
 
 
+    }
+
+    private fun guardarDatosUsuario() {
+        // Obtén el usuario actualmente autenticado
+        val user = auth.currentUser
+        val uid = user?.uid
+        val email = user?.email
+        val displayName = user?.displayName
+        val partes = displayName!!.split(" ")
+        val nombre: String? = partes[0]
+        val apellidos: String? = partes.subList(1, partes.size).joinToString(" ")
+
+
+        // Define los datos que deseas agregar al documento
+        val datos = hashMapOf(
+            "Nombre" to "$nombre",
+            "Apellidos" to "$apellidos",
+            "Correo" to "$email",
+            "Telefono" to "",
+            "FechaNacimiento" to "",
+            "Direccion" to "",
+            // Agrega más campos y valores según sea necesario
+        )
+
+
+
+        FirebaseFirestore.getInstance()
+            .collection("Usuarios")
+            .document("$uid")
+            .set(datos)
+            .addOnSuccessListener {
+                // Los datos se han agregado exitosamente
+                // Realiza las acciones necesarias en caso de éxito
+                Log.d(
+                    "Firestore",
+                    "Datos agregados con éxito al documento $uid"
+                )
+            }
+            .addOnFailureListener { e ->
+                // Maneja los errores en caso de que ocurra algún problema
+                // Puedes obtener información adicional sobre el error a través de 'e'
+                Log.e(
+                    "Firestore",
+                    "Error al agregar datos al documento $uid: $e"
+                )
+            }
     }
 
     private fun inicioSesion() {

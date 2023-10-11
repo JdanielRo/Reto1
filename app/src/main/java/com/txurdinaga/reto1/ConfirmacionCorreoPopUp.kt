@@ -14,7 +14,8 @@ class ConfirmacionCorreoPopUp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_confirmacion_correo_pop_up)
-
+        val auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
         val metrics = DisplayMetrics()
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         val ancho = metrics.widthPixels
@@ -23,12 +24,11 @@ class ConfirmacionCorreoPopUp : AppCompatActivity() {
         var Enlazar = findViewById<Button>(R.id.enlazar)
         var Cerrar = findViewById<Button>(R.id.cancelar)
         var correo = findViewById<EditText>(R.id.CorreoEnlazar)
+        correo.setText(currentUser?.email.toString())
         var contrasenya = findViewById<EditText>(R.id.ContraEnlazar)
 
         Enlazar.setOnClickListener(){
-            val auth = FirebaseAuth.getInstance()
-            val currentUser = auth.currentUser
-            val correofor= correo.text.toString()
+            val correofor= currentUser?.email.toString()
             val contrasena = contrasenya.text.toString()
             val credential1 = EmailAuthProvider.getCredential(correofor, contrasena)
             currentUser!!.linkWithCredential(credential1)
