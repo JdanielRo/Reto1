@@ -14,6 +14,7 @@ import android.util.Log // Importa Log para el manejo de errores
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.SeekBar
 import android.widget.Spinner
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -31,6 +32,8 @@ class Pedidos : Fragment() {
     private val listaPlatos: MutableList<Plato> = mutableListOf()
     private val listaMenus: MutableList<Menu> = mutableListOf()
 
+    private val values = listOf(1000, 1500, 2000, 2500)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,34 +50,51 @@ class Pedidos : Fragment() {
         val view = inflater.inflate(R.layout.fragment_pedidos, container, false)
         linearLayout = view.findViewById(R.id.linearLayoutScrollPedidos)
 
+        mostrarPanelSuperior(inflater, container, "menus")
+        obtenerPlatos()
+        obtenerMenus()
+        return view
+    }
+
+    private fun mostrarPanelSuperior(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        tipo: String
+    ) {
+        linearLayout.removeAllViews()
         val itemLayout = inflater.inflate(R.layout.layout_pedidos_menu_superior, container, false)
         linearLayout.addView(itemLayout)
 
         val btnMostrarMenus = itemLayout.findViewById<Button>(R.id.btnPedidosMenus)
         val btnMostrarPlatos = itemLayout.findViewById<Button>(R.id.btnPedidosPlatos)
 
-        obtenerPlatos()
-        obtenerMenus()
+        val seekBar = itemLayout.findViewById<SeekBar>(R.id.seekBar)
+        val selectedValue = itemLayout.findViewById<TextView>(R.id.txtCaloriasSeleccionar)
 
+        seekBar.max = values.size - 1
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                selectedValue.text = "${R.string.calorias} ${values[progress].toString()}"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
         btnMostrarMenus.setOnClickListener {
             if (listaMenus.isNotEmpty()) {
                 mostrarMenus(inflater, container)
             }
         }
-
-        btnMostrarMenus.performClick()
-
         btnMostrarPlatos.setOnClickListener {
             if (listaPlatos.isNotEmpty()) {
                 mostrarPlatos(inflater, container)
             }
         }
-
-
-        return view
     }
 
-    private fun obtenerPlatos() {
+    fun obtenerPlatos() {
+        var suma = 1
         db.collection("Platos")
             .get()
             .addOnSuccessListener { result ->
@@ -88,7 +108,9 @@ class Pedidos : Fragment() {
                     val id_plato = document.id.toIntOrNull() ?: 0
                     val plato =
                         Plato(nombre, descripcion, celiaco, calorias, precio, cantidad, id_plato)
+                    println("$suma.- $plato")
                     listaPlatos.add(plato)
+                    suma++
                 }
             }
             .addOnFailureListener { e ->
@@ -97,7 +119,7 @@ class Pedidos : Fragment() {
             }
     }
 
-    private fun obtenerMenus() {
+    fun obtenerMenus() {
         db.collection("Menus")
             .get()
             .addOnSuccessListener { resultMenus ->
@@ -121,7 +143,7 @@ class Pedidos : Fragment() {
                                 tipo_comida,
                                 platos
                             )
-
+                            println(menu)
                             listaMenus.add(menu)
                         }
                     }
@@ -169,10 +191,7 @@ class Pedidos : Fragment() {
     }
 
     private fun mostrarPlatos(inflater: LayoutInflater, container: ViewGroup?) {
-        linearLayout.removeAllViews()
-        val itemLayout = inflater.inflate(R.layout.layout_pedidos_menu_superior, container, false)
-        linearLayout.addView(itemLayout)
-
+        mostrarPanelSuperior(inflater, container, "platos")
         for (plato in listaPlatos) {
             val itemLayout = inflater.inflate(R.layout.layout_pedidos_platos, container, false)
             val txtNombrePlato = itemLayout.findViewById<TextView>(R.id.txtNombrePlatos)
@@ -200,7 +219,7 @@ class Pedidos : Fragment() {
                     id: Long
                 ) {
                     val selectedNumber = parent?.getItemAtPosition(position).toString()
-                    Log.d(TAG, "Número seleccionado: $selectedNumber")
+                    //Log.d(TAG, "Numero de Plato: ${plato.id_plato}, número seleccionado: $selectedNumber")
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -212,13 +231,11 @@ class Pedidos : Fragment() {
     }
 
     private fun mostrarMenus(inflater: LayoutInflater, container: ViewGroup?) {
-        linearLayout.removeAllViews()
-        val itemLayout = inflater.inflate(R.layout.layout_pedidos_menu_superior, container, false)
-        linearLayout.addView(itemLayout)
+        mostrarPanelSuperior(inflater, container, "menus")
+
 
         for (menu in listaMenus) {
-            val itemLayout =
-                inflater.inflate(R.layout.layout_pedidos_menus, container, false)
+            val itemLayout = inflater.inflate(R.layout.layout_pedidos_menus, container, false)
 
             val txtMenu1plato = itemLayout.findViewById<TextView>(R.id.txtMenu1plato)
             val txtMenu2plato = itemLayout.findViewById<TextView>(R.id.txtMenu2plato)
@@ -231,9 +248,9 @@ class Pedidos : Fragment() {
 
             txtCaloriaMenu.text = menu.calorias.toString()
             txtPrecioMenu.text = "${menu.precio}€"
-            txtMenu1plato.text = "Primer Plato: ${cogerTextoMenu(1)}"
-            txtMenu2plato.text = "Segundo Plato: ${cogerTextoMenu(2)}"
-            txtMenu3plato.text = "Postre: ${cogerTextoMenu(3)}"
+            txtMenu1plato.text = "Primer Plato: ${cogerTextoMenu(menu.platos[0].toInt())}"
+            txtMenu2plato.text = "Segundo Plato: ${cogerTextoMenu(menu.platos[1].toInt())}"
+            txtMenu3plato.text = "Postre: ${cogerTextoMenu(menu.platos[2].toInt())}"
             /*imgMenu1plato.text = cogerImgMenu(1, resultPlatos)
             imgMenu2plato.text = cogerImgMenu(2, resultPlatos)
             imgMenu3plato.text = cogerImgMenu(3, resultPlatos)*/
@@ -254,7 +271,7 @@ class Pedidos : Fragment() {
                     id: Long
                 ) {
                     val selectedNumber = parent?.getItemAtPosition(position).toString()
-                    Log.d(TAG, "Número seleccionado: $selectedNumber")
+                    //Log.d(TAG, "Numero de Menu: ${menu.id_menu}, número seleccionado: $selectedNumber")
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -263,8 +280,8 @@ class Pedidos : Fragment() {
 
             linearLayout.addView(itemLayout)
         }
-
     }
+
 
     private fun cogerTextoMenu(idPlato: Int): String {
         var texto: String = ""

@@ -41,6 +41,7 @@
     <string name="guardar">GUARDAR CAMBIOS</string>
     <string name="olvidar_contra">¿Has olvidado tu contraseña? </string>
     <string name="cerrar">CERRAR SESIÓN</string>
+    <string name="calorias">Calorias\n</string>
 
 
 </resources>

@@ -39,6 +39,7 @@
     <string name="guardar">SAVE CHANGES</string>
     <string name="olvidar_contra">Forgot your password?</string>
     <string name="cerrar">LOG OUT</string>
+    <string name="calorias">Calorias\n</string>
 
 
 </resources>

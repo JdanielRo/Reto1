@@ -16,7 +16,7 @@
             android:name=".ConfirmacionCorreoPopUp"
             android:exported="false" />
         <activity
-            android:name=".Main"
+            android:name=".SplashScreen"
             android:exported="false" />
         <activity
             android:name=".Login"
@@ -34,7 +34,7 @@
             android:name=".Home"
             android:exported="false" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".Main"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
