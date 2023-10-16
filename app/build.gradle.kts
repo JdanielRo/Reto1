@@ -60,5 +60,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.firebase:firebase-auth:22.1.2")
     implementation ("com.google.firebase:firebase-storage:19.2.0")
-    implementation ("com.google.android.gms:play-services-auth:19.2.0") // Asegúrate de usar la última versión
+    implementation ("com.google.android.gms:play-services-auth:19.2.0")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0") // Asegúrate de usar la última versión
 }

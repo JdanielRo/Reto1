@@ -47,8 +47,7 @@
                 android:layout_width="250dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/white"
-                android:src="@drawable/espana" />
+                android:background="@color/white" />
 
         </LinearLayout>
 
@@ -62,8 +61,7 @@
                 android:layout_width="250dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/white"
-                android:src="@drawable/reinounido" />
+                android:background="@color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -114,8 +112,7 @@
                 android:layout_width="250dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/white"
-                android:src="@drawable/paisvasco" />
+                android:background="@color/white"/>
 
         </LinearLayout>
 

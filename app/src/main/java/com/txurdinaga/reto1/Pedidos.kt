@@ -14,9 +14,13 @@ import android.util.Log // Importa Log para el manejo de errores
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Spinner
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
+import com.bumptech.glide.Glide
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -119,6 +123,23 @@ class Pedidos : Fragment() {
             }
     }
 
+    private fun cargarImagenFirebase(nombre: String, imgImagen: ImageView) {
+        val name = nombre
+        val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://reto1-d31c7.appspot.com/$name.png")
+
+        storageReference.downloadUrl.addOnSuccessListener { uri ->
+            // uri contiene la URL de descarga de la imagen
+            val imageUrl = uri.toString()
+
+            // Utiliza una biblioteca como Glide para cargar la imagen en un ImageView
+            Glide.with(requireContext())
+                .load(imageUrl)
+                .into(imgImagen) // 'imagen' es tu ImageView
+        }.addOnFailureListener { exception ->
+            // Manejar errores, por ejemplo, si la imagen no se pudo descargar
+        }
+    }
+
     fun obtenerMenus() {
         db.collection("Menus")
             .get()
@@ -197,11 +218,14 @@ class Pedidos : Fragment() {
             val txtNombrePlato = itemLayout.findViewById<TextView>(R.id.txtNombrePlatos)
             val txtCaloriaPlato = itemLayout.findViewById<TextView>(R.id.txtCaloriaPlato)
             val txtPrecioPlato = itemLayout.findViewById<TextView>(R.id.txtPrecioPlatos)
+            val imgPlato = itemLayout.findViewById<ImageView>(R.id.img_platos)
             val spinner = itemLayout.findViewById<Spinner>(R.id.spinnerNumbers)
 
             txtNombrePlato.text = plato.nombre
             txtCaloriaPlato.text = plato.calorias.toString()
             txtPrecioPlato.text = "${plato.precio}€"
+
+            cargarImagenFirebase(plato.nombre, imgPlato)
 
             val adapter = ArrayAdapter(
                 requireContext(),
@@ -240,9 +264,9 @@ class Pedidos : Fragment() {
             val txtMenu1plato = itemLayout.findViewById<TextView>(R.id.txtMenu1plato)
             val txtMenu2plato = itemLayout.findViewById<TextView>(R.id.txtMenu2plato)
             val txtMenu3plato = itemLayout.findViewById<TextView>(R.id.txtMenu3plato)
-            /*val imgMenu1plato = itemLayout.findViewById<TextView>(R.id.imgMenu1plato)
-            val imgMenu2plato = itemLayout.findViewById<TextView>(R.id.imgMenu2plato)
-            val imgMenu3plato = itemLayout.findViewById<TextView>(R.id.imgMenu3plato)*/
+            val imgMenu1plato = itemLayout.findViewById<ImageView>(R.id.imgMenu1plato)
+            val imgMenu2plato = itemLayout.findViewById<ImageView>(R.id.imgMenu2plato)
+            val imgMenu3plato = itemLayout.findViewById<ImageView>(R.id.imgMenu3plato)
             val txtCaloriaMenu = itemLayout.findViewById<TextView>(R.id.txtCaloriaMenu)
             val txtPrecioMenu = itemLayout.findViewById<TextView>(R.id.txtPrecioMenu)
 
@@ -251,9 +275,11 @@ class Pedidos : Fragment() {
             txtMenu1plato.text = "Primer Plato: ${cogerTextoMenu(menu.platos[0].toInt())}"
             txtMenu2plato.text = "Segundo Plato: ${cogerTextoMenu(menu.platos[1].toInt())}"
             txtMenu3plato.text = "Postre: ${cogerTextoMenu(menu.platos[2].toInt())}"
-            /*imgMenu1plato.text = cogerImgMenu(1, resultPlatos)
-            imgMenu2plato.text = cogerImgMenu(2, resultPlatos)
-            imgMenu3plato.text = cogerImgMenu(3, resultPlatos)*/
+
+            cargarImagenFirebase(buscarNombrePlato(menu.platos[0].toInt()), imgMenu1plato)
+            cargarImagenFirebase(buscarNombrePlato(menu.platos[1].toInt()), imgMenu2plato)
+            cargarImagenFirebase(buscarNombrePlato(menu.platos[2].toInt()), imgMenu3plato)
+
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
@@ -282,6 +308,17 @@ class Pedidos : Fragment() {
         }
     }
 
+    private fun buscarNombrePlato(idplato: Int): String{
+        var nombreplato: String = ""
+            for(plato in listaPlatos){
+                if(plato.id_plato==idplato){
+                    nombreplato = plato.nombre
+                    break
+                }
+            }
+        println(nombreplato)
+        return nombreplato
+    }
 
     private fun cogerTextoMenu(idPlato: Int): String {
         var texto: String = ""
