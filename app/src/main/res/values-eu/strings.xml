@@ -40,5 +40,5 @@
     <string name="olvidar_contra">Pasahitza ahaztu duzu? </string>
     <string name="cerrar">SAIOA ITXI</string>
     <string name="calorias">Calorias\n</string>
-
+    <string name="contraseñas_no_iguales">Pasahitzak bat etorri behar dute</string>
 </resources>

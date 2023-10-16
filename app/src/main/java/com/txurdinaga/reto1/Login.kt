@@ -53,11 +53,14 @@ class Login : AppCompatActivity() {
         btnInicioSesion = findViewById(R.id.btnInicioSesion)
         editTextCorreo = findViewById(R.id.editTextTextEmailAddress)
         editTextContraseña = findViewById(R.id.editTextTextPassword)
-        botonRegisterGoogle = findViewById(R.id.signInWithGoogleButton)
+        txtRegistro = findViewById(R.id.textViewNoTienesCuenta)
+        editTextCorreo.setText("dani@gmail.com")
+        editTextContraseña.setText("123456")
+        //botonRegisterGoogle = findViewById(R.id.signInWithGoogleButton)
 
         // Inicializar campos con valores de ejemplo (puedes eliminarlos en producción)
-        editTextCorreo.setText("diego@gmail.com")
-        editTextContraseña.setText("diego@gmail.com")
+        //editTextCorreo.setText("diego@gmail.com")
+        //editTextContraseña.setText("diego@gmail.com")
 
         // Configurar clic en el botón de inicio de sesión
         btnInicioSesion.setOnClickListener {
@@ -69,7 +72,13 @@ class Login : AppCompatActivity() {
             inicioSesion()
         }
 
-        botonRegisterGoogle.setOnClickListener { iniciarSesionGoogle() }
+        // Configurar clic en el texto de registro
+        txtRegistro.setOnClickListener {
+            val intent = Intent(this, Registro::class.java)
+            startActivity(intent)
+        }
+
+        // botonRegisterGoogle.setOnClickListener { iniciarSesionGoogle() }
 
 
         //CAMBIO DE IDIOMA
@@ -99,7 +108,7 @@ class Login : AppCompatActivity() {
 
     }
 
-    private fun iniciarSesionGoogle() {
+    /*private fun iniciarSesionGoogle() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -108,9 +117,9 @@ class Login : AppCompatActivity() {
         val googleSignInClient = GoogleSignIn.getClient(this, gso)
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
+    }*/
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
@@ -122,9 +131,9 @@ class Login : AppCompatActivity() {
                 Toast.makeText(this, "Error al iniciar sesión con Google: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
-    }
+    }*/
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
+    /*private fun firebaseAuthWithGoogle(idToken: String) {
 
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         val currentUser = auth.currentUser
@@ -151,24 +160,24 @@ class Login : AppCompatActivity() {
 
 
 
-    }
+    }*/
 
-    private fun guardarDatosUsuario() {
+    /*private fun guardarDatosUsuario() {
         // Obtén el usuario actualmente autenticado
         val user = auth.currentUser
         val uid = user?.uid
-        val email = user?.email
-        val displayName = user?.displayName
-        val partes = displayName!!.split(" ")
-        val nombre: String? = partes[0]
-        val apellidos: String? = partes.subList(1, partes.size).joinToString(" ")
+        //val email = user?.email
+        //val displayName = user?.displayName
+        //val partes = displayName!!.split(" ")
+        //val nombre: String? = partes[0]
+        //val apellidos: String? = partes.subList(1, partes.size).joinToString(" ")
 
 
         // Define los datos que deseas agregar al documento
         val datos = hashMapOf(
-            "Nombre" to "$nombre",
-            "Apellidos" to "$apellidos",
-            "Correo" to "$email",
+            "Nombre" to "",
+            "Apellidos" to "",
+            "Correo" to "",
             "Telefono" to "",
             "FechaNacimiento" to "",
             "Direccion" to "",
@@ -197,7 +206,7 @@ class Login : AppCompatActivity() {
                     "Error al agregar datos al documento $uid: $e"
                 )
             }
-    }
+    }*/
 
     private fun inicioSesion() {
         val correo = editTextCorreo.text.toString()

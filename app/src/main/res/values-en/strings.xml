@@ -40,6 +40,7 @@
     <string name="olvidar_contra">Forgot your password?</string>
     <string name="cerrar">LOG OUT</string>
     <string name="calorias">Calorias\n</string>
+    <string name="contraseñas_no_iguales">Passwords must match</string>
 
 
 </resources>

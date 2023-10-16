@@ -42,6 +42,7 @@
     <string name="olvidar_contra">¿Has olvidado tu contraseña? </string>
     <string name="cerrar">CERRAR SESIÓN</string>
     <string name="calorias">Calorias\n</string>
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="contraseñas_no_iguales">Las contraseñas deben coincidir</string>
 
 </resources>

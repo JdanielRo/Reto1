@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -73,7 +75,6 @@ class MiCuenta : Fragment() {
                     // El documento existe, obtén los datos
                     val datos = documentSnapshot.data
 
-
                     // Ahora puedes acceder a los campos de datos como un mapa
                     val nombre = datos?.get("Nombre") as? String
                     val apellidos = datos?.get("Apellidos") as? String
@@ -104,17 +105,61 @@ class MiCuenta : Fragment() {
             }
 
 
+        //MODIFICAR DATOS
+
+        view.findViewById<Button>(R.id.btnGuardarCambios).setOnClickListener(){
+            val nuevoNombre = editTextNombre.text.toString()
+            val nuevoApellidos = editTextApellidos.text.toString()
+            val nuevoCorreo = editTextCorreoElectronico.text.toString()
+            val nuevoFechaNacimiento = editTextFechaNacimiento.text.toString()
+            val nuevoTelefono = editTextTelefono.text.toString()
+            val nuevoDireccion = editTextDireccion.text.toString()
+
+            val nuevosDatos = HashMap<String, Any>()
+            nuevosDatos["Nombre"] = nuevoNombre
+            nuevosDatos["Apellidos"] = nuevoApellidos
+            nuevosDatos["Correo"] = nuevoCorreo
+            nuevosDatos["FechaNacimiento"] = nuevoFechaNacimiento
+            nuevosDatos["Telefono"] = nuevoTelefono
+            nuevosDatos["Direccion"] = nuevoDireccion
+
+            db.collection("Usuarios")
+                .document("$uid")
+                .update(nuevosDatos)
+                .addOnSuccessListener {
+
+                    //Quitar los focus en caso de que se hayan actualizado los datos
+                    editTextNombre.clearFocus()
+                    editTextApellidos.clearFocus()
+                    editTextCorreoElectronico.clearFocus()
+                    editTextFechaNacimiento.clearFocus()
+                    editTextTelefono.clearFocus()
+                    editTextDireccion.clearFocus()
+
+                    // Los datos se actualizaron con éxito
+                    //Toast.makeText(this,"Los datos han sido actualizados correctamente", LENGTH_SHORT).show
+
+                }
+                .addOnFailureListener { e ->
+                    // Maneja el error en caso de que ocurra
+                    Log.w("MiCuenta", "Error al actualizar los datos", e)
+                    // Puedes registrar el error o mostrar un mensaje de error al usuario, o realizar cualquier acción de manejo de errores necesaria.
+                }
+        }
+
+
+
         //LOG OUT
         mAuth = Firebase.auth
         val buttonLogOut = view.findViewById<Button>(R.id.buttonLogOut)
         buttonLogOut.setOnClickListener{
             signOutAndStartSignInActivity()
         }
-        configureGoogleSignIn()
+
         return view
     }
 
-    private fun configureGoogleSignIn() {
+    /*private fun configureGoogleSignIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -122,7 +167,7 @@ class MiCuenta : Fragment() {
 
         // Crea un cliente de inicio de sesión de Google con las opciones configuradas
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-    }
+    }*/
 
     private fun signOutAndStartSignInActivity() {
         mAuth.signOut()
