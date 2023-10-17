@@ -58,8 +58,8 @@ class Login : AppCompatActivity() {
         //botonRegisterGoogle = findViewById(R.id.signInWithGoogleButton)
 
         // Inicializar campos con valores de ejemplo (puedes eliminarlos en producción)
-        //editTextCorreo.setText("diego@gmail.com")
-        //editTextContraseña.setText("diego@gmail.com")
+        editTextCorreo.setText("2grupotxurdinaga@gmail.com")
+        editTextContraseña.setText("Grupo!2!Grupo")
 
         // Configurar clic en el botón de inicio de sesión
         btnInicioSesion.setOnClickListener {
