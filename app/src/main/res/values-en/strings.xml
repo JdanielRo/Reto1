@@ -50,5 +50,18 @@
     <string name="calorias">Calorias\n</string>
     <string name="contraseñas_no_iguales">Passwords must match</string>
 
+    <!-- HOME -->
+    <string name="comida_saludable">Healthy Food</string>
+    <string name="productos_cuidados">We Care for the Products</string>
+    <string name="variedad_celiacos">Variety for Celiacs</string>
+    <string name="text_variedad_celiacos">We offer a wide variety of dishes and menus for people with celiac disease while always respecting the customers health.</string>
+    <string name="text_comida_saludable">At Fitness Restaurant, we provide healthy dishes and menus for those who need to take care of their diet and health.</string>
+    <string name="text_productos_cuidados">We respect the raw materials and always take care of the products to ensure they retain their characteristics and offer the best to our customers.</string>
+    <string name="bilbao_bizkaia">Bilbao, Bizkaia</string>
+    <string name="fitnessrestaurant_gmail_com">fitnessrestaurant@gmail.com</string>
+    <string name="_94672846_683562594">94672846 | 683562594</string>
+    <string name="contacto">CONTACT</string>
+    <string name="maps_api_key">AIzaSyDVR_AVXogAW6eCD6iQgdFRaGD5UtN-hDQ</string>
+
 
 </resources>

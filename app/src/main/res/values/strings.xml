@@ -52,4 +52,17 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="contraseñas_no_iguales">Las contraseñas deben coincidir</string>
 
+    <!-- INICIO -->
+    <string name="comida_saludable">Comida Saludable</string>
+    <string name="productos_cuidados">Cuidamos de los Productos</string>
+    <string name="variedad_celiacos">Variedad para celíacos</string>
+    <string name="text_variedad_celiacos">Disponemos de una amplia variedad de platos y menús para personas celíacas respetando en todo momento la salud del cliente.</string>
+    <string name="text_comida_saludable">En Fitness Restaurant ofrecemos platos y menús saludables para aquellas personas que necesiten cuidar su dieta y salud. </string>
+    <string name="text_productos_cuidados">Respetamos la materia prima y cuidamos siempre de los productos para que no pierdan sus características y ofrecer lo mejor a nuestros clientes.</string>
+    <string name="bilbao_bizkaia">Bilbao, Bizkaia</string>
+    <string name="fitnessrestaurant_gmail_com">fitnessrestaurant@gmail.com</string>
+    <string name="_94672846_683562594">94672846 | 683562594</string>
+    <string name="contacto">CONTACTO</string>
+    <string name="maps_api_key">AIzaSyDVR_AVXogAW6eCD6iQgdFRaGD5UtN-hDQ</string>
+
 </resources>

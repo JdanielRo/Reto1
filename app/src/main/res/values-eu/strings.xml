@@ -50,4 +50,18 @@
     <string name="cerrar">SAIOA ITXI</string>
     <string name="calorias">Calorias\n</string>
     <string name="contraseñas_no_iguales">Pasahitzak bat etorri behar dute</string>
+
+    <!-- HASIERA -->
+    <string name="comida_saludable">Janari osasuntsua</string>
+    <string name="productos_cuidados">Produktuak zaintzen ditugu</string>
+    <string name="variedad_celiacos">Zeliakoentzako aniztasuna</string>
+    <string name="text_variedad_celiacos">Zeliakoentzako janari eta menu anitz eskaintzen ditugu, beti bezeroaren osasuna errespetatuz.</string>
+    <string name="text_comida_saludable">Fitness Restaurant-en osasuntsuak diren janari eta menuak eskaintzen ditugu, dieta eta osasuna zaindu behar duten pertsonentzako.</string>
+    <string name="text_productos_cuidados">Hainbat produktuen oinarrizko materiala errespetatzen dugu eta produktuak zaintzen ditugu, haien ezaugarriak ez galtzeko eta gure bezeroei hoberena eskaintzeko.</string>
+    <string name="bilbao_bizkaia">Bilbo, Bizkaia</string>
+    <string name="fitnessrestaurant_gmail_com">fitnessrestaurant@gmail.com</string>
+    <string name="_94672846_683562594">94672846 | 683562594</string>
+    <string name="contacto">KONTAKTUA</string>
+    <string name="maps_api_key">AIzaSyDVR_AVXogAW6eCD6iQgdFRaGD5UtN-hDQ</string>
+
 </resources>
