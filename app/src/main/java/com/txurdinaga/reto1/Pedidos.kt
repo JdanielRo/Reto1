@@ -110,10 +110,10 @@ class Pedidos : Fragment() {
                     val precio = document.getDouble("precio") ?: 0.0
                     val cantidad = document.getLong("cantidad")?.toInt() ?: 0
                     val id_plato = document.id.toIntOrNull() ?: 0
-                    val plato =
-                        Plato(nombre, descripcion, celiaco, calorias, precio, cantidad, id_plato)
+                    val plato = null
+                        //Plato(nombre, descripcion, celiaco, calorias, precio, cantidad, id_plato)
                     println("$suma.- $plato")
-                    listaPlatos.add(plato)
+                    //listaPlatos.add(plato)
                     suma++
                 }
             }
@@ -222,7 +222,7 @@ class Pedidos : Fragment() {
             val spinner = itemLayout.findViewById<Spinner>(R.id.spinnerNumbers)
 
             txtNombrePlato.text = plato.nombre
-            txtCaloriaPlato.text = plato.calorias.toString()
+            //txtCaloriaPlato.text = plato.calorias.toString()
             txtPrecioPlato.text = "${plato.precio}€"
 
             cargarImagenFirebase(plato.nombre, imgPlato)
@@ -230,7 +230,7 @@ class Pedidos : Fragment() {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                (1..plato.cantidad).map { it.toString() }
+                (1..plato.stock/*.cantidad*/).map { it.toString() }
             )
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
@@ -311,7 +311,7 @@ class Pedidos : Fragment() {
     private fun buscarNombrePlato(idplato: Int): String{
         var nombreplato: String = ""
             for(plato in listaPlatos){
-                if(plato.id_plato==idplato){
+                if(plato.idPlato.equals(idplato)){
                     nombreplato = plato.nombre
                     break
                 }
@@ -323,7 +323,7 @@ class Pedidos : Fragment() {
     private fun cogerTextoMenu(idPlato: Int): String {
         var texto: String = ""
         for (plato in listaPlatos) {
-            if (plato.id_plato == idPlato) {
+            if (plato.idPlato.equals(idPlato) ) {
                 texto = plato.nombre
                 break
             }
