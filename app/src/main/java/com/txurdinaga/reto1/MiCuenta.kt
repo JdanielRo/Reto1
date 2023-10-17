@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -25,7 +26,7 @@ private const val ARG_PARAM2 = "param2"
 class MiCuenta : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    //private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,12 +149,29 @@ class MiCuenta : Fragment() {
         }
 
 
+        //RESTABLECER CONTRASEÑA
+
+        val restablecerPass = view.findViewById<TextView>(R.id.textViewRestablecerPass)
+
+        restablecerPass.setOnClickListener{
+
+            val intent = Intent(requireContext(), NewPassword::class.java)
+            startActivity(intent)
+
+        }
+
 
         //LOG OUT
         mAuth = Firebase.auth
         val buttonLogOut = view.findViewById<Button>(R.id.buttonLogOut)
         buttonLogOut.setOnClickListener{
-            signOutAndStartSignInActivity()
+
+            mAuth.signOut()
+
+            val intent = Intent(requireContext(), Login::class.java)
+            startActivity(intent)
+
+
         }
 
         return view
@@ -169,16 +187,6 @@ class MiCuenta : Fragment() {
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
     }*/
 
-    private fun signOutAndStartSignInActivity() {
-        mAuth.signOut()
-
-        mGoogleSignInClient.signOut().addOnCompleteListener(requireActivity()) {
-            val intent = Intent(requireContext(), Login::class.java)
-            startActivity(intent)
-        }
-
-
-    }
 
     companion object {
         fun newInstance(param1: String, param2: String) =

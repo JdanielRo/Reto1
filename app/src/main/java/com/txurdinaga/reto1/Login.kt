@@ -24,18 +24,18 @@ import java.util.Locale
 
 class Login : AppCompatActivity() {
 
-    companion object {
+    /*companion object {
         private const val RC_SIGN_IN = 9001
-    }
+    }*/
 
     private lateinit var auth: FirebaseAuth
     private lateinit var btnInicioSesion: Button
     private lateinit var editTextCorreo: EditText
     private lateinit var editTextContraseña: EditText
     private lateinit var txtRegistro: TextView
-    private lateinit var botonRegisterGoogle: Button
+    //private lateinit var botonRegisterGoogle: Button
 
-    lateinit var navigation: BottomNavigationView
+    //lateinit var navigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,8 +54,8 @@ class Login : AppCompatActivity() {
         editTextCorreo = findViewById(R.id.editTextTextEmailAddress)
         editTextContraseña = findViewById(R.id.editTextTextPassword)
         txtRegistro = findViewById(R.id.textViewNoTienesCuenta)
-        editTextCorreo.setText("dani@gmail.com")
-        editTextContraseña.setText("123456")
+        //editTextCorreo.setText("dani@gmail.com")
+        //editTextContraseña.setText("123456")
         //botonRegisterGoogle = findViewById(R.id.signInWithGoogleButton)
 
         // Inicializar campos con valores de ejemplo (puedes eliminarlos en producción)
@@ -103,6 +103,14 @@ class Login : AppCompatActivity() {
             // Cambiar el idioma a euskera
             setAppLocale("eu")
             recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+        }
+
+        //¿HAS OLVIDADO TU CONTRASEÑA?
+        findViewById<TextView>(R.id.textViewPreguntaLogin).setOnClickListener{
+
+            val olvidarContra = Intent(this, NewPassword::class.java)
+            startActivity(olvidarContra)
+
         }
 
 

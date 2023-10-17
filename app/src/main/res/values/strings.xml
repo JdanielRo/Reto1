@@ -30,6 +30,13 @@
     <string name="sign_up_with_google">Registarse con Google</string>
     <string name="platos">Platos</string>
 
+    <string name="pregunta_correo">Escribe el correo al que quieres que enviemos el enlace para restablecer la contraseña</string>
+    <string name="confirmar">CONFIRMAR</string>
+    <string name="toast_if"> Se ha enviado un enlace de restablecimiento a tu correo electrónico</string>
+    <string name="toast_else"> No se pudo enviar el enlace de restablecimiento</string>
+
+    <string name="tener_cuenta">Si ya tienes una cuenta, haz clic AQUÍ.</string>
+    <string name="no_tener_cuenta">Si no tienes una cuenta, haz clic AQUÍ.</string>
 
     <!--FORMULARIO MI CUENTA-->
     <string name="nombre">Nombre</string>

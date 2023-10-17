@@ -29,6 +29,15 @@
     <string name="emailDuplicado">Posta elektroniko hau dagoeneko erregistratuta dago.</string>
     <string name="sign_up_with_google">Google-rekin Erregistratu</string>
 
+
+    <string name="pregunta_correo">Pasahitza berrezaritzeko esteka bidaltzeko nahi duzun posta elektronikoa idatzi</string>
+    <string name="confirmar">BAIEZTATU</string>
+    <string name="toast_if">Pasahitz berrezartzeko esteka zure posta elektronikora bidali da.</string>
+    <string name="toast_else">Ezin izan da pasahitzaren berrezartzeko esteka bidali.</string>
+
+    <string name="tener_cuenta">Kontu bat baduzu, sakatu HEMEN.</string>
+    <string name="no_tener_cuenta">Konturik ez baduzu, sakatu HEMEN.</string>
+
     <!--FORMULARIO MI CUENTA-->
     <string name="nombre">Izena</string>
     <string name="apellidos">Abizenak</string>

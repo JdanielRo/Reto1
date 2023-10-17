@@ -29,6 +29,14 @@
     <string name="emailDuplicado">This email address is already registered.</string>
     <string name="sign_up_with_google">Sign up with Google</string>
 
+    <string name="pregunta_correo">Enter the email to which you want us to send the password reset link</string>
+    <string name="confirmar">CONFIRM</string>
+    <string name="toast_if">A password reset link has been sent to your email.</string>
+    <string name="toast_else">Unable to send the password reset link.</string>
+
+    <string name="tener_cuenta">If you already have an account, click HERE.</string>
+    <string name="no_tener_cuenta">If you already have an account, click HERE.</string>
+
     <!--FORMULARIO MI CUENTA-->
     <string name="nombre">Name</string>
     <string name="apellidos">Last Name</string>
