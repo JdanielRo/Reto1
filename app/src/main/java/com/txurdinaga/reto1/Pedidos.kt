@@ -1,13 +1,16 @@
 package com.txurdinaga.reto1
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RadioButton
+import android.widget.Spinner
 import android.widget.Switch
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -66,10 +69,35 @@ class Pedidos : Fragment() {
         val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
         val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
         val radioButton = itemLayout.findViewById<RadioButton>(R.id.radioButton2)
+        val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
+        val spinner = itemLayout.findViewById<Spinner>(R.id.spinner)
+        val txtPrecioPlatoPedidos = itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
+        val layoutMostrarPrecioCantidad = itemLayout.findViewById<LinearLayout>(R.id.layoutMostrarPrecioCantidad)
+        val txtDescripcionPlatoPedidos = itemLayout.findViewById<TextView>(R.id.txtDescripcionPlatoPedidos)
+        val txtDescripcionPlato = itemLayout.findViewById<TextView>(R.id.txtDescripcionPlato)
+        txtDescripcionPlato.setOnClickListener{
+            if (tipo == Tipo.CARTA){
+                layoutMostrarPrecioCantidad.visibility = View.GONE
+                txtDescripcionPlatoPedidos.visibility = View.VISIBLE
+                imgCerrarDescripcion.visibility = View.VISIBLE
+            }else{
+
+            }
+        }
+        imgCerrarDescripcion.setOnClickListener{
+            layoutMostrarPrecioCantidad.visibility = View.VISIBLE
+            txtDescripcionPlatoPedidos.visibility = View.GONE
+            imgCerrarDescripcion.visibility = View.GONE
+        }
+        imgCerrarDescripcion.visibility = View.GONE
+
         if (tipo == Tipo.CARTA) {
             checkBox.visibility = View.VISIBLE
             radioButton.visibility = View.GONE
+            txtDescripcionPlatoPedidos.visibility = View.GONE
         } else {
+            layoutMostrarPrecioCantidad.visibility = View.GONE
+            imgCerrarDescripcion.visibility = View.GONE
             checkBox.visibility = View.GONE
             radioButton.visibility = View.VISIBLE
         }

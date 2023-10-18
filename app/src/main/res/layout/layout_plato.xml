@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/space_height"
@@ -42,7 +43,7 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:layout_margin="10dp"
+            android:layout_margin="2.5dp"
             android:gravity="center"
             android:text="Plato"
             android:textColor="@color/light_green" />
@@ -53,8 +54,8 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/txtDescripcioPlato"
-                android:layout_width="0dp"
+                android:id="@+id/txtDescripcionPlato"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
@@ -63,33 +64,52 @@
                 android:textColor="@color/azul_enlace"
                 android:textColorLink="@color/azul_enlace" />
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="1" />
+
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@drawable/x" />
 
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            app:cardBackgroundColor="#D7E6E6E6">
 
             <TextView
-                android:id="@+id/txtPrecio"
-                android:layout_width="125dp"
+                android:id="@+id/txtDescripcionPlatoPedidos"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="1€" />
+                android:text="Esta es la descripcion" />
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+            <LinearLayout
+                android:id="@+id/layoutMostrarPrecioCantidad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/txtPrecioPlatoPedidos"
+                    android:layout_width="125dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="1€" />
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 
