@@ -11,7 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class SplashScreen : AppCompatActivity() {
 
     private val listaPlatos: ArrayList<Plato> = ArrayList()
-    private val listaExtras: ArrayList<Plato> = ArrayList()
+    private val listaExtras: ArrayList<Extra> = ArrayList()
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +32,7 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun obtenerPlatos() {
-        Log.d("MiApp", "Obteniendo Platos")
+
         db.collection("Plato")
             .get()
             .addOnSuccessListener { result ->
@@ -45,9 +45,6 @@ class SplashScreen : AppCompatActivity() {
                     val tipo = document.getString("tipo") ?: ""
                     val plato = Plato(idPlato, nombre, precio, descripcion, stock, tipo)
 
-                    // Aquí, deberías ver el nombre de cada plato en el logcat
-                    Log.d("MiApp", "Plato obtenido: ${plato.nombre}")
-
                     listaPlatos.add(plato)
                 }
             }
@@ -57,6 +54,23 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun obtenerExtras() {
-        // Aquí puedes implementar la lógica para obtener extras si es necesario.
+        db.collection("Extra")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val idPlato = document.id
+                    val nombre = document.getString("nombre") ?: ""
+                    val precio = document.getDouble("precio") ?: 0.0
+                    val descripcion = document.getString("descripcion") ?: ""
+                    val stock = document.getLong("stock")?.toInt() ?: 0
+                    val tipo = document.getString("tipo") ?: ""
+                    val extra = Extra(idPlato, nombre, precio, descripcion, stock, tipo)
+
+                    listaExtras.add(extra)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("MiApp", "Error al obtener platos: ${e.message}", e)
+            }
     }
 }
