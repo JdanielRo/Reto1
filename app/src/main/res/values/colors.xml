@@ -7,4 +7,5 @@
     <color name="google_blue">#4285F4</color>
     <color name="azul_enlace">#03A9F4</color>
     <color name="color_transparent">#00FFFFFF</color>
+    <color name="cardview">#D7E6E6E6</color>
 </resources>
