@@ -1,8 +1,10 @@
 package com.txurdinaga.reto1
 
 class Pedido(
-    val idPedido: String,
+    val idPedido: Int,
     val idUsuario: String,
-    val idPlato: List<String>
+    val idMenu: Int,
+    val idPlato: String,
+    val cantida: Int
 ) {
 }

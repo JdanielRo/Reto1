@@ -1,10 +1,14 @@
 package com.txurdinaga.reto1
 
+import Extra
+import Plato
+import Usuario
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -16,6 +20,10 @@ class Main : AppCompatActivity() {
     lateinit var navigation: BottomNavigationView // Declaración de la vista BottomNavigationView
     private lateinit var sharedPref: SharedPreferences // Declaración de SharedPreferences para guardar el idioma
     private var currentFragment: Fragment? = null // Declaración de un Fragmento actual
+    private var listaPlatos: ArrayList<Plato> = ArrayList()
+    private var listaExtras: ArrayList<Extra> = ArrayList()
+    private var usuario :Usuario = Usuario()
+    private var carritoUsuario: ArrayList<Pedido> = ArrayList()
 
     // Listener para las selecciones de elementos del menú de navegación
     private val onNavMenuListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -25,7 +33,7 @@ class Main : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemPedidos -> {
-                showFragment(Pedidos()) // Mostrar el fragmento "Pedidos" al seleccionar el elemento correspondiente
+                showFragment(Pedidos(listaPlatos)) // Mostrar el fragmento "Pedidos" al seleccionar el elemento correspondiente
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemCarrito -> {
@@ -44,6 +52,17 @@ class Main : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main) // Establecer el diseño de la actividad
+
+        listaPlatos = intent.getSerializableExtra("platos") as ArrayList<Plato>
+        listaExtras = intent.getSerializableExtra("extras") as ArrayList<Extra>
+        Log.d("MiApp", "esta en el main el extra${listaExtras[0].nombre}")
+        Log.d("MiApp", "esta en el main el plato ${listaPlatos[0].nombre}")
+
+        usuario = intent.getParcelableExtra<Usuario>("usuario")!!
+        carritoUsuario= intent.getStringArrayListExtra("carrito") as ArrayList<Pedido>
+       /* for (plato in listaPlatos){
+            Log.d("MiApp", "datos plato ${plato.nombre}")
+        }*/
 
         navigation = findViewById(R.id.navMenu) // Inicializar la vista BottomNavigationView
         navigation.setOnNavigationItemSelectedListener(onNavMenuListener) // Configurar el listener para elementos de navegación
