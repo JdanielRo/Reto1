@@ -7,8 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
@@ -124,7 +127,7 @@ class MiCuenta : Fragment() {
             val nuevoCorreo = editTextCorreoElectronico.text.toString()
             val nuevoFechaNacimiento = editTextFechaNacimiento.text.toString()
             val nuevoTelefono = editTextTelefono.text.toString()
-            val nuevoDireccion = editTextDireccion.text.toString()
+
 
             val nuevosDatos = HashMap<String, Any>()
             nuevosDatos["Nombre"] = nuevoNombre
@@ -132,7 +135,7 @@ class MiCuenta : Fragment() {
             nuevosDatos["Correo"] = nuevoCorreo
             nuevosDatos["FechaNacimiento"] = nuevoFechaNacimiento
             nuevosDatos["Telefono"] = nuevoTelefono
-            nuevosDatos["Direccion"] = nuevoDireccion
+            //nuevosDatos["Direccion"] = nuevoDireccion
 
             db.collection("Usuarios")
                 .document("$uid")
@@ -155,6 +158,134 @@ class MiCuenta : Fragment() {
                 }
 
         }
+
+
+        //****************************DIRECCIONES********************************
+
+        var listaDatos = mutableListOf<String>()
+
+        // Crea un ArrayAdapter para el Spinner
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listaDatos)
+
+        view.findViewById<Button>(R.id.buttonAgregarDireccion).setOnClickListener {
+
+            val nuevoDireccion = editTextDireccion.text.toString()
+
+            val documentReference = db.collection("Usuarios").document("$uid")
+            val direccionesCollectionRef = documentReference.collection("Direcciones")
+
+            // Obtener los documentos actuales en la colección "Direcciones"
+            direccionesCollectionRef.get()
+                .addOnSuccessListener { documents ->
+                    if (documents.size() < 5) {
+                        // Si el número de documentos es menor que 5, puedes agregar uno nuevo
+                        val nuevaColeccion = HashMap<String, Any>()
+                        nuevaColeccion["direccion"] = nuevoDireccion
+
+                        // Agregar la nueva colección
+                        direccionesCollectionRef.add(nuevaColeccion)
+
+                        Toast.makeText(requireContext(), R.string.direccion_agregada, Toast.LENGTH_SHORT).show()
+                        editTextDireccion.setText("")
+                        listaDatos.add(nuevoDireccion)
+                        adapter.notifyDataSetChanged()
+
+
+                    } else {
+                        // Si ya hay 5 documentos, muestra un mensaje de error o realiza otra acción
+                        Toast.makeText(requireContext(), R.string.limite_direcciones, Toast.LENGTH_SHORT).show()
+                        editTextDireccion.setText("")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    // Manejar errores si la operación falla
+                    Log.e("Error", "Error al obtener documentos: $e")
+                }
+
+        }
+
+
+
+
+        val referenciaDocumentoPadre = db.collection("Usuarios").document("$uid")
+        val referenciaColeccionHija = referenciaDocumentoPadre.collection("Direcciones")
+
+        var datoSeleccionado: String = ""
+        // Recupera los documentos de la colección hija
+        referenciaColeccionHija.get()
+            .addOnSuccessListener { querySnapshot ->
+                 // Crea una lista para almacenar los datos
+
+                for (document in querySnapshot.documents) {
+                    // Para cada documento en la colección hija, obtén los datos y agrégalos a la lista
+                    val dato = document.getString("direccion") // Ajusta esto según tus datos
+                    dato?.let {
+                        listaDatos.add(it)
+                    }
+                }
+
+
+
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                // Obtén una referencia al Spinner en tu diseño XML
+                val spinner = view.findViewById<Spinner>(R.id.spinner)
+
+                // Configura el adaptador en el Spinner
+                spinner.adapter = adapter
+                
+                // Configura un oyente de selección si deseas realizar acciones al seleccionar un dato
+                spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        datoSeleccionado = listaDatos[position]
+                        // Realiza acciones basadas en el dato seleccionado
+
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        // Manejar el caso en el que no se ha seleccionado nada
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                // Maneja errores si la operación falla
+                Log.e("Error", "Error al obtener datos de la colección hija: $e")
+            }
+
+
+        view.findViewById<Button>(R.id.buttonBorrarDireccion).setOnClickListener {
+
+            referenciaColeccionHija
+                .whereEqualTo("direccion", datoSeleccionado)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot.documents) {
+                        // Encuentra el documento que deseas eliminar
+                        val referenciaDocumentoAEliminar = document.reference
+
+                        // Elimina el documento
+                        referenciaDocumentoAEliminar.delete()
+                            .addOnSuccessListener {
+                                // Documento eliminado con éxito
+                                listaDatos.remove(datoSeleccionado)
+                                adapter.notifyDataSetChanged()
+
+                                Log.e("Success", "Se elimino la direccion")
+                            }
+                            .addOnFailureListener { e ->
+                                // Maneja errores si la eliminación falla
+                                Log.e("Error", "Error al eliminar direccion: $e")
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    // Maneja errores si la consulta falla
+                    Log.e("Error", "Error al obtener datos de la colección hija: $e")
+                }
+
+        }
+
+
 
 
         //RESTABLECER CONTRASEÑA

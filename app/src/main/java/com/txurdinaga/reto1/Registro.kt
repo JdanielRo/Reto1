@@ -197,8 +197,7 @@ class Registro : AppCompatActivity() {
             "Correo" to "$gmail",
             "Telefono" to "",
             "FechaNacimiento" to "$fechaNacimiento",
-            "Direccion" to "",
-            "idUsuario" to "$uid"
+            "idUsuario" to "$uid",
             // Agrega más campos y valores según sea necesario
         )
 
@@ -224,6 +223,19 @@ class Registro : AppCompatActivity() {
                     "Error al agregar datos al documento $uid: $e"
                 )
             }
+
+        editTextNombreRegistro.setText("Diego")
+        editTextApellidosRegistro.setText("Navarro")
+        editTextEmail.setText("diegutxo2002@gmail.com")
+        editTextPassword.setText("000000")
+        editTextPasswordComprobar.setText("000000")
+        editTextDateRegistro.setText("11/11/1999")
+
+        val db = FirebaseFirestore.getInstance()
+        val documentReference = db.collection("Usuarios").document("$uid")
+
+        documentReference.collection("Direcciones")
+
     }
 
 }

@@ -55,6 +55,12 @@
     <string name="campos_vacios">Eremu guztiak bete behar dituzu</string>
     <string name="datos_actualizados">Datuak ongi eguneratu dira</string>
     <string name="cuenta_borrada">Kontua behar-beharra ezabatu da</string>
+    <string name="agregar_direccion">DIREKZIOA GEHITU</string>
+    <string name="borrar_direccion">DIREKZIOA EZABATU</string>
+    <string name="limite_direcciones">5 helbide dituzu dagoeneko, beste bat gehitzeko bat ezabatu behar duzu</string>
+    <string name="direccion_agregada">Egindako helbidea ongi gehitu da</string>
+
+
 
     <!-- HASIERA -->
     <string name="comida_saludable">Janari osasuntsua</string>

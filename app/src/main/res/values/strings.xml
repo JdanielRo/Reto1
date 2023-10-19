@@ -56,6 +56,10 @@
     <string name="campos_vacios">Debes rellenar todos los campos</string>
     <string name="datos_actualizados">Los datos han sido actualizados correctamente</string>
     <string name="cuenta_borrada">La cuenta ha sido borrada correctamente</string>
+    <string name="agregar_direccion">AGREGAR DIRECCIÓN</string>
+    <string name="borrar_direccion">BORRAR DIRECCIÓN</string>
+    <string name="limite_direcciones">Ya tienes 5 direcciones, debes eliminar alguna para poder añadir otra</string>
+    <string name="direccion_agregada">Dirección agregada con exito</string>
 
 
     <!-- INICIO -->

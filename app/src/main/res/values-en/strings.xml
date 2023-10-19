@@ -54,6 +54,12 @@
     <string name="campos_vacios">You must fill in all the fields</string>
     <string name="datos_actualizados">Data has been updated successfully</string>
     <string name="cuenta_borrada">Account deleted successfully</string>
+    <string name="agregar_direccion">ADD ADDRESS</string>
+    <string name="borrar_direccion">DELETE ADDRESS</string>
+    <string name="limite_direcciones">You already have 5 addresses, you need to delete one to add another</string>
+    <string name="direccion_agregada">Address added successfully</string>
+
+
 
     <!-- HOME -->
     <string name="comida_saludable">Healthy Food</string>
