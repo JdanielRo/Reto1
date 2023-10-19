@@ -1,5 +1,8 @@
 package com.txurdinaga.reto1
 
+import Extra
+import Plato
+import Usuario
 import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
@@ -10,13 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 
@@ -30,8 +27,13 @@ class Login : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var btnInicioSesion: Button
     private lateinit var editTextCorreo: EditText
-    private lateinit var editTextContraseña: EditText
+    private lateinit var editTextContrasena: EditText
     private lateinit var txtRegistro: TextView
+    private var listaPlatos: ArrayList<Plato> = ArrayList()
+    private var listaExtras: ArrayList<Extra> = ArrayList()
+    private var usuario :Usuario = Usuario()
+    private var carritoUsuario: ArrayList<Pedido> = ArrayList()
+    private val db = FirebaseFirestore.getInstance()
     //private lateinit var botonRegisterGoogle: Button
 
     //lateinit var navigation: BottomNavigationView
@@ -41,9 +43,22 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.login)
 
         auth = FirebaseAuth.getInstance()
+
+        val listaPlatos = intent.getSerializableExtra("platos") as ArrayList<Plato>
+        val listaExtras = intent.getSerializableExtra("extras") as ArrayList<Extra>
+        Log.d("MiApp", "esta en el login el extra${listaExtras[0].nombre}")
+        Log.d("MiApp", "esta en el login el plato ${listaPlatos[0].nombre}")
+
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            startActivity(Intent(this, Main::class.java))
+            obtenerDatosUsuario()
+            obtenerPedidosUsuario()
+            val intent = Intent(this, Main::class.java)
+            intent.putExtra("platos", listaPlatos)
+            intent.putExtra("extras", listaExtras)
+            intent.putExtra("usuario", usuario)
+            intent.putExtra("carrito", carritoUsuario)
+            startActivity(intent)
             finish()
         }
 
@@ -51,7 +66,7 @@ class Login : AppCompatActivity() {
         // Asignar vistas a las variables
         btnInicioSesion = findViewById(R.id.btnInicioSesion)
         editTextCorreo = findViewById(R.id.editTextTextEmailAddress)
-        editTextContraseña = findViewById(R.id.editTextTextPassword)
+        editTextContrasena = findViewById(R.id.editTextTextPassword)
         txtRegistro = findViewById(R.id.textViewNoTienesCuenta)
         //editTextCorreo.setText("dani@gmail.com")
         //editTextContraseña.setText("123456")
@@ -59,7 +74,7 @@ class Login : AppCompatActivity() {
 
         // Inicializar campos con valores de ejemplo (puedes eliminarlos en producción)
         editTextCorreo.setText("2grupotxurdinaga@gmail.com")
-        editTextContraseña.setText("Grupo!2!Grupo")
+        editTextContrasena.setText("Grupo!2!Grupo")
 
         // Configurar clic en el botón de inicio de sesión
         btnInicioSesion.setOnClickListener {
@@ -67,7 +82,7 @@ class Login : AppCompatActivity() {
         }
 
         // Configurar clic en el campo de contraseña (si es necesario)
-        editTextContraseña.setOnClickListener {
+        editTextContrasena.setOnClickListener {
             inicioSesion()
         }
 
@@ -112,6 +127,55 @@ class Login : AppCompatActivity() {
 
         }
 
+
+    }
+
+    private fun obtenerPedidosUsuario() {
+        val idUsuario = auth.currentUser?.uid
+        db.collection("Pedido")
+            .whereEqualTo("idUsuario", idUsuario)
+            .whereEqualTo("idPedido", null)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val idUsuario = document.getString("idUsuario") ?: ""
+                    val idPlato = document.getString("idPlato") ?: ""
+                    val cantidad = document.getString("cantidad")?.toIntOrNull() ?: 0
+                    val idPedido = document.getString("idPedido")?.toIntOrNull() ?: 0
+                    val idMenu =document.getString("idMenu")?.toIntOrNull() ?: 0
+                    val carrito = Pedido(idPedido,idUsuario,idMenu,idPlato,cantidad)
+                    carritoUsuario.add(carrito)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("MiApp", "Error al obtener Usuario: ${e.message}", e)
+            }
+
+    }
+
+    private fun obtenerDatosUsuario() {
+        val idUsuario = auth.currentUser?.uid
+        db.collection("Usuarios")
+            .whereEqualTo("idUsuario", "$idUsuario")
+            .get()
+            .addOnSuccessListener { result ->
+                if (!result.isEmpty) {
+                    val document = result.documents[0]
+
+                    val idUsuario = document.getString("IdUsuario") ?: ""
+                    val nombre = document.getString("Nombre") ?: ""
+                    val apellido = document.getString("Apellido") ?: ""
+                    val correo = document.getString("Correo") ?: ""
+                    val telefono = document.getString("Telefono") ?: ""
+                    val direccion = document.getString("Direccion") ?: ""
+                    val fechaNacimiento = document.getString("FechaNacimiento") ?: ""
+
+                    usuario = Usuario(idUsuario, nombre, apellido, correo, telefono, direccion, fechaNacimiento)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("MiApp", "Error al obtener Usuario: ${e.message}", e)
+            }
 
     }
 
@@ -217,17 +281,21 @@ class Login : AppCompatActivity() {
 
     private fun inicioSesion() {
         val correo = editTextCorreo.text.toString()
-        val contraseña = editTextContraseña.text.toString()
+        val contrasenya = editTextContrasena.text.toString()
 
-        if (correo.isNotEmpty() && contraseña.isNotEmpty()) {
+        if (correo.isNotEmpty() && contrasenya.isNotEmpty()) {
             //val credential = GoogleAuthProvider.getCredential(googleIdToken, null)
 
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(correo, contraseña)
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(correo, contrasenya)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
 
                         // Inicio de sesión exitoso, redirige al usuario a la pantalla Home.
                         val intent = Intent(this, Main::class.java)
+
+                        intent.putExtra("platos", listaPlatos)
+                        intent.putExtra("extras", listaExtras)
+
                         startActivity(intent)
                     } else {
                         // Fallo el inicio de sesión, muestra un mensaje de error al usuario.

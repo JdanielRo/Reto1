@@ -64,4 +64,6 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation ("com.google.android.gms:play-services-maps:17.0.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0") // Asegúrate de usar la última versión
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
 }
