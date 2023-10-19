@@ -17,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
@@ -58,6 +59,8 @@ class MiCuenta : Fragment() {
             uid = user.uid
         }
 
+
+
         val db = FirebaseFirestore.getInstance()
 
         val editTextNombre = view.findViewById<EditText>(R.id.editTextNombre)
@@ -66,6 +69,13 @@ class MiCuenta : Fragment() {
         val editTextFechaNacimiento = view.findViewById<EditText>(R.id.editTextDate)
         val editTextTelefono = view.findViewById<EditText>(R.id.editTextPhone)
         val editTextDireccion = view.findViewById<EditText>(R.id.editTextPostalAddress)
+
+        //Para que no deje modificar
+        editTextNombre.isEnabled = false
+        editTextApellidos.isEnabled = false
+        editTextCorreoElectronico.isEnabled = false
+        editTextFechaNacimiento.isEnabled = false
+
 
         db.collection("Usuarios")
             .document("$uid")
@@ -130,15 +140,12 @@ class MiCuenta : Fragment() {
                 .addOnSuccessListener {
 
                     //Quitar los focus en caso de que se hayan actualizado los datos
-                    editTextNombre.clearFocus()
-                    editTextApellidos.clearFocus()
-                    editTextCorreoElectronico.clearFocus()
-                    editTextFechaNacimiento.clearFocus()
                     editTextTelefono.clearFocus()
                     editTextDireccion.clearFocus()
 
                     // Los datos se actualizaron con éxito
-                    //Toast.makeText(this,"Los datos han sido actualizados correctamente", LENGTH_SHORT).show
+                    Toast.makeText(requireContext(), R.string.datos_actualizados, Toast.LENGTH_SHORT).show()
+
 
                 }
                 .addOnFailureListener { e ->
@@ -146,11 +153,11 @@ class MiCuenta : Fragment() {
                     Log.w("MiCuenta", "Error al actualizar los datos", e)
                     // Puedes registrar el error o mostrar un mensaje de error al usuario, o realizar cualquier acción de manejo de errores necesaria.
                 }
+
         }
 
 
         //RESTABLECER CONTRASEÑA
-
         val restablecerPass = view.findViewById<TextView>(R.id.textViewRestablecerPass)
 
         restablecerPass.setOnClickListener{
@@ -168,14 +175,67 @@ class MiCuenta : Fragment() {
 
             mAuth.signOut()
 
-            val intent = Intent(requireContext(), Login::class.java)
-            startActivity(intent)
+            val irLogin = Intent(requireContext(), Login::class.java)
+            startActivity(irLogin)
 
 
         }
 
+
+        //BORRAR CUENTA
+        val buttonDeleteAccount = view.findViewById<Button>(R.id.buttonDeleteAccount)
+
+        buttonDeleteAccount.setOnClickListener{
+
+            val usuario = Firebase.auth.currentUser!!
+            usuario.delete()
+                ?.addOnSuccessListener {
+                    // El usuario se eliminó con éxito
+                    Toast.makeText(requireContext(), R.string.cuenta_borrada, Toast.LENGTH_SHORT).show()
+
+                    // Realiza acciones adicionales si es necesario
+
+                    val updates = HashMap<String, Any>()
+                    updates["Correo"] = ""
+
+                    db.collection("Usuarios")
+                        .document("$uid")
+                        .update(updates)
+                        .addOnSuccessListener {
+                            // El campo se ha borrado con éxito
+                            val irLogin = Intent(requireContext(), Login::class.java)
+                            startActivity(irLogin)
+
+                            // Realiza acciones adicionales si es necesario
+                        }
+                        .addOnFailureListener { e ->
+                            // Maneja errores si ocurre alguno al borrar el campo
+                            // Puedes mostrar un mensaje de error o realizar cualquier acción de manejo de errores necesaria
+                            Log.e("BorrarCampo", "Error al borrar el campo: $e")
+                        }
+
+
+                }
+                ?.addOnFailureListener { e ->
+                    // Maneja errores si ocurre alguno al eliminar el usuario
+                    // Puedes mostrar un mensaje de error o realizar cualquier acción de manejo de errores necesaria
+                    Log.e("EliminarUsuario", "Error al eliminar el usuario: $e")
+                }
+
+
+
+
+
+
+
+        }
+
+
+
         return view
     }
+
+
 
     /*private fun configureGoogleSignIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -186,6 +246,8 @@ class MiCuenta : Fragment() {
         // Crea un cliente de inicio de sesión de Google con las opciones configuradas
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
     }*/
+
+
 
 
     companion object {

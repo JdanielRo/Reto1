@@ -43,12 +43,17 @@
     <!--<string name="email">Email</string>-->
     <string name="telefono">Phone</string>
     <string name="direccion">Postal Address</string>
-    <string name="fecha_nacimiento">Date of Birth</string>
+    <string name="fecha_nacimiento">dd/mm/yyyy</string>
     <string name="guardar">SAVE CHANGES</string>
     <string name="olvidar_contra">Forgot your password?</string>
     <string name="cerrar">LOG OUT</string>
+    <string name="borrar">DELETE ACCOUNT</string>
     <string name="calorias">Calorias\n</string>
     <string name="contraseñas_no_iguales">Passwords must match</string>
+    <string name="mayor_edad">You must be of legal age to register. Or the date format is incorrect</string>
+    <string name="campos_vacios">You must fill in all the fields</string>
+    <string name="datos_actualizados">Data has been updated successfully</string>
+    <string name="cuenta_borrada">Account deleted successfully</string>
 
     <!-- HOME -->
     <string name="comida_saludable">Healthy Food</string>

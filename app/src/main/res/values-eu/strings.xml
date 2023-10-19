@@ -44,12 +44,17 @@
     <!--<string name="email">Helbide Elektronikoa</string>-->
     <string name="telefono">Telefonoa</string>
     <string name="direccion">Helbidea</string>
-    <string name="fecha_nacimiento">Jaiotze Data</string>
+    <string name="fecha_nacimiento">ee/hh/uuuu</string>
     <string name="guardar">ALDATU EGIN</string>
     <string name="olvidar_contra">Pasahitza ahaztu duzu? </string>
     <string name="cerrar">SAIOA ITXI</string>
+    <string name="borrar">KONTUA EZABATU</string>
     <string name="calorias">Calorias\n</string>
     <string name="contraseñas_no_iguales">Pasahitzak bat etorri behar dute</string>
+    <string name="mayor_edad">Erregistratu ahal izateko, nagusikerik izan behar duzu. Edota dataren formatua ez da zuzena</string>
+    <string name="campos_vacios">Eremu guztiak bete behar dituzu</string>
+    <string name="datos_actualizados">Datuak ongi eguneratu dira</string>
+    <string name="cuenta_borrada">Kontua behar-beharra ezabatu da</string>
 
     <!-- HASIERA -->
     <string name="comida_saludable">Janari osasuntsua</string>

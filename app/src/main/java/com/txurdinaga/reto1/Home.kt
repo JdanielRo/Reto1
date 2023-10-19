@@ -36,6 +36,8 @@ class Home : Fragment(), OnMapReadyCallback {
     }
 
     private lateinit var googleMap: GoogleMap
+
+    // Este método se llama cuando se crea la vista del fragmento
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,19 +47,20 @@ class Home : Fragment(), OnMapReadyCallback {
         // Obtiene el fragmento del mapa y registra el callback
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        mapFragment.getMapAsync(this) // Registra el callback para la carga asincrónica del mapa
 
         return root
     }
 
+    // Este método se llama cuando el mapa está listo para ser utilizado
     override fun onMapReady(map: GoogleMap) {
-        googleMap = map
+        googleMap = map // Configura el objeto GoogleMap
 
         // Configura la ubicación y el marcador
         val latitude = 43.25776503411578
         val longitude = -2.902460547792678
         val location = LatLng(latitude, longitude)
-        val marker = MarkerOptions().position(location).title("Mi Ubicación")
+        val marker = MarkerOptions().position(location).title("Mi Ubicación") // Crea un marcador
 
         // Agrega el marcador al mapa
         googleMap.addMarker(marker)

@@ -44,13 +44,19 @@
     <!--<string name="email">Correo Electrónico</string>-->
     <string name="telefono">Teléfono</string>
     <string name="direccion">Dirección Postal</string>
-    <string name="fecha_nacimiento">Fecha de Nacimiento</string>
+    <string name="fecha_nacimiento">dd/mm/aaaa</string>
     <string name="guardar">GUARDAR CAMBIOS</string>
     <string name="olvidar_contra">¿Has olvidado tu contraseña? </string>
     <string name="cerrar">CERRAR SESIÓN</string>
+    <string name="borrar">BORRAR CUENTA</string>
     <string name="calorias">Calorias\n</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="contraseñas_no_iguales">Las contraseñas deben coincidir</string>
+    <string name="mayor_edad">Debes ser mayor de edad para poder registrarte. O el formato de la fecha es incorrecto</string>
+    <string name="campos_vacios">Debes rellenar todos los campos</string>
+    <string name="datos_actualizados">Los datos han sido actualizados correctamente</string>
+    <string name="cuenta_borrada">La cuenta ha sido borrada correctamente</string>
+
 
     <!-- INICIO -->
     <string name="comida_saludable">Comida Saludable</string>
