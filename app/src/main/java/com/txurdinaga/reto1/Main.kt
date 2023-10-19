@@ -33,7 +33,7 @@ class Main : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemPedidos -> {
-                showFragment(Pedidos(listaPlatos)) // Mostrar el fragmento "Pedidos" al seleccionar el elemento correspondiente
+                showFragment(Pedidos(listaPlatos, listaExtras)) // Mostrar el fragmento "Pedidos" al seleccionar el elemento correspondiente
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemCarrito -> {

@@ -44,8 +44,8 @@ class Login : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        val listaPlatos = intent.getSerializableExtra("platos") as ArrayList<Plato>
-        val listaExtras = intent.getSerializableExtra("extras") as ArrayList<Extra>
+        listaPlatos = intent.getSerializableExtra("platos") as ArrayList<Plato>
+        listaExtras = intent.getSerializableExtra("extras") as ArrayList<Extra>
         Log.d("MiApp", "esta en el login el extra${listaExtras[0].nombre}")
         Log.d("MiApp", "esta en el login el plato ${listaPlatos[0].nombre}")
 
@@ -74,7 +74,7 @@ class Login : AppCompatActivity() {
 
         // Inicializar campos con valores de ejemplo (puedes eliminarlos en producción)
         editTextCorreo.setText("2grupotxurdinaga@gmail.com")
-        editTextContrasena.setText("Grupo!2!Grupo")
+        editTextContrasena.setText("123456")
 
         // Configurar clic en el botón de inicio de sesión
         btnInicioSesion.setOnClickListener {
@@ -290,13 +290,15 @@ class Login : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
 
-                        // Inicio de sesión exitoso, redirige al usuario a la pantalla Home.
+                        obtenerDatosUsuario()
+                        obtenerPedidosUsuario()
                         val intent = Intent(this, Main::class.java)
-
                         intent.putExtra("platos", listaPlatos)
                         intent.putExtra("extras", listaExtras)
-
+                        intent.putExtra("usuario", usuario)
+                        intent.putExtra("carrito", carritoUsuario)
                         startActivity(intent)
+                        finish()
                     } else {
                         // Fallo el inicio de sesión, muestra un mensaje de error al usuario.
                         val errorMensaje = task.exception?.message ?: "Error al iniciar sesión"

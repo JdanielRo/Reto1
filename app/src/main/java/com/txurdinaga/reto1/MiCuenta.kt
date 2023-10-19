@@ -175,7 +175,7 @@ class MiCuenta : Fragment() {
 
             mAuth.signOut()
 
-            val irLogin = Intent(requireContext(), Login::class.java)
+            val irLogin = Intent(requireContext(), SplashScreen::class.java)
             startActivity(irLogin)
 
 
