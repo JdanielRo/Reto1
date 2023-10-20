@@ -334,7 +334,7 @@ class MiCuenta : Fragment() {
                         .update(updates)
                         .addOnSuccessListener {
                             // El campo se ha borrado con éxito
-                            val irLogin = Intent(requireContext(), Login::class.java)
+                            val irLogin = Intent(requireContext(), SplashScreen::class.java)
                             startActivity(irLogin)
 
                             // Realiza acciones adicionales si es necesario
