@@ -17,8 +17,11 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
     private var param2: String? = null
     private var listaPlatos: ArrayList<Plato> = listaPlatosRe
     private var listaExtras: ArrayList<Extra> = listaExtrasRe
-    private var seccion: String = "Entrantes"//, "PlatosPrincipales", "Guarnicion", "Postre", "Bebida")
+    private var seccion: String =
+        "Entrantes"//, "PlatosPrincipales", "Guarnicion", "Postre", "Bebida")
     private lateinit var linearLayout: LinearLayout
+
+    private var seleccionCheckBox: ArrayList<Boolean> = ArrayList()
 
     private var listaPlatosEntrantes: ArrayList<Plato> = ArrayList()
     private var listaPlatosPrincipales: ArrayList<Plato> = ArrayList()
@@ -27,6 +30,8 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
     private var listaPlatosBebida: ArrayList<Plato> = ArrayList()
 
     private var tipo: Tipo = Tipo.MENU
+
+    private var numerodeplatosSeccion: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +50,10 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
 
         // Asegúrate de inicializar listaPlatos y listaExtras en algún lugar antes de usarlos.
 
+        for (i in 0 until listaPlatos.size) {
+            println(listaPlatos[i])
+        }
+
         dividirListas()
 
         val switch = view.findViewById<Switch>(R.id.switch2)
@@ -59,8 +68,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
     }
 
     private fun dividirListas() {
-        for (plato in listaPlatos){
-            println("${plato.tipo}")
+        for (plato in listaPlatos) {
             when (plato.tipo) {
                 "Entrante" -> listaPlatosEntrantes.add(plato)
                 "PlatoPrincipal" -> listaPlatosPrincipales.add(plato)
@@ -73,32 +81,33 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
 
     private fun cargarPedidos(inflater: LayoutInflater, container: ViewGroup?) {
         linearLayout.removeAllViews()
-        var radioGroup: RadioGroup? = null // Inicializa radioGroup como un RadioGroup nulo
-
-        if (tipo == Tipo.MENU) {
-            radioGroup = view?.findViewById(R.id.radioGroupPedidos) // Asigna el RadioGroup desde la vista
-        }
+        numerodeplatosSeccion = 0
         when (seccion) {
             "Entrantes" -> {
                 for (plato in listaPlatosEntrantes) {
-                    println(plato)
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
-                    val radioButton = itemLayout.findViewById<RadioButton>(R.id.radioButton2)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
                     val spinner = itemLayout.findViewById<Spinner>(R.id.spinner)
-                    val txtPrecioPlatoPedidos = itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
-                    val layoutMostrarPrecioCantidad = itemLayout.findViewById<LinearLayout>(R.id.layoutMostrarPrecioCantidad)
-                    val txtDescripcionPlatoPedidos = itemLayout.findViewById<TextView>(R.id.txtDescripcionPlatoPedidos)
-                    val txtDescripcionPlato = itemLayout.findViewById<TextView>(R.id.txtDescripcionPlato)
+                    val txtPrecioPlatoPedidos =
+                        itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
+                    val layoutMostrarPrecioCantidad =
+                        itemLayout.findViewById<LinearLayout>(R.id.layoutMostrarPrecioCantidad)
+                    val txtDescripcionPlatoPedidos =
+                        itemLayout.findViewById<TextView>(R.id.txtDescripcionPlatoPedidos)
+                    val txtDescripcionPlato =
+                        itemLayout.findViewById<TextView>(R.id.txtDescripcionPlato)
+                    val txtNombrePlato = itemLayout.findViewById<TextView>(R.id.txtNombrePlato)
+
+                    txtNombrePlato.text = plato.nombre
+                    txtDescripcionPlatoPedidos.setText(plato.descripcion)
+                    txtPrecioPlatoPedidos.text = plato.precio.toString()
 
                     txtDescripcionPlato.setOnClickListener {
                         if (tipo == Tipo.CARTA) {
                             layoutMostrarPrecioCantidad.visibility = View.GONE
                             txtDescripcionPlatoPedidos.visibility = View.VISIBLE
                             imgCerrarDescripcion.visibility = View.VISIBLE
-                        } else {
-
                         }
                     }
 
@@ -107,34 +116,50 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                         txtDescripcionPlatoPedidos.visibility = View.GONE
                         imgCerrarDescripcion.visibility = View.GONE
                     }
-                    imgCerrarDescripcion.visibility = View.GONE
 
                     if (tipo == Tipo.CARTA) {
-                        checkBox.visibility = View.VISIBLE
-                        radioButton.visibility = View.GONE
                         txtDescripcionPlatoPedidos.visibility = View.GONE
-                        añadirBotonAlGrupo(radioGroup, radioButton)
+                        layoutMostrarPrecioCantidad.visibility = View.VISIBLE
+                        imgCerrarDescripcion.visibility = View.VISIBLE
+
                     } else {
+                        txtDescripcionPlatoPedidos.visibility = View.VISIBLE
                         layoutMostrarPrecioCantidad.visibility = View.GONE
                         imgCerrarDescripcion.visibility = View.GONE
-                        checkBox.visibility = View.GONE
-                        radioButton.visibility = View.VISIBLE
                     }
 
+                    cargarCheckBox(checkBox, numerodeplatosSeccion)
+
                     linearLayout.addView(itemLayout)
+                    numerodeplatosSeccion += 1
                 }
             }
-            // Maneja otras secciones aquí
+
         }
     }
 
-    private fun añadirBotonAlGrupo(radioGroup: RadioGroup?, radioButton: RadioButton) {
-        radioGroup?.addView(radioButton)
+    private fun cargarCheckBox(checkBox: CheckBox, index: Int) {
+        checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            seleccionCheckBox.ensureCapacity(index + 1)
+            while (seleccionCheckBox.size <= index) {
+                seleccionCheckBox.add(false)
+            }
+            seleccionCheckBox[index] = isChecked
+
+            for (i in 0 until seleccionCheckBox.size) {
+                println(seleccionCheckBox[i])
+            }
+        }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String, listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>): Pedidos {
+        fun newInstance(
+            param1: String,
+            param2: String,
+            listaPlatosRe: ArrayList<Plato>,
+            listaExtrasRe: ArrayList<Extra>
+        ): Pedidos {
             val fragment = Pedidos(listaPlatosRe, listaExtrasRe)
             fragment.listaPlatos = listaPlatosRe
             fragment.listaExtras = listaExtrasRe

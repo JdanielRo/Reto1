@@ -59,15 +59,7 @@
             android:id="@+id/linearLayoutScrollPedidos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Aquí puedes agregar más vistas si es necesario -->
-
-            <RadioGroup
-                android:id="@+id/radioGroupPedidos"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+            android:orientation="vertical"/>
 
     </LinearLayout>
 
