@@ -60,6 +60,7 @@
     <string name="borrar_direccion">BORRAR DIRECCIÓN</string>
     <string name="limite_direcciones">Ya tienes 5 direcciones, debes eliminar alguna para poder añadir otra</string>
     <string name="direccion_agregada">Dirección agregada con exito</string>
+    <string name="mis_datos">Mis Datos</string>
 
 
     <!-- INICIO -->

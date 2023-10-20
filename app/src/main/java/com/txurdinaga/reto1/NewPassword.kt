@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -34,7 +35,7 @@ class NewPassword : AppCompatActivity() {
 
                         val mAuth = Firebase.auth
                         mAuth.signOut()
-                        val intent = Intent(this, Login::class.java)
+                        val intent = Intent(this, SplashScreen::class.java)
                         startActivity(intent)
 
                     } else {
@@ -43,6 +44,12 @@ class NewPassword : AppCompatActivity() {
                         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
                     }
                 }
+        }
+
+        findViewById<ImageView>(R.id.imageViewX).setOnClickListener{
+
+            finish()
+
         }
     }
 }

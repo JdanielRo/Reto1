@@ -58,7 +58,7 @@
     <string name="borrar_direccion">DELETE ADDRESS</string>
     <string name="limite_direcciones">You already have 5 addresses, you need to delete one to add another</string>
     <string name="direccion_agregada">Address added successfully</string>
-
+    <string name="mis_datos">My Data</string>
 
 
     <!-- HOME -->

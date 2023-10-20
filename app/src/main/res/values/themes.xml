@@ -13,6 +13,12 @@
         <item name="itemTextColor">@color/light_green</item>
     </style>
 
+    <style name="TituloEstilo">
+        <item name="android:textSize">24sp</item> <!-- Tamaño del texto -->
+        <item name="android:textStyle">bold</item> <!-- Negrita -->
+        <item name="android:fontFamily">sans-serif-condensed</item> <!-- Fuente personalizada -->
+    </style>
+
 
     <style name="Theme.Reto1" parent="Base.Theme.Reto1" />
 </resources>
