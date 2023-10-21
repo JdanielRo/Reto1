@@ -33,6 +33,8 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
 
     private var numerodeplatosSeccion: Int = 0
 
+    private lateinit var switch: Switch
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -56,7 +58,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
 
         dividirListas()
 
-        val switch = view.findViewById<Switch>(R.id.switch2)
+        switch = view.findViewById<Switch>(R.id.switch2)
         switch.setOnCheckedChangeListener { _, isChecked ->
             tipo = if (isChecked) Tipo.CARTA else Tipo.MENU
             cargarPedidos(inflater, container)
@@ -82,6 +84,16 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
     private fun cargarPedidos(inflater: LayoutInflater, container: ViewGroup?) {
         linearLayout.removeAllViews()
         numerodeplatosSeccion = 0
+        seleccionCheckBox.ensureCapacity(listaPlatosEntrantes.size)
+        switch.setOnCheckedChangeListener { _, isChecked ->
+            for (i in 0 until seleccionCheckBox.size) {
+                seleccionCheckBox[i] = false
+            }
+            cargarPedidos(inflater, container)
+        }
+        for (i in 0 until seleccionCheckBox.size) {
+            println(seleccionCheckBox[i])
+        }
         when (seccion) {
             "Entrantes" -> {
                 for (plato in listaPlatosEntrantes) {
@@ -100,7 +112,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     val txtNombrePlato = itemLayout.findViewById<TextView>(R.id.txtNombrePlato)
 
                     txtNombrePlato.text = plato.nombre
-                    txtDescripcionPlatoPedidos.setText(plato.descripcion)
+                    txtDescripcionPlatoPedidos.text = plato.descripcion
                     txtPrecioPlatoPedidos.text = plato.precio.toString()
 
                     txtDescripcionPlato.setOnClickListener {
@@ -134,22 +146,26 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     numerodeplatosSeccion += 1
                 }
             }
-
         }
     }
 
     private fun cargarCheckBox(checkBox: CheckBox, index: Int) {
-        checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
-            seleccionCheckBox.ensureCapacity(index + 1)
-            while (seleccionCheckBox.size <= index) {
-                seleccionCheckBox.add(false)
+        if (index >= seleccionCheckBox.size) {
+            seleccionCheckBox.add(false)
+        }
+
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (index < seleccionCheckBox.size) {
+                seleccionCheckBox[index] = isChecked
+            } else {
+                seleccionCheckBox.add(isChecked)
             }
-            seleccionCheckBox[index] = isChecked
 
             for (i in 0 until seleccionCheckBox.size) {
                 println(seleccionCheckBox[i])
             }
         }
+
     }
 
     companion object {
