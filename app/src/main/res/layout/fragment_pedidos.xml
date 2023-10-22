@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     tools:context=".Pedidos">
 
     <LinearLayout
@@ -51,15 +51,18 @@
             android:layout_height="match_parent"
             android:layout_margin="@dimen/space_height"
             android:layout_weight="1"
-            android:gravity="left"
+            android:gravity="center"
             android:paddingLeft="@dimen/space_height"
-            android:text="Menu" />
+            android:text="Menu"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold|italic" />
 
         <LinearLayout
             android:id="@+id/linearLayoutScrollPedidos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            android:orientation="vertical" />
 
     </LinearLayout>
 
