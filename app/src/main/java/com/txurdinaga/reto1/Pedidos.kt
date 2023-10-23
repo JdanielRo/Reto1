@@ -118,7 +118,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
             cargarPedidos(inflater, container)
         }
         for (i in 0 until seleccionCheckBox.size) {
-            println(seleccionCheckBox[i])
+            println("Mostrar seleccionCheckBox: ${ seleccionCheckBox[i]}, $i")
         }
         var seccionEnviarCarrito: Int = 0
         nombreSeccion.text = seccion
@@ -171,7 +171,9 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-
+                    if(checkBox.isChecked){
+                        seleccionCheckBox[numerodeplatosSeccion] = true
+                    }
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
@@ -235,7 +237,9 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-
+                    if(checkBox.isChecked){
+                        seleccionCheckBox[numerodeplatosSeccion] = true
+                    }
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
@@ -302,7 +306,9 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-
+                    if(checkBox.isChecked){
+                        seleccionCheckBox[numerodeplatosSeccion] = true
+                    }
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
@@ -318,6 +324,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     seccion = "Postres"
                     cargarPedidos(inflater, container)
                 }
+
                 linearLayout.addView(itemLayout)
             }
 
@@ -369,7 +376,9 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-
+                    if(checkBox.isChecked){
+                        seleccionCheckBox[numerodeplatosSeccion] = true
+                    }
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
@@ -436,7 +445,9 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-
+                    if(checkBox.isChecked){
+                        seleccionCheckBox[numerodeplatosSeccion] = true
+                    }
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
@@ -444,17 +455,42 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     inflater.inflate(R.layout.layout_pedidos_siguiente_atras, container, false)
                 val btnAtras = itemLayout.findViewById<Button>(R.id.btnAtras)
                 val btnSiguiente = itemLayout.findViewById<Button>(R.id.btnSiguiente)
+                btnSiguiente.text = "Añadir al Carrito"
                 btnAtras.setOnClickListener {
                     seccion = "Postres"
                     cargarPedidos(inflater, container)
                 }
-                /*btnSiguiente.setOnClickListener {
-                    seccion = "Entrante"
-                    cargarPedidos(inflater, container)
-                }*/
+                btnSiguiente.setOnClickListener {
+                    println("Enviar al corrito: ${comprobarAlAñadirAlCarrito()}")
+
+                }
                 linearLayout.addView(itemLayout)
             }
         }
+    }
+
+    private fun comprobarAlAñadirAlCarrito(): Boolean {
+        var enviar: Boolean = true
+        if (tipo == Tipo.MENU) {
+            for (i in 0 until enviarIdPlatoACarrito.size) {
+                if (enviarIdPlatoACarrito[i].size != 1) {
+                    enviar = false
+                    break
+                }
+            }
+        } else {
+            for (i in 0 until enviarIdPlatoACarrito.size) {
+                if (enviarIdPlatoACarrito[i].size == 0) {
+                    enviar = false
+                } else {
+                    enviar = true
+                    break
+                }
+            }
+        }
+
+
+        return enviar
     }
 
     private fun cargarCheckBox(
@@ -465,6 +501,64 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
     ) {
         if (index >= seleccionCheckBox.size) {
             seleccionCheckBox.add(false)
+        } else {
+            var fila = 0
+            when (seccion) {
+                "Entrantes" -> {
+                    fila = 0
+                    for (i in 0 until enviarIdPlatoACarrito[fila].size) {
+                        if (enviarIdPlatoACarrito[fila][i] == plato.idExtra) {
+                            checkBox.isChecked = true
+                            seleccionCheckBox[numerodeplatosSeccion] = true
+                            break
+                        }
+                    }
+                }
+
+                "Platos Principales" -> {
+                    fila = 1
+                    for (i in 0 until enviarIdPlatoACarrito[fila].size) {
+                        if (enviarIdPlatoACarrito[fila][i] == plato.idExtra) {
+                            checkBox.isChecked = true
+                            seleccionCheckBox[numerodeplatosSeccion] = true
+                            break
+                        }
+                    }
+                }
+
+                "Guarniciones" -> {
+                    fila = 2
+                    for (i in 0 until enviarIdPlatoACarrito[fila].size) {
+                        if (enviarIdPlatoACarrito[fila][i] == plato.idExtra) {
+                            checkBox.isChecked = true
+                            seleccionCheckBox[numerodeplatosSeccion] = true
+                            break
+                        }
+                    }
+                }
+
+                "Postres" -> {
+                    fila = 3
+                    for (i in 0 until enviarIdPlatoACarrito[fila].size) {
+                        if (enviarIdPlatoACarrito[fila][i] == plato.idExtra) {
+                            checkBox.isChecked = true
+                            seleccionCheckBox[numerodeplatosSeccion] = true
+                            break
+                        }
+                    }
+                }
+
+                "Bebidas" -> {
+                    fila = 4
+                    for (i in 0 until enviarIdPlatoACarrito[fila].size) {
+                        if (enviarIdPlatoACarrito[fila][i] == plato.idExtra) {
+                            checkBox.isChecked = true
+                            seleccionCheckBox[numerodeplatosSeccion] = true
+                            break
+                        }
+                    }
+                }
+            }
         }
 
         checkBox.setOnCheckedChangeListener { _, isChecked ->
@@ -499,6 +593,60 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
     ) {
         if (index >= seleccionCheckBox.size) {
             seleccionCheckBox.add(false)
+        } else {
+            var fila = 0
+            when (seccion) {
+                "Entrantes" -> {
+                    fila = 0
+                    for (i in 0 until enviarIdPlatoACarrito[fila].size) {
+                        if (enviarIdPlatoACarrito[fila][i] == plato.idPlato) {
+                            checkBox.isChecked = true
+                            break
+                        }
+                    }
+                }
+
+                "Platos Principales" -> {
+                    fila = 1
+                    for (i in 0 until enviarIdPlatoACarrito[fila].size) {
+                        if (enviarIdPlatoACarrito[fila][i] == plato.idPlato) {
+                            checkBox.isChecked = true
+                            break
+                        }
+                    }
+                }
+
+                "Guarniciones" -> {
+                    fila = 2
+                    for (i in 0 until enviarIdPlatoACarrito[fila].size) {
+                        if (enviarIdPlatoACarrito[fila][i] == plato.idPlato) {
+                            checkBox.isChecked = true
+                            break
+                        }
+                    }
+                }
+
+                "Postres" -> {
+                    fila = 3
+                    for (i in 0 until enviarIdPlatoACarrito[fila].size) {
+                        if (enviarIdPlatoACarrito[fila][i] == plato.idPlato) {
+                            checkBox.isChecked = true
+                            break
+                        }
+                    }
+                }
+
+                "Bebidas" -> {
+                    fila = 4
+                    for (i in 0 until enviarIdPlatoACarrito[fila].size) {
+                        if (enviarIdPlatoACarrito[fila][i] == plato.idPlato) {
+                            checkBox.isChecked = true
+                            break
+                        }
+                    }
+                }
+            }
+
         }
 
         checkBox.setOnCheckedChangeListener { _, isChecked ->
