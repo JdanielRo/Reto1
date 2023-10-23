@@ -15,6 +15,10 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.util.Locale
 
 
@@ -31,7 +35,7 @@ class Login : AppCompatActivity() {
     private lateinit var txtRegistro: TextView
     private var listaPlatos: ArrayList<Plato> = ArrayList()
     private var listaExtras: ArrayList<Extra> = ArrayList()
-    private var usuario :Usuario = Usuario()
+    private var usuario: Usuario = Usuario()
     private var carritoUsuario: ArrayList<Pedido> = ArrayList()
     private val db = FirebaseFirestore.getInstance()
     //private lateinit var botonRegisterGoogle: Button
@@ -46,136 +50,129 @@ class Login : AppCompatActivity() {
 
         listaPlatos = intent.getSerializableExtra("platos") as ArrayList<Plato>
         listaExtras = intent.getSerializableExtra("extras") as ArrayList<Extra>
-        Log.d("MiApp", "esta en el login el extra${listaExtras[0].nombre}")
-        Log.d("MiApp", "esta en el login el plato ${listaPlatos[0].nombre}")
 
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            obtenerDatosUsuario()
-            obtenerPedidosUsuario()
-            val intent = Intent(this, Main::class.java)
-            intent.putExtra("platos", listaPlatos)
-            intent.putExtra("extras", listaExtras)
-            intent.putExtra("usuario", usuario)
-            intent.putExtra("carrito", carritoUsuario)
-            startActivity(intent)
-            finish()
+            GlobalScope.launch(Dispatchers.IO) {
+                obtenerDatosUsuario()
+                obtenerPedidosUsuario()
+                val intent = Intent(this@Login, Main::class.java)
+                intent.putExtra("platos", listaPlatos)
+                intent.putExtra("extras", listaExtras)
+                intent.putExtra("usuario", usuario)
+                intent.putExtra("carrito", carritoUsuario)
+                startActivity(intent)
+                finish()
+            }
+        } else {
+
+
+            // Asignar vistas a las variables
+            btnInicioSesion = findViewById(R.id.btnInicioSesion)
+            editTextCorreo = findViewById(R.id.editTextTextEmailAddress)
+            editTextContrasena = findViewById(R.id.editTextTextPassword)
+            txtRegistro = findViewById(R.id.textViewNoTienesCuenta)
+            //editTextCorreo.setText("dani@gmail.com")
+            //editTextContraseña.setText("123456")
+            //botonRegisterGoogle = findViewById(R.id.signInWithGoogleButton)
+
+            // Inicializar campos con valores de ejemplo (puedes eliminarlos en producción)
+            editTextCorreo.setText("2grupotxurdinaga@gmail.com")
+            editTextContrasena.setText("123456")
+
+            // Configurar clic en el botón de inicio de sesión
+            btnInicioSesion.setOnClickListener {
+                inicioSesion()
+            }
+
+            // Configurar clic en el campo de contraseña (si es necesario)
+            editTextContrasena.setOnClickListener {
+                inicioSesion()
+            }
+
+            // Configurar clic en el texto de registro
+            txtRegistro.setOnClickListener {
+                val intent = Intent(this, Registro::class.java)
+                startActivity(intent)
+            }
+
+            // botonRegisterGoogle.setOnClickListener { iniciarSesionGoogle() }
+
+
+            //CAMBIO DE IDIOMA
+
+            val englishButton = findViewById<ImageView>(R.id.imageViewEnglish)
+            val spanishButton = findViewById<ImageView>(R.id.imageViewEspañol)
+            val euskeraButton = findViewById<ImageView>(R.id.imageViewEuskera)
+
+            englishButton.setOnClickListener {
+                // Cambiar el idioma a inglés
+                setAppLocale("en")
+                recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+            }
+
+            spanishButton.setOnClickListener {
+                // Cambiar el idioma a español
+                setAppLocale("es")
+                recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+            }
+
+            euskeraButton.setOnClickListener {
+                // Cambiar el idioma a euskera
+                setAppLocale("eu")
+                recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+            }
+
+            //¿HAS OLVIDADO TU CONTRASEÑA?
+            findViewById<TextView>(R.id.textViewPreguntaLogin).setOnClickListener {
+
+                val olvidarContra = Intent(this, NewPassword::class.java)
+                startActivity(olvidarContra)
+
+            }
         }
-
-
-        // Asignar vistas a las variables
-        btnInicioSesion = findViewById(R.id.btnInicioSesion)
-        editTextCorreo = findViewById(R.id.editTextTextEmailAddress)
-        editTextContrasena = findViewById(R.id.editTextTextPassword)
-        txtRegistro = findViewById(R.id.textViewNoTienesCuenta)
-        //editTextCorreo.setText("dani@gmail.com")
-        //editTextContraseña.setText("123456")
-        //botonRegisterGoogle = findViewById(R.id.signInWithGoogleButton)
-
-        // Inicializar campos con valores de ejemplo (puedes eliminarlos en producción)
-        editTextCorreo.setText("2grupotxurdinaga@gmail.com")
-        editTextContrasena.setText("123456")
-
-        // Configurar clic en el botón de inicio de sesión
-        btnInicioSesion.setOnClickListener {
-            inicioSesion()
-        }
-
-        // Configurar clic en el campo de contraseña (si es necesario)
-        editTextContrasena.setOnClickListener {
-            inicioSesion()
-        }
-
-        // Configurar clic en el texto de registro
-        txtRegistro.setOnClickListener {
-            val intent = Intent(this, Registro::class.java)
-            startActivity(intent)
-        }
-
-        // botonRegisterGoogle.setOnClickListener { iniciarSesionGoogle() }
-
-
-        //CAMBIO DE IDIOMA
-
-        val englishButton = findViewById<ImageView>(R.id.imageViewEnglish)
-        val spanishButton = findViewById<ImageView>(R.id.imageViewEspañol)
-        val euskeraButton = findViewById<ImageView>(R.id.imageViewEuskera)
-
-        englishButton.setOnClickListener {
-            // Cambiar el idioma a inglés
-            setAppLocale("en")
-            recreate() // Reiniciar la actividad para aplicar el cambio de idioma
-        }
-
-        spanishButton.setOnClickListener {
-            // Cambiar el idioma a español
-            setAppLocale("es")
-            recreate() // Reiniciar la actividad para aplicar el cambio de idioma
-        }
-
-        euskeraButton.setOnClickListener {
-            // Cambiar el idioma a euskera
-            setAppLocale("eu")
-            recreate() // Reiniciar la actividad para aplicar el cambio de idioma
-        }
-
-        //¿HAS OLVIDADO TU CONTRASEÑA?
-        findViewById<TextView>(R.id.textViewPreguntaLogin).setOnClickListener{
-
-            val olvidarContra = Intent(this, NewPassword::class.java)
-            startActivity(olvidarContra)
-
-        }
-
 
     }
 
-    private fun obtenerPedidosUsuario() {
+    private suspend fun obtenerPedidosUsuario() {
         val idUsuario = auth.currentUser?.uid
-        db.collection("Pedido")
+        val result = db.collection("Pedido")
             .whereEqualTo("idUsuario", idUsuario)
-            .whereEqualTo("idPedido", null)
+            .whereEqualTo("idPedido", 0)
             .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val idUsuario = document.getString("idUsuario") ?: ""
-                    val idPlato = document.getString("idPlato") ?: ""
-                    val cantidad = document.getString("cantidad")?.toIntOrNull() ?: 0
-                    val idPedido = document.getString("idPedido")?.toIntOrNull() ?: 0
-                    val idMenu =document.getString("idMenu")?.toIntOrNull() ?: 0
-                    val carrito = Pedido(idPedido,idUsuario,idMenu,idPlato,cantidad)
-                    carritoUsuario.add(carrito)
-                }
-            }
-            .addOnFailureListener { e ->
-                Log.e("MiApp", "Error al obtener Usuario: ${e.message}", e)
-            }
-
+            .await() // Esperar la respuesta de Firestore en una corrutina
+        for (document in result) {
+            val idUsuario = document.getString("idUsuario") ?: ""
+            val idPlato = document.getString("idPlato") ?: ""
+            val idExtra = document.getString("idExtra") ?: ""
+            val cantidad = document.getLong("cantidad")?.toInt() ?: 0
+            val idPedido = document.getLong("idPedido")?.toInt() ?: 0
+            val idMenu = document.getLong("idMenu")?.toInt() ?: 0
+            val carrito = Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
+            carritoUsuario.add(carrito)
+        }
     }
 
-    private fun obtenerDatosUsuario() {
+    private suspend fun obtenerDatosUsuario() {
         val idUsuario = auth.currentUser?.uid
-        db.collection("Usuarios")
+        val result = db.collection("Usuarios")
             .whereEqualTo("idUsuario", "$idUsuario")
             .get()
-            .addOnSuccessListener { result ->
-                if (!result.isEmpty) {
-                    val document = result.documents[0]
+            .await() // Esperar la respuesta de Firestore en una corrutina
+        if (!result.isEmpty) {
+            val document = result.documents[0]
 
-                    val idUsuario = document.getString("IdUsuario") ?: ""
-                    val nombre = document.getString("Nombre") ?: ""
-                    val apellido = document.getString("Apellido") ?: ""
-                    val correo = document.getString("Correo") ?: ""
-                    val telefono = document.getString("Telefono") ?: ""
-                    val direccion = document.getString("Direccion") ?: ""
-                    val fechaNacimiento = document.getString("FechaNacimiento") ?: ""
+            val idUsuario = document.getString("IdUsuario") ?: ""
+            val nombre = document.getString("Nombre") ?: ""
+            val apellido = document.getString("Apellido") ?: ""
+            val correo = document.getString("Correo") ?: ""
+            val telefono = document.getString("Telefono") ?: ""
+            val direccion = document.getString("Direccion") ?: ""
+            val fechaNacimiento = document.getString("FechaNacimiento") ?: ""
 
-                    usuario = Usuario(idUsuario, nombre, apellido, correo, telefono, direccion, fechaNacimiento)
-                }
-            }
-            .addOnFailureListener { e ->
-                Log.e("MiApp", "Error al obtener Usuario: ${e.message}", e)
-            }
+            usuario =
+                Usuario(idUsuario, nombre, apellido, correo, telefono, direccion, fechaNacimiento)
+        }
 
     }
 
@@ -289,16 +286,17 @@ class Login : AppCompatActivity() {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(correo, contrasenya)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-
-                        obtenerDatosUsuario()
-                        obtenerPedidosUsuario()
-                        val intent = Intent(this, Main::class.java)
-                        intent.putExtra("platos", listaPlatos)
-                        intent.putExtra("extras", listaExtras)
-                        intent.putExtra("usuario", usuario)
-                        intent.putExtra("carrito", carritoUsuario)
-                        startActivity(intent)
-                        finish()
+                        GlobalScope.launch(Dispatchers.IO) {
+                            obtenerDatosUsuario()
+                            obtenerPedidosUsuario()
+                            val intent = Intent(this@Login, Main::class.java)
+                            intent.putExtra("platos", listaPlatos)
+                            intent.putExtra("extras", listaExtras)
+                            intent.putExtra("usuario", usuario)
+                            intent.putExtra("carrito", carritoUsuario)
+                            startActivity(intent)
+                            finish()
+                        }
                     } else {
                         // Fallo el inicio de sesión, muestra un mensaje de error al usuario.
                         val errorMensaje = task.exception?.message ?: "Error al iniciar sesión"

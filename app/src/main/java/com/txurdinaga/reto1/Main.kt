@@ -37,7 +37,7 @@ class Main : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemCarrito -> {
-                showFragment(Carrito()) // Mostrar el fragmento "Carrito" al seleccionar el elemento correspondiente
+                showFragment(Carrito(carritoUsuario)) // Mostrar el fragmento "Carrito" al seleccionar el elemento correspondiente
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemMiCuenta -> {
@@ -55,11 +55,9 @@ class Main : AppCompatActivity() {
 
         listaPlatos = intent.getSerializableExtra("platos") as ArrayList<Plato>
         listaExtras = intent.getSerializableExtra("extras") as ArrayList<Extra>
-        Log.d("MiApp", "esta en el main el extra${listaExtras[0].nombre}")
-        Log.d("MiApp", "esta en el main el plato ${listaPlatos[0].nombre}")
 
         usuario = intent.getParcelableExtra<Usuario>("usuario")!!
-        carritoUsuario= intent.getStringArrayListExtra("carrito") as ArrayList<Pedido>
+        carritoUsuario= intent.getSerializableExtra("carrito") as ArrayList<Pedido>
        /* for (plato in listaPlatos){
             Log.d("MiApp", "datos plato ${plato.nombre}")
         }*/

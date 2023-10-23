@@ -171,7 +171,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-                    
+
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }

@@ -47,7 +47,6 @@ class SplashScreen : AppCompatActivity() {
             val stock = document.getLong("stock")?.toInt() ?: 0
             val tipo = document.getString("tipo") ?: ""
             val plato = Plato(idPlato, nombre, precio, descripcion, stock, tipo)
-            Log.d("MiApp", "se esta cargando el plato ${plato.nombre}")
 
             listaPlatos.add(plato)
         }
@@ -65,7 +64,6 @@ class SplashScreen : AppCompatActivity() {
             val stock = document.getLong("stock")?.toInt() ?: 0
             val tipo = document.getString("tipo") ?: ""
             val extra = Extra(idPlato, nombre, precio, descripcion, stock, tipo)
-            Log.d("MiApp", "se esta cargando el extra ${extra.nombre}")
 
             listaExtras.add(extra)
         }
