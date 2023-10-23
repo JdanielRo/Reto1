@@ -191,8 +191,13 @@ class Pedidos(
                 val btnSiguiente = itemLayout.findViewById<Button>(R.id.btnSiguiente)
                 btnAtras.visibility = View.GONE
                 btnSiguiente.setOnClickListener {
-                    seccion = "Platos Principales"
-                    cargarPedidos(inflater, container)
+                    if (comprobarContinuarMenu()) {
+                        seccion = "Platos Principales"
+                        cargarPedidos(inflater, container)
+                    }else{
+                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    }
+
                 }
                 linearLayout.addView(itemLayout)
             }
@@ -254,12 +259,22 @@ class Pedidos(
                 val btnAtras = itemLayout.findViewById<Button>(R.id.btnAtras)
                 val btnSiguiente = itemLayout.findViewById<Button>(R.id.btnSiguiente)
                 btnAtras.setOnClickListener {
-                    seccion = "Entrantes"
-                    cargarPedidos(inflater, container)
+                    if (comprobarContinuarMenu()) {
+                        seccion = "Entrantes"
+                        cargarPedidos(inflater, container)
+                    }else{
+                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    }
+
                 }
                 btnSiguiente.setOnClickListener {
-                    seccion = "Guarniciones"
-                    cargarPedidos(inflater, container)
+
+                    if (comprobarContinuarMenu()) {
+                        seccion = "Guarniciones"
+                        cargarPedidos(inflater, container)
+                    }else{
+                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    }
                 }
                 linearLayout.addView(itemLayout)
             }
@@ -321,12 +336,21 @@ class Pedidos(
                 val btnAtras = itemLayout.findViewById<Button>(R.id.btnAtras)
                 val btnSiguiente = itemLayout.findViewById<Button>(R.id.btnSiguiente)
                 btnAtras.setOnClickListener {
-                    seccion = "Platos Principales"
-                    cargarPedidos(inflater, container)
+                    if (comprobarContinuarMenu()) {
+                        seccion = "Platos Principales"
+                        cargarPedidos(inflater, container)
+                    }else{
+                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    }
+
                 }
                 btnSiguiente.setOnClickListener {
-                    seccion = "Postres"
-                    cargarPedidos(inflater, container)
+                    if (comprobarContinuarMenu()) {
+                        seccion = "Postres"
+                        cargarPedidos(inflater, container)
+                    }else{
+                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    }
                 }
 
                 linearLayout.addView(itemLayout)
@@ -389,12 +413,21 @@ class Pedidos(
                 val btnAtras = itemLayout.findViewById<Button>(R.id.btnAtras)
                 val btnSiguiente = itemLayout.findViewById<Button>(R.id.btnSiguiente)
                 btnAtras.setOnClickListener {
-                    seccion = "Guarniciones"
-                    cargarPedidos(inflater, container)
+                    if (comprobarContinuarMenu()) {
+                        seccion = "Guarniciones"
+                        cargarPedidos(inflater, container)
+                    }else{
+                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    }
+
                 }
                 btnSiguiente.setOnClickListener {
-                    seccion = "Bebidas"
-                    cargarPedidos(inflater, container)
+                    if (comprobarContinuarMenu()) {
+                        seccion = "Bebidas"
+                        cargarPedidos(inflater, container)
+                    }else{
+                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    }
                 }
                 linearLayout.addView(itemLayout)
             }
@@ -457,8 +490,12 @@ class Pedidos(
                 val btnSiguiente = itemLayout.findViewById<Button>(R.id.btnSiguiente)
                 btnSiguiente.text = "Añadir al Carrito"
                 btnAtras.setOnClickListener {
-                    seccion = "Postres"
-                    cargarPedidos(inflater, container)
+                    if (comprobarContinuarMenu()) {
+                        seccion = "Postres"
+                        cargarPedidos(inflater, container)
+                    }else{
+                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    }
                 }
                 btnSiguiente.setOnClickListener {
                     if (comprobarAlAñadirAlCarrito()) {
@@ -482,6 +519,24 @@ class Pedidos(
                 linearLayout.addView(itemLayout)
             }
         }
+    }
+
+    private fun comprobarContinuarMenu(): Boolean {
+        var continuar: Boolean = true
+        if(tipo == Tipo.MENU){
+            var numeroDeTrue: Int = 0
+            for (i in 0 until seleccionCheckBox.size) {
+                if (seleccionCheckBox[1]) {
+                    numeroDeTrue++
+                    if (numeroDeTrue == 2) {
+                        continuar = false
+                        break
+                    }
+
+                }
+            }
+        }
+        return continuar
     }
 
     private fun enviarPedidoALaLista() {

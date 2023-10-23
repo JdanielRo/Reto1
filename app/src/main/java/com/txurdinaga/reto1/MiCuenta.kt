@@ -1,5 +1,6 @@
 package com.txurdinaga.reto1
 
+import Usuario
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,24 +15,22 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class MiCuenta : Fragment() {
+class MiCuenta(usuarioRe: Usuario) : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
+
     //private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var mAuth: FirebaseAuth
+
+    private var usuario: Usuario = usuarioRe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +62,6 @@ class MiCuenta : Fragment() {
         }
 
 
-
         val db = FirebaseFirestore.getInstance()
 
         val editTextNombre = view.findViewById<EditText>(R.id.editTextNombre)
@@ -88,22 +86,14 @@ class MiCuenta : Fragment() {
                 if (documentSnapshot.exists()) {
                     // El documento existe, obtén los datos
                     val datos = documentSnapshot.data
-
-                    // Ahora puedes acceder a los campos de datos como un mapa
-                    val nombre = datos?.get("Nombre") as? String
-                    val apellidos = datos?.get("Apellidos") as? String
-                    val correo = datos?.get("Correo") as? String
                     val direccion = datos?.get("Direccion") as? String
-                    val fechaNacimiento = datos?.get("FechaNacimiento") as? String
-                    val telefono = datos?.get("Telefono") as? String
-
                     // Establece los valores en los EditText
-                    editTextNombre.setText(nombre)
-                    editTextApellidos.setText(apellidos)
-                    editTextCorreoElectronico.setText(correo)
+                    editTextNombre.setText(usuario.nombre)
+                    editTextApellidos.setText(usuario.apellido)
+                    editTextCorreoElectronico.setText(usuario.correo)
                     editTextDireccion.setText(direccion)
-                    editTextFechaNacimiento.setText(fechaNacimiento)
-                    editTextTelefono.setText(telefono)
+                    editTextFechaNacimiento.setText(usuario.fechaNacimiento)
+                    editTextTelefono.setText(usuario.telefono)
 
                     // Haz lo que necesites con los datos
                 } else {
@@ -121,19 +111,12 @@ class MiCuenta : Fragment() {
 
         //MODIFICAR DATOS
 
-        view.findViewById<Button>(R.id.btnGuardarCambios).setOnClickListener(){
-            val nuevoNombre = editTextNombre.text.toString()
-            val nuevoApellidos = editTextApellidos.text.toString()
-            val nuevoCorreo = editTextCorreoElectronico.text.toString()
-            val nuevoFechaNacimiento = editTextFechaNacimiento.text.toString()
+        view.findViewById<Button>(R.id.btnGuardarCambios).setOnClickListener() {
+
             val nuevoTelefono = editTextTelefono.text.toString()
 
 
             val nuevosDatos = HashMap<String, Any>()
-            nuevosDatos["Nombre"] = nuevoNombre
-            nuevosDatos["Apellidos"] = nuevoApellidos
-            nuevosDatos["Correo"] = nuevoCorreo
-            nuevosDatos["FechaNacimiento"] = nuevoFechaNacimiento
             nuevosDatos["Telefono"] = nuevoTelefono
             //nuevosDatos["Direccion"] = nuevoDireccion
 
@@ -144,10 +127,13 @@ class MiCuenta : Fragment() {
 
                     //Quitar los focus en caso de que se hayan actualizado los datos
                     editTextTelefono.clearFocus()
-                    editTextDireccion.clearFocus()
 
                     // Los datos se actualizaron con éxito
-                    Toast.makeText(requireContext(), R.string.datos_actualizados, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.datos_actualizados,
+                        Toast.LENGTH_SHORT
+                    ).show()
 
 
                 }
@@ -165,7 +151,8 @@ class MiCuenta : Fragment() {
         var listaDatos = mutableListOf<String>()
 
         // Crea un ArrayAdapter para el Spinner
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listaDatos)
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listaDatos)
 
         view.findViewById<Button>(R.id.buttonAgregarDireccion).setOnClickListener {
 
@@ -185,7 +172,11 @@ class MiCuenta : Fragment() {
                         // Agregar la nueva colección
                         direccionesCollectionRef.add(nuevaColeccion)
 
-                        Toast.makeText(requireContext(), R.string.direccion_agregada, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.direccion_agregada,
+                            Toast.LENGTH_SHORT
+                        ).show()
                         editTextDireccion.setText("")
                         listaDatos.add(nuevoDireccion)
                         adapter.notifyDataSetChanged()
@@ -193,7 +184,11 @@ class MiCuenta : Fragment() {
 
                     } else {
                         // Si ya hay 5 documentos, muestra un mensaje de error o realiza otra acción
-                        Toast.makeText(requireContext(), R.string.limite_direcciones, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.limite_direcciones,
+                            Toast.LENGTH_SHORT
+                        ).show()
                         editTextDireccion.setText("")
                     }
                 }
@@ -205,8 +200,6 @@ class MiCuenta : Fragment() {
         }
 
 
-
-
         val referenciaDocumentoPadre = db.collection("Usuarios").document("$uid")
         val referenciaColeccionHija = referenciaDocumentoPadre.collection("Direcciones")
 
@@ -214,7 +207,7 @@ class MiCuenta : Fragment() {
         // Recupera los documentos de la colección hija
         referenciaColeccionHija.get()
             .addOnSuccessListener { querySnapshot ->
-                 // Crea una lista para almacenar los datos
+                // Crea una lista para almacenar los datos
 
                 for (document in querySnapshot.documents) {
                     // Para cada documento en la colección hija, obtén los datos y agrégalos a la lista
@@ -233,10 +226,15 @@ class MiCuenta : Fragment() {
 
                 // Configura el adaptador en el Spinner
                 spinner.adapter = adapter
-                
+
                 // Configura un oyente de selección si deseas realizar acciones al seleccionar un dato
                 spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
                         datoSeleccionado = listaDatos[position]
                         // Realiza acciones basadas en el dato seleccionado
 
@@ -286,12 +284,10 @@ class MiCuenta : Fragment() {
         }
 
 
-
-
         //RESTABLECER CONTRASEÑA
         val restablecerPass = view.findViewById<TextView>(R.id.textViewRestablecerPass)
 
-        restablecerPass.setOnClickListener{
+        restablecerPass.setOnClickListener {
 
             val intent = Intent(requireContext(), NewPassword::class.java)
             startActivity(intent)
@@ -302,7 +298,7 @@ class MiCuenta : Fragment() {
         //LOG OUT
         mAuth = Firebase.auth
         val buttonLogOut = view.findViewById<Button>(R.id.buttonLogOut)
-        buttonLogOut.setOnClickListener{
+        buttonLogOut.setOnClickListener {
 
             mAuth.signOut()
 
@@ -316,13 +312,14 @@ class MiCuenta : Fragment() {
         //BORRAR CUENTA
         val buttonDeleteAccount = view.findViewById<Button>(R.id.buttonDeleteAccount)
 
-        buttonDeleteAccount.setOnClickListener{
+        buttonDeleteAccount.setOnClickListener {
 
             val usuario = Firebase.auth.currentUser!!
             usuario.delete()
                 ?.addOnSuccessListener {
                     // El usuario se eliminó con éxito
-                    Toast.makeText(requireContext(), R.string.cuenta_borrada, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.cuenta_borrada, Toast.LENGTH_SHORT)
+                        .show()
 
                     // Realiza acciones adicionales si es necesario
 
@@ -354,18 +351,12 @@ class MiCuenta : Fragment() {
                 }
 
 
-
-
-
-
-
         }
 
 
 
         return view
     }
-
 
 
     /*private fun configureGoogleSignIn() {
@@ -379,15 +370,19 @@ class MiCuenta : Fragment() {
     }*/
 
 
-
-
     companion object {
-        fun newInstance(param1: String, param2: String) =
-            MiCuenta().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance(
+            param1: String,
+            param2: String,
+            usuarioRe: Usuario)
+        : MiCuenta {
+            val fragment = MiCuenta(usuarioRe)
+            fragment.usuario = usuarioRe
+            val args = Bundle()
+            args.putString(ARG_PARAM1, param1)
+            args.putString(ARG_PARAM2, param2)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

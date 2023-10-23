@@ -22,7 +22,7 @@ class Main : AppCompatActivity() {
     private var listaPlatos: ArrayList<Plato> = ArrayList()
     private var listaExtras: ArrayList<Extra> = ArrayList()
     private var usuario :Usuario = Usuario()
-    private var carritoUsuario: ArrayList<Pedido> = ArrayList()
+    var carritoUsuario: ArrayList<Pedido> = ArrayList()
 
     // Listener para las selecciones de elementos del menú de navegación
     private val onNavMenuListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -40,7 +40,7 @@ class Main : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemMiCuenta -> {
-                showFragment(MiCuenta()) // Mostrar el fragmento "MiCuenta" al seleccionar el elemento correspondiente
+                showFragment(MiCuenta(usuario)) // Mostrar el fragmento "MiCuenta" al seleccionar el elemento correspondiente
                 return@OnNavigationItemSelectedListener true
             }
             // Puedes agregar más casos para otros elementos del menú de navegación aquí si es necesario
