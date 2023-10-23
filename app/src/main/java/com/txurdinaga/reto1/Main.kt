@@ -22,7 +22,7 @@ class Main : AppCompatActivity() {
     private var listaPlatos: ArrayList<Plato> = ArrayList()
     private var listaExtras: ArrayList<Extra> = ArrayList()
     private var usuario :Usuario = Usuario()
-    var carritoUsuario: ArrayList<Pedido> = ArrayList()
+    private var carritoUsuario: ArrayList<Pedido> = ArrayList()
 
     // Listener para las selecciones de elementos del menú de navegación
     private val onNavMenuListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -32,7 +32,7 @@ class Main : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemPedidos -> {
-                showFragment(Pedidos(listaPlatos, listaExtras)) // Mostrar el fragmento "Pedidos" al seleccionar el elemento correspondiente
+                showFragment(Pedidos(carritoUsuario, listaPlatos, listaExtras)) // Mostrar el fragmento "Pedidos" al seleccionar el elemento correspondiente
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemCarrito -> {
@@ -57,9 +57,10 @@ class Main : AppCompatActivity() {
 
         usuario = intent.getParcelableExtra<Usuario>("usuario")!!
         carritoUsuario= intent.getSerializableExtra("carrito") as ArrayList<Pedido>
-       /* for (plato in listaPlatos){
-            Log.d("MiApp", "datos plato ${plato.nombre}")
-        }*/
+        println("Tamaño de la lista(Main): ${carritoUsuario.size}")
+        /* for (plato in listaPlatos){
+             Log.d("MiApp", "datos plato ${plato.nombre}")
+         }*/
 
         navigation = findViewById(R.id.navMenu) // Inicializar la vista BottomNavigationView
         navigation.setOnNavigationItemSelectedListener(onNavMenuListener) // Configurar el listener para elementos de navegación

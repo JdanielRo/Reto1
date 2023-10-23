@@ -16,11 +16,17 @@ import com.txurdinaga.reto1.Main
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) : Fragment() {
+class Pedidos(
+    carritoUsuarioRe: ArrayList<Pedido>,
+    listaPlatosRe: ArrayList<Plato>,
+    listaExtrasRe: ArrayList<Extra>
+) : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listaPlatos: ArrayList<Plato> = listaPlatosRe
     private var listaExtras: ArrayList<Extra> = listaExtrasRe
+    private var carritoUsuario: ArrayList<Pedido> = carritoUsuarioRe
+
     private var seccion: String =
         "Entrantes"
     private lateinit var linearLayout: LinearLayout
@@ -62,7 +68,6 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pedidos, container, false)
         linearLayout = view.findViewById(R.id.linearLayoutScrollPedidos)
-
 
         nombreSeccion = view.findViewById<TextView>(R.id.txtNombreApartadoPedidos)
         // Asegúrate de inicializar listaPlatos y listaExtras en algún lugar antes de usarlos.
@@ -483,14 +488,14 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
         for (i in 0 until 3) {
             for (j in 0 until enviarIdPlatoACarrito[i].size) {
                 var idPedido = 0
-                val idUsuario = auth.currentUser?.uid.toString()
+                var idUsuario: String = auth.currentUser?.uid.toString()
                 var idMenu = 0
                 var cantidad = 0
                 if (tipo == Tipo.MENU) {
                     idMenu = comprobarNumeroMenu()
-                    var cantidad = 1
+                    cantidad = 1
                 } else {
-                    var cantidad = 2
+                    cantidad = 2
                 }
                 var idPlato: String = enviarIdPlatoACarrito[i][j]
                 var idExtra: String = ""
@@ -507,7 +512,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     .addOnSuccessListener { documentReference ->
                         var pedido =
                             Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
-                        Main().carritoUsuario.add(pedido)
+                        carritoUsuario.add(pedido)
                     }
                     .addOnFailureListener { e ->
                         datosSubidos = false
@@ -520,14 +525,14 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
         for (i in 3 until 5) {
             for (j in 0 until enviarIdPlatoACarrito[i].size) {
                 var idPedido = 0
-                val idUsuario = auth.currentUser?.uid.toString()
+                var idUsuario: String = auth.currentUser?.uid.toString()
                 var idMenu = 0
                 var cantidad = 0
                 if (tipo == Tipo.MENU) {
                     idMenu = comprobarNumeroMenu()
-                    var cantidad = 1
+                    cantidad = 1
                 } else {
-                    var cantidad = 2
+                    cantidad = 2
                 }
                 var idPlato: String = ""
                 var idExtra: String = enviarIdPlatoACarrito[i][j]
@@ -544,7 +549,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     .addOnSuccessListener { documentReference ->
                         var pedido =
                             Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
-                        Main().carritoUsuario.add(pedido)
+                        carritoUsuario.add(pedido)
                     }
                     .addOnFailureListener { e ->
                         datosSubidos = false
@@ -555,8 +560,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
 
     private fun comprobarNumeroMenu(): Int {
         var numero: Int = 0
-        println("Tamaño de la lista: ${Main().carritoUsuario.size}")
-        for (pedido in Main().carritoUsuario) {
+        for (pedido in carritoUsuario) {
             println(pedido.idMenu)
             if (pedido.idMenu > numero) {
                 numero = pedido.idMenu
@@ -777,10 +781,11 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
         fun newInstance(
             param1: String,
             param2: String,
+            carritoUsuarioRe: ArrayList<Pedido>,
             listaPlatosRe: ArrayList<Plato>,
             listaExtrasRe: ArrayList<Extra>
         ): Pedidos {
-            val fragment = Pedidos(listaPlatosRe, listaExtrasRe)
+            val fragment = Pedidos(carritoUsuarioRe, listaPlatosRe, listaExtrasRe)
             fragment.listaPlatos = listaPlatosRe
             fragment.listaExtras = listaExtrasRe
             val args = Bundle()
