@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -20,6 +23,10 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
     private var seccion: String =
         "Entrantes"
     private lateinit var linearLayout: LinearLayout
+
+    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    private val db = FirebaseFirestore.getInstance()
 
     private var seleccionCheckBox: ArrayList<Boolean> = ArrayList()
 
@@ -57,9 +64,6 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
         nombreSeccion = view.findViewById<TextView>(R.id.txtNombreApartadoPedidos)
         // Asegúrate de inicializar listaPlatos y listaExtras en algún lugar antes de usarlos.
 
-        for (i in 0 until listaPlatos.size) {
-            println(listaPlatos[i])
-        }
         enviarIdPlatoACarrito = Array(5) { mutableListOf() }
 
         dividirListas()
@@ -114,11 +118,9 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                 seleccionCheckBox[i] = false
             }
             tipo = if (isChecked) Tipo.CARTA else Tipo.MENU
+            println(tipo)
             vaciarEnvioACarrito()
             cargarPedidos(inflater, container)
-        }
-        for (i in 0 until seleccionCheckBox.size) {
-            println("Mostrar seleccionCheckBox: ${ seleccionCheckBox[i]}, $i")
         }
         var seccionEnviarCarrito: Int = 0
         nombreSeccion.text = seccion
@@ -451,12 +453,107 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     cargarPedidos(inflater, container)
                 }
                 btnSiguiente.setOnClickListener {
-                    println("Enviar al corrito: ${comprobarAlAñadirAlCarrito()}")
-
+                    enviarPedidoALaLista(comprobarAlAñadirAlCarrito())
+                    for (list in enviarIdPlatoACarrito) {
+                        list.removeAll { true }
+                    }
+                    seccion = "Postres"
+                    cargarPedidos(inflater, container)
                 }
                 linearLayout.addView(itemLayout)
             }
         }
+    }
+
+    private fun enviarPedidoALaLista(comprobarAlAñadirAlCarrito: Boolean) {
+        if (comprobarAlAñadirAlCarrito) {
+
+            for (i in 0 until 3) {
+                for (j in 0 until enviarIdPlatoACarrito[i].size) {
+                    var idPedido = 0
+                    val idUsuario = auth.currentUser?.uid.toString()
+                    var idMenu = 0
+                    var cantidad = 0
+                    if (tipo == Tipo.MENU) {
+                        idMenu = comprobarNumeroMenu()
+                        var cantidad = 1
+                    } else {
+                        var cantidad = 2
+                    }
+                    var idPlato: String = enviarIdPlatoACarrito[i][j]
+                    var idExtra: String = ""
+                    val pedidobd = hashMapOf(
+                        "idPedido" to idPedido,
+                        "idUsuario" to idUsuario,
+                        "idMenu" to idMenu,
+                        "idPlato" to idPlato,
+                        "idExtra" to idExtra,
+                        "cantidad" to cantidad
+                    )
+                    db.collection("Pedido")
+                        .add(pedidobd)
+                        .addOnSuccessListener { documentReference ->
+                            var pedido =
+                                Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
+                            Main().carritoUsuario.add(pedido)
+                        }
+                        .addOnFailureListener { e ->
+
+                        }
+
+                }
+
+
+            }
+            for (i in 3 until 5) {
+                for (j in 0 until enviarIdPlatoACarrito[i].size) {
+                    var idPedido = 0
+                    val idUsuario = auth.currentUser?.uid.toString()
+                    var idMenu = 0
+                    var cantidad = 0
+                    if (tipo == Tipo.MENU) {
+                        idMenu = comprobarNumeroMenu()
+                        var cantidad = 1
+                    } else {
+                        var cantidad = 2
+                    }
+                    var idPlato: String = ""
+                    var idExtra: String = enviarIdPlatoACarrito[i][j]
+                    val pedidobd = hashMapOf(
+                        "idPedido" to idPedido,
+                        "idUsuario" to idUsuario,
+                        "idMenu" to idMenu,
+                        "idPlato" to idPlato,
+                        "idExtra" to idExtra,
+                        "cantidad" to cantidad
+                    )
+                    db.collection("Pedido")
+                        .add(pedidobd)
+                        .addOnSuccessListener { documentReference ->
+                            var pedido =
+                                Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
+                            Main().carritoUsuario.add(pedido)
+                        }
+                        .addOnFailureListener { e ->
+
+                        }
+                }
+            }
+
+        } else {
+
+        }
+
+    }
+
+    private fun comprobarNumeroMenu(): Int {
+        var numero: Int = 0
+        for (pedido in Main().carritoUsuario) {
+            if (pedido.idMenu > numero) {
+                numero = pedido.idMenu
+            }
+        }
+        return numero + 1
     }
 
     private fun comprobarAlAñadirAlCarrito(): Boolean {
@@ -550,7 +647,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                 }
             }
         }
-        if(checkBox.isChecked){
+        if (checkBox.isChecked) {
             seleccionCheckBox[numerodeplatosSeccion] = true
         }
         checkBox.setOnCheckedChangeListener { _, isChecked ->
@@ -570,7 +667,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
             }
             for (i in 0 until enviarIdPlatoACarrito.size) {
                 for (j in 0 until enviarIdPlatoACarrito[i].size) {
-                    println(enviarIdPlatoACarrito[i][j])
+                    println("${enviarIdPlatoACarrito[i][j]}, fila: $i, columna: $j")
                 }
             }
         }
@@ -640,7 +737,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
             }
 
         }
-        if(checkBox.isChecked){
+        if (checkBox.isChecked) {
             seleccionCheckBox[numerodeplatosSeccion] = true
         }
         checkBox.setOnCheckedChangeListener { _, isChecked ->
@@ -659,7 +756,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
             }
             for (i in 0 until enviarIdPlatoACarrito.size) {
                 for (j in 0 until enviarIdPlatoACarrito[i].size) {
-                    println(enviarIdPlatoACarrito[i][j])
+                    println("${enviarIdPlatoACarrito[i][j]}, fila: $i, columna: $j")
                 }
             }
         }

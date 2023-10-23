@@ -44,7 +44,7 @@ class Login : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login)
+
 
         auth = FirebaseAuth.getInstance()
 
@@ -53,6 +53,7 @@ class Login : AppCompatActivity() {
 
         val currentUser = auth.currentUser
         if (currentUser != null) {
+            setContentView(R.layout.splash_screen)
             GlobalScope.launch(Dispatchers.IO) {
                 obtenerDatosUsuario()
                 obtenerPedidosUsuario()
@@ -65,7 +66,7 @@ class Login : AppCompatActivity() {
                 finish()
             }
         } else {
-
+            setContentView(R.layout.login)
 
             // Asignar vistas a las variables
             btnInicioSesion = findViewById(R.id.btnInicioSesion)

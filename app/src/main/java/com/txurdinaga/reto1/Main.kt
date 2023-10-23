@@ -23,7 +23,7 @@ class Main : AppCompatActivity() {
     private var listaPlatos: ArrayList<Plato> = ArrayList()
     private var listaExtras: ArrayList<Extra> = ArrayList()
     private var usuario :Usuario = Usuario()
-    private var carritoUsuario: ArrayList<Pedido> = ArrayList()
+    var carritoUsuario: ArrayList<Pedido> = ArrayList()
 
     // Listener para las selecciones de elementos del menú de navegación
     private val onNavMenuListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->

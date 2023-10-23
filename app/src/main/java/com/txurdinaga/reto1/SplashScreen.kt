@@ -31,6 +31,8 @@ class SplashScreen : AppCompatActivity() {
                 intent.putExtra("extras", listaExtras)
 
                 startActivity(intent)
+                overridePendingTransition(0, 0)
+
                 finish() // Finaliza la actividad actual después de iniciar la siguiente
             }
         }
