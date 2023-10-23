@@ -171,9 +171,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-                    if(checkBox.isChecked){
-                        seleccionCheckBox[numerodeplatosSeccion] = true
-                    }
+                    
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
@@ -237,9 +235,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-                    if(checkBox.isChecked){
-                        seleccionCheckBox[numerodeplatosSeccion] = true
-                    }
+
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
@@ -306,9 +302,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-                    if(checkBox.isChecked){
-                        seleccionCheckBox[numerodeplatosSeccion] = true
-                    }
+
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
@@ -376,9 +370,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-                    if(checkBox.isChecked){
-                        seleccionCheckBox[numerodeplatosSeccion] = true
-                    }
+
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
@@ -445,9 +437,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
 
                     cargarCheckBox(checkBox, numerodeplatosSeccion, seccionEnviarCarrito, plato)
-                    if(checkBox.isChecked){
-                        seleccionCheckBox[numerodeplatosSeccion] = true
-                    }
+
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
@@ -560,7 +550,9 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                 }
             }
         }
-
+        if(checkBox.isChecked){
+            seleccionCheckBox[numerodeplatosSeccion] = true
+        }
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             if (index < seleccionCheckBox.size) {
                 seleccionCheckBox[index] = isChecked
@@ -648,7 +640,9 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
             }
 
         }
-
+        if(checkBox.isChecked){
+            seleccionCheckBox[numerodeplatosSeccion] = true
+        }
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             if (index < seleccionCheckBox.size) {
                 seleccionCheckBox[index] = isChecked
