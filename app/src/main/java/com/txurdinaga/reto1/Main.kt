@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -37,7 +36,7 @@ class Main : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemCarrito -> {
-                showFragment(Carrito(carritoUsuario)) // Mostrar el fragmento "Carrito" al seleccionar el elemento correspondiente
+                showFragment(Carrito(carritoUsuario, listaPlatos, listaExtras)) // Mostrar el fragmento "Carrito" al seleccionar el elemento correspondiente
                 return@OnNavigationItemSelectedListener true
             }
             R.id.itemMiCuenta -> {
@@ -129,12 +128,12 @@ class Main : AppCompatActivity() {
     // Función para mostrar un fragmento en la actividad
     private fun showFragment(fragment: Fragment) {
         if (currentFragment != null) {
-            supportFragmentManager.beginTransaction().remove(currentFragment!!).commit()
+            supportFragmentManager.beginTransaction().remove(currentFragment!!).commitAllowingStateLoss()
         }
         supportFragmentManager.beginTransaction()
             .replace(R.id.frameContainer, fragment)
             .addToBackStack(null)
-            .commit()
+            .commitAllowingStateLoss()
         currentFragment = fragment
     }
 
@@ -155,4 +154,10 @@ class Main : AppCompatActivity() {
         config.setLocale(locale)
         return context.createConfigurationContext(config).resources
     }
+
+    fun mostrarCarrito() {
+        showFragment(Carrito(carritoUsuario, listaPlatos, listaExtras))
+    }
+
+
 }

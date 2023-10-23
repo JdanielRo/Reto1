@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.txurdinaga.reto1.Main
 
 
 private const val ARG_PARAM1 = "param1"
@@ -453,97 +454,102 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     cargarPedidos(inflater, container)
                 }
                 btnSiguiente.setOnClickListener {
-                    enviarPedidoALaLista(comprobarAlAñadirAlCarrito())
-                    for (list in enviarIdPlatoACarrito) {
-                        list.removeAll { true }
+                    if (comprobarAlAñadirAlCarrito()) {
+                        if (enviarPedidoALaLista()) {
+                            for (list in enviarIdPlatoACarrito) {
+                                list.removeAll { true }
+                            }
+                            seccion = "Entrantes"
+                            cargarPedidos(inflater, container)
+                        } else {
+                            //TODO Error al subir los datos a la base de datos
+                        }
+                    } else {
+                        //TODO Error al enviar el pedido al carrito
+
                     }
-                    seccion = "Postres"
-                    cargarPedidos(inflater, container)
+
+
                 }
                 linearLayout.addView(itemLayout)
             }
         }
     }
 
-    private fun enviarPedidoALaLista(comprobarAlAñadirAlCarrito: Boolean) {
-        if (comprobarAlAñadirAlCarrito) {
-
-            for (i in 0 until 3) {
-                for (j in 0 until enviarIdPlatoACarrito[i].size) {
-                    var idPedido = 0
-                    val idUsuario = auth.currentUser?.uid.toString()
-                    var idMenu = 0
-                    var cantidad = 0
-                    if (tipo == Tipo.MENU) {
-                        idMenu = comprobarNumeroMenu()
-                        var cantidad = 1
-                    } else {
-                        var cantidad = 2
-                    }
-                    var idPlato: String = enviarIdPlatoACarrito[i][j]
-                    var idExtra: String = ""
-                    val pedidobd = hashMapOf(
-                        "idPedido" to idPedido,
-                        "idUsuario" to idUsuario,
-                        "idMenu" to idMenu,
-                        "idPlato" to idPlato,
-                        "idExtra" to idExtra,
-                        "cantidad" to cantidad
-                    )
-                    db.collection("Pedido")
-                        .add(pedidobd)
-                        .addOnSuccessListener { documentReference ->
-                            var pedido =
-                                Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
-                            Main().carritoUsuario.add(pedido)
-                        }
-                        .addOnFailureListener { e ->
-
-                        }
-
+    private fun enviarPedidoALaLista(): Boolean {
+        var datosSubidos: Boolean = true
+        for (i in 0 until 3) {
+            for (j in 0 until enviarIdPlatoACarrito[i].size) {
+                var idPedido = 0
+                val idUsuario = auth.currentUser?.uid.toString()
+                var idMenu = 0
+                var cantidad = 0
+                if (tipo == Tipo.MENU) {
+                    idMenu = comprobarNumeroMenu()
+                    var cantidad = 1
+                } else {
+                    var cantidad = 2
                 }
-
+                var idPlato: String = enviarIdPlatoACarrito[i][j]
+                var idExtra: String = ""
+                val pedidobd = hashMapOf(
+                    "idPedido" to idPedido,
+                    "idUsuario" to idUsuario,
+                    "idMenu" to idMenu,
+                    "idPlato" to idPlato,
+                    "idExtra" to idExtra,
+                    "cantidad" to cantidad
+                )
+                db.collection("Pedido")
+                    .add(pedidobd)
+                    .addOnSuccessListener { documentReference ->
+                        var pedido =
+                            Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
+                        Main().carritoUsuario.add(pedido)
+                    }
+                    .addOnFailureListener { e ->
+                        datosSubidos = false
+                    }
 
             }
-            for (i in 3 until 5) {
-                for (j in 0 until enviarIdPlatoACarrito[i].size) {
-                    var idPedido = 0
-                    val idUsuario = auth.currentUser?.uid.toString()
-                    var idMenu = 0
-                    var cantidad = 0
-                    if (tipo == Tipo.MENU) {
-                        idMenu = comprobarNumeroMenu()
-                        var cantidad = 1
-                    } else {
-                        var cantidad = 2
-                    }
-                    var idPlato: String = ""
-                    var idExtra: String = enviarIdPlatoACarrito[i][j]
-                    val pedidobd = hashMapOf(
-                        "idPedido" to idPedido,
-                        "idUsuario" to idUsuario,
-                        "idMenu" to idMenu,
-                        "idPlato" to idPlato,
-                        "idExtra" to idExtra,
-                        "cantidad" to cantidad
-                    )
-                    db.collection("Pedido")
-                        .add(pedidobd)
-                        .addOnSuccessListener { documentReference ->
-                            var pedido =
-                                Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
-                            Main().carritoUsuario.add(pedido)
-                        }
-                        .addOnFailureListener { e ->
 
-                        }
-                }
-            }
-
-        } else {
 
         }
-
+        for (i in 3 until 5) {
+            for (j in 0 until enviarIdPlatoACarrito[i].size) {
+                var idPedido = 0
+                val idUsuario = auth.currentUser?.uid.toString()
+                var idMenu = 0
+                var cantidad = 0
+                if (tipo == Tipo.MENU) {
+                    idMenu = comprobarNumeroMenu()
+                    var cantidad = 1
+                } else {
+                    var cantidad = 2
+                }
+                var idPlato: String = ""
+                var idExtra: String = enviarIdPlatoACarrito[i][j]
+                val pedidobd = hashMapOf(
+                    "idPedido" to idPedido,
+                    "idUsuario" to idUsuario,
+                    "idMenu" to idMenu,
+                    "idPlato" to idPlato,
+                    "idExtra" to idExtra,
+                    "cantidad" to cantidad
+                )
+                db.collection("Pedido")
+                    .add(pedidobd)
+                    .addOnSuccessListener { documentReference ->
+                        var pedido =
+                            Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
+                        Main().carritoUsuario.add(pedido)
+                    }
+                    .addOnFailureListener { e ->
+                        datosSubidos = false
+                    }
+            }
+        }
+        return datosSubidos
     }
 
     private fun comprobarNumeroMenu(): Int {

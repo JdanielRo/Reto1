@@ -1,6 +1,8 @@
 
 package com.txurdinaga.reto1
 
+import Extra
+import Plato
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,15 +14,23 @@ import android.view.ViewGroup
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+
 /**
  * A simple [Fragment] subclass.
  * Use the [Carrito.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Carrito(carritoUsuarioRe: ArrayList<Pedido>) : Fragment() {
+class Carrito(
+    carritoUsuarioRe: ArrayList<Pedido>,
+    listaPlatosRe: ArrayList<Plato>,
+    listaExtrasRe: ArrayList<Extra>
+) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private var listaPlatos: ArrayList<Plato> = listaPlatosRe
+    private var listaExtras: ArrayList<Extra> = listaExtrasRe
 
     private var carritoUsuario:ArrayList<Pedido> = carritoUsuarioRe
 
@@ -41,9 +51,10 @@ class Carrito(carritoUsuarioRe: ArrayList<Pedido>) : Fragment() {
     }
 
     companion object {
-        fun newInstance(param1: String, param2: String, carritoUsuarioRe: ArrayList<Pedido>):
+        fun newInstance(param1: String, param2: String, carritoUsuarioRe: ArrayList<Pedido>, listaPlatosRe: ArrayList<Plato>,
+                        listaExtrasRe: ArrayList<Extra>):
             Carrito {
-            val fragment = Carrito(carritoUsuarioRe)
+            val fragment = Carrito(carritoUsuarioRe, listaPlatosRe, listaExtrasRe)
             fragment.carritoUsuario = carritoUsuarioRe
             val args = Bundle()
             args.putString(ARG_PARAM1, param1)
