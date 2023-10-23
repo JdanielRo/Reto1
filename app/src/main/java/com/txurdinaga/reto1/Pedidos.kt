@@ -25,6 +25,8 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
         "Entrantes"
     private lateinit var linearLayout: LinearLayout
 
+    private var datosSubidos: Boolean = true
+
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private val db = FirebaseFirestore.getInstance()
@@ -455,7 +457,8 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                 }
                 btnSiguiente.setOnClickListener {
                     if (comprobarAlAñadirAlCarrito()) {
-                        if (enviarPedidoALaLista()) {
+                        enviarPedidoALaLista()
+                        if (datosSubidos) {
                             for (list in enviarIdPlatoACarrito) {
                                 list.removeAll { true }
                             }
@@ -476,8 +479,7 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
         }
     }
 
-    private fun enviarPedidoALaLista(): Boolean {
-        var datosSubidos: Boolean = true
+    private fun enviarPedidoALaLista() {
         for (i in 0 until 3) {
             for (j in 0 until enviarIdPlatoACarrito[i].size) {
                 var idPedido = 0
@@ -549,12 +551,13 @@ class Pedidos(listaPlatosRe: ArrayList<Plato>, listaExtrasRe: ArrayList<Extra>) 
                     }
             }
         }
-        return datosSubidos
     }
 
     private fun comprobarNumeroMenu(): Int {
         var numero: Int = 0
+        println("Tamaño de la lista: ${Main().carritoUsuario.size}")
         for (pedido in Main().carritoUsuario) {
+            println(pedido.idMenu)
             if (pedido.idMenu > numero) {
                 numero = pedido.idMenu
             }
