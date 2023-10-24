@@ -9,9 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.txurdinaga.reto1.Main
 
 
 private const val ARG_PARAM1 = "param1"
@@ -55,6 +55,7 @@ class Pedidos(
     private lateinit var switch: Switch
 
     private lateinit var nombreSeccion: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -196,7 +197,11 @@ class Pedidos(
                         seccion = "Platos Principales"
                         cargarPedidos(inflater, container)
                     } else {
-                        mostrarErrorContinuarMenu()
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Error")
+                        mostrarErrorContinuarMenu(builder)
+                        val dialog: AlertDialog = builder.create()
+                        dialog.show()
                     }
 
                 }
@@ -264,7 +269,11 @@ class Pedidos(
                         seccion = "Entrantes"
                         cargarPedidos(inflater, container)
                     } else {
-                        mostrarErrorContinuarMenu()
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Error")
+                        mostrarErrorContinuarMenu(builder)
+                        val dialog: AlertDialog = builder.create()
+                        dialog.show()
                     }
 
                 }
@@ -274,7 +283,11 @@ class Pedidos(
                         seccion = "Guarniciones"
                         cargarPedidos(inflater, container)
                     } else {
-                        mostrarErrorContinuarMenu()
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Error")
+                        mostrarErrorContinuarMenu(builder)
+                        val dialog: AlertDialog = builder.create()
+                        dialog.show()
                     }
                 }
                 linearLayout.addView(itemLayout)
@@ -341,7 +354,11 @@ class Pedidos(
                         seccion = "Platos Principales"
                         cargarPedidos(inflater, container)
                     } else {
-                        mostrarErrorContinuarMenu()
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Error")
+                        mostrarErrorContinuarMenu(builder)
+                        val dialog: AlertDialog = builder.create()
+                        dialog.show()
                     }
 
                 }
@@ -350,7 +367,11 @@ class Pedidos(
                         seccion = "Postres"
                         cargarPedidos(inflater, container)
                     } else {
-                        mostrarErrorContinuarMenu()
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Error")
+                        mostrarErrorContinuarMenu(builder)
+                        val dialog: AlertDialog = builder.create()
+                        dialog.show()
                     }
                 }
 
@@ -418,7 +439,11 @@ class Pedidos(
                         seccion = "Guarniciones"
                         cargarPedidos(inflater, container)
                     } else {
-                        mostrarErrorContinuarMenu()
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Error")
+                        mostrarErrorContinuarMenu(builder)
+                        val dialog: AlertDialog = builder.create()
+                        dialog.show()
                     }
 
                 }
@@ -427,7 +452,11 @@ class Pedidos(
                         seccion = "Bebidas"
                         cargarPedidos(inflater, container)
                     } else {
-                        mostrarErrorContinuarMenu()
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Error")
+                        mostrarErrorContinuarMenu(builder)
+                        val dialog: AlertDialog = builder.create()
+                        dialog.show()
                     }
                 }
                 linearLayout.addView(itemLayout)
@@ -495,12 +524,19 @@ class Pedidos(
                         seccion = "Postres"
                         cargarPedidos(inflater, container)
                     } else {
-                        mostrarErrorContinuarMenu()
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Error")
+                        mostrarErrorContinuarMenu(builder)
+                        val dialog: AlertDialog = builder.create()
+                        dialog.show()
                     }
                 }
                 btnSiguiente.setOnClickListener {
                     if (comprobarAlAñadirAlCarrito()) {
-
+/*                      *****EJEMPLO SNACKBAR*****
+                        val rootView = requireActivity().findViewById<View>(android.R.id.content)
+                        Snackbar.make(rootView, "Este es un mensaje Snackbar", Snackbar.LENGTH_SHORT).show()
+*/
                         val builder = AlertDialog.Builder(context)
                         builder.setMessage("¿Deseas añadir el $tipo al carrito?")
                             .setTitle("Mensaje")
@@ -530,8 +566,26 @@ class Pedidos(
                         dialog.show()
 
                     } else {
-                        mostrarErrorContinuarMenu()
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Error")
+                        var hayTrue: Boolean = false
+                        for (i in 0 until enviarIdPlatoACarrito.size) {
+                            if (enviarIdPlatoACarrito[i].size == 2) {
+                                hayTrue = true
+                                break
+                            }
+                        }
+                        if (hayTrue) {
+                            mostrarErrorContinuarMenu(builder)
+                        } else {
+                            builder.setMessage("Se debe seleccionar un plato en cada seccion del menu")
 
+                            builder.setPositiveButton("Aceptar") { dialog, which ->
+                                dialog.cancel()
+                            }
+                        }
+                        val dialog: AlertDialog = builder.create()
+                        dialog.show()
 
                     }
 
@@ -542,24 +596,16 @@ class Pedidos(
         }
     }
 
-    private fun mostrarErrorContinuarMenu() {
+    private fun mostrarErrorContinuarMenu(builder: AlertDialog.Builder) {
         if (tipo == Tipo.MENU) {
-            val builder = AlertDialog.Builder(context)
-            var text: String
-            if (tipo == Tipo.MENU) {
-                text = "el $tipo"
-            } else {
-                text = "la $tipo"
-            }
-            builder.setTitle("Error")
+
             builder.setMessage("No se pueden seleccionar mas de un plato")
 
             builder.setPositiveButton("Aceptar") { dialog, which ->
                 dialog.cancel()
             }
 
-            val dialog: AlertDialog = builder.create()
-            dialog.show()
+
         }
     }
 
@@ -577,6 +623,7 @@ class Pedidos(
 
                 }
             }
+
         }
 
         return continuar
