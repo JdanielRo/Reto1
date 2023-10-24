@@ -150,9 +150,7 @@ class Registro : AppCompatActivity() {
 
         }
 
-        txtLogin.setOnClickListener {
-            val intent = Intent(this, Login::class.java)
-            startActivity(intent)
+        txtLogin.setOnClickListener {onBackPressed()
         }
     }
 

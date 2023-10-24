@@ -165,7 +165,7 @@ class Login : AppCompatActivity() {
 
             val idUsuario = document.getString("IdUsuario") ?: ""
             val nombre = document.getString("Nombre") ?: ""
-            val apellido = document.getString("Apellido") ?: ""
+            val apellido = document.getString("Apellidos") ?: ""
             val correo = document.getString("Correo") ?: ""
             val telefono = document.getString("Telefono") ?: ""
             val direccion = document.getString("Direccion") ?: ""

@@ -72,11 +72,7 @@ class NewPassword : AppCompatActivity() {
                 }
         }
 
-        findViewById<ImageView>(R.id.imageViewX).setOnClickListener{
-
-            finish()
-
-        }
+        findViewById<ImageView>(R.id.imageViewX).setOnClickListener{onBackPressed()}
     }
 
     //Función para el cambio de idiomas

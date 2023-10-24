@@ -2,6 +2,7 @@ package com.txurdinaga.reto1
 
 import Extra
 import Plato
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -194,8 +195,8 @@ class Pedidos(
                     if (comprobarContinuarMenu()) {
                         seccion = "Platos Principales"
                         cargarPedidos(inflater, container)
-                    }else{
-                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    } else {
+                        mostrarErrorContinuarMenu()
                     }
 
                 }
@@ -262,8 +263,8 @@ class Pedidos(
                     if (comprobarContinuarMenu()) {
                         seccion = "Entrantes"
                         cargarPedidos(inflater, container)
-                    }else{
-                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    } else {
+                        mostrarErrorContinuarMenu()
                     }
 
                 }
@@ -272,8 +273,8 @@ class Pedidos(
                     if (comprobarContinuarMenu()) {
                         seccion = "Guarniciones"
                         cargarPedidos(inflater, container)
-                    }else{
-                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    } else {
+                        mostrarErrorContinuarMenu()
                     }
                 }
                 linearLayout.addView(itemLayout)
@@ -339,8 +340,8 @@ class Pedidos(
                     if (comprobarContinuarMenu()) {
                         seccion = "Platos Principales"
                         cargarPedidos(inflater, container)
-                    }else{
-                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    } else {
+                        mostrarErrorContinuarMenu()
                     }
 
                 }
@@ -348,8 +349,8 @@ class Pedidos(
                     if (comprobarContinuarMenu()) {
                         seccion = "Postres"
                         cargarPedidos(inflater, container)
-                    }else{
-                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    } else {
+                        mostrarErrorContinuarMenu()
                     }
                 }
 
@@ -416,8 +417,8 @@ class Pedidos(
                     if (comprobarContinuarMenu()) {
                         seccion = "Guarniciones"
                         cargarPedidos(inflater, container)
-                    }else{
-                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    } else {
+                        mostrarErrorContinuarMenu()
                     }
 
                 }
@@ -425,8 +426,8 @@ class Pedidos(
                     if (comprobarContinuarMenu()) {
                         seccion = "Bebidas"
                         cargarPedidos(inflater, container)
-                    }else{
-                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    } else {
+                        mostrarErrorContinuarMenu()
                     }
                 }
                 linearLayout.addView(itemLayout)
@@ -493,24 +494,44 @@ class Pedidos(
                     if (comprobarContinuarMenu()) {
                         seccion = "Postres"
                         cargarPedidos(inflater, container)
-                    }else{
-                        //TODO Error por que hay mas de uno seleccionado en el menu
+                    } else {
+                        mostrarErrorContinuarMenu()
                     }
                 }
                 btnSiguiente.setOnClickListener {
                     if (comprobarAlAñadirAlCarrito()) {
-                        enviarPedidoALaLista()
-                        if (datosSubidos) {
-                            for (list in enviarIdPlatoACarrito) {
-                                list.removeAll { true }
+
+                        val builder = AlertDialog.Builder(context)
+                        builder.setMessage("¿Deseas añadir el $tipo al carrito?")
+                            .setTitle("Mensaje")
+                        builder.setPositiveButton("Aceptar") { dialog, id ->
+                            enviarPedidoALaLista()
+                            if (datosSubidos) {
+                                for (list in enviarIdPlatoACarrito) {
+                                    list.removeAll { true }
+                                }
+                                seccion = "Entrantes"
+                                cargarPedidos(inflater, container)
+                            } else {
+                                for (list in enviarIdPlatoACarrito) {
+                                    list.removeAll { true }
+                                }
+                                for (i in 0 until seleccionCheckBox.size) {
+                                    seleccionCheckBox[i] = false
+                                }
+                                seccion = "Entrantes"
+                                cargarPedidos(inflater, container)
                             }
-                            seccion = "Entrantes"
-                            cargarPedidos(inflater, container)
-                        } else {
-                            //TODO Error al subir los datos a la base de datos
                         }
+                        builder.setNegativeButton("Cancelar") { dialog, id ->
+                            dialog.cancel()
+                        }
+                        val dialog = builder.create()
+                        dialog.show()
+
                     } else {
-                        //TODO Error al enviar el pedido al carrito
+                        mostrarErrorContinuarMenu()
+
 
                     }
 
@@ -521,12 +542,33 @@ class Pedidos(
         }
     }
 
+    private fun mostrarErrorContinuarMenu() {
+        if (tipo == Tipo.MENU) {
+            val builder = AlertDialog.Builder(context)
+            var text: String
+            if (tipo == Tipo.MENU) {
+                text = "el $tipo"
+            } else {
+                text = "la $tipo"
+            }
+            builder.setTitle("Error")
+            builder.setMessage("No se pueden seleccionar mas de un plato")
+
+            builder.setPositiveButton("Aceptar") { dialog, which ->
+                dialog.cancel()
+            }
+
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
+    }
+
     private fun comprobarContinuarMenu(): Boolean {
         var continuar: Boolean = true
-        if(tipo == Tipo.MENU){
+        if (tipo == Tipo.MENU) {
             var numeroDeTrue: Int = 0
             for (i in 0 until seleccionCheckBox.size) {
-                if (seleccionCheckBox[1]) {
+                if (seleccionCheckBox[i]) {
                     numeroDeTrue++
                     if (numeroDeTrue == 2) {
                         continuar = false
@@ -536,6 +578,7 @@ class Pedidos(
                 }
             }
         }
+
         return continuar
     }
 
@@ -729,15 +772,6 @@ class Pedidos(
             } else {
                 enviarIdPlatoACarrito[seccionEnviarCarrito].remove(plato.idExtra)
             }
-
-            for (i in 0 until seleccionCheckBox.size) {
-                println(seleccionCheckBox[i])
-            }
-            for (i in 0 until enviarIdPlatoACarrito.size) {
-                for (j in 0 until enviarIdPlatoACarrito[i].size) {
-                    println("${enviarIdPlatoACarrito[i][j]}, fila: $i, columna: $j")
-                }
-            }
         }
 
     }
@@ -818,14 +852,6 @@ class Pedidos(
                 enviarIdPlatoACarrito[seccionEnviarCarrito].add(plato.idPlato)
             } else {
                 enviarIdPlatoACarrito[seccionEnviarCarrito].remove(plato.idPlato)
-            }
-            for (i in 0 until seleccionCheckBox.size) {
-                println(seleccionCheckBox[i])
-            }
-            for (i in 0 until enviarIdPlatoACarrito.size) {
-                for (j in 0 until enviarIdPlatoACarrito[i].size) {
-                    println("${enviarIdPlatoACarrito[i][j]}, fila: $i, columna: $j")
-                }
             }
         }
 
