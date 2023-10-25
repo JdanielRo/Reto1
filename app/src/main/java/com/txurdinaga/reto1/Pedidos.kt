@@ -9,9 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.android.material.snackbar.Snackbar
 
 
 private const val ARG_PARAM1 = "param1"
@@ -533,10 +533,14 @@ class Pedidos(
                 }
                 btnSiguiente.setOnClickListener {
                     if (comprobarAlAñadirAlCarrito()) {
-/*                      *****EJEMPLO SNACKBAR*****
+                        //                      *****EJEMPLO SNACKBAR*****
                         val rootView = requireActivity().findViewById<View>(android.R.id.content)
-                        Snackbar.make(rootView, "Este es un mensaje Snackbar", Snackbar.LENGTH_SHORT).show()
-*/
+                        Snackbar.make(
+                            rootView,
+                            "Este es un mensaje Snackbar",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+
                         val builder = AlertDialog.Builder(context)
                         builder.setMessage("¿Deseas añadir el $tipo al carrito?")
                             .setTitle("Mensaje")
@@ -630,20 +634,18 @@ class Pedidos(
     }
 
     private fun enviarPedidoALaLista() {
+        val idPedido = 0
+        val idUsuario: String = auth.currentUser?.uid.toString()
+        var idMenu = 0
+        var cantidad = 0
+        if (tipo == Tipo.MENU) {
+            idMenu = comprobarNumeroMenu()
+            cantidad = 1
+        }
         for (i in 0 until 3) {
             for (j in 0 until enviarIdPlatoACarrito[i].size) {
-                var idPedido = 0
-                var idUsuario: String = auth.currentUser?.uid.toString()
-                var idMenu = 0
-                var cantidad = 0
-                if (tipo == Tipo.MENU) {
-                    idMenu = comprobarNumeroMenu()
-                    cantidad = 1
-                } else {
-                    cantidad = 2
-                }
-                var idPlato: String = enviarIdPlatoACarrito[i][j]
-                var idExtra: String = ""
+                val idPlato: String = enviarIdPlatoACarrito[i][j]
+                val idExtra: String = ""
                 val pedidobd = hashMapOf(
                     "idPedido" to idPedido,
                     "idUsuario" to idUsuario,
@@ -669,18 +671,8 @@ class Pedidos(
         }
         for (i in 3 until 5) {
             for (j in 0 until enviarIdPlatoACarrito[i].size) {
-                var idPedido = 0
-                var idUsuario: String = auth.currentUser?.uid.toString()
-                var idMenu = 0
-                var cantidad = 0
-                if (tipo == Tipo.MENU) {
-                    idMenu = comprobarNumeroMenu()
-                    cantidad = 1
-                } else {
-                    cantidad = 2
-                }
-                var idPlato: String = ""
-                var idExtra: String = enviarIdPlatoACarrito[i][j]
+                val idPlato: String = ""
+                val idExtra: String = enviarIdPlatoACarrito[i][j]
                 val pedidobd = hashMapOf(
                     "idPedido" to idPedido,
                     "idUsuario" to idUsuario,
@@ -702,6 +694,7 @@ class Pedidos(
             }
         }
     }
+
 
     private fun comprobarNumeroMenu(): Int {
         var numero: Int = 0
