@@ -52,7 +52,7 @@
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:paddingStart="10dp"
-                android:text="Descripcion: "
+                android:text="@string/descripcion"
                 android:textColor="@color/azul_enlace"
                 android:textColorLink="@color/azul_enlace"
                 android:textStyle="bold" />

@@ -17,6 +17,8 @@
     <!--Fragment Orders-->
     <string name="menus" >Menus</string>
     <string name="platos">Dishes</string>
+    <string name="descripcion"><u>Description</u></string>
+
 
     <!--GOOGLE-->
     <string name="repeatPassword">Repeat Password</string>
@@ -75,4 +77,8 @@
     <string name="maps_api_key">AIzaSyDVR_AVXogAW6eCD6iQgdFRaGD5UtN-hDQ</string>
 
 
+    <!-- CARRITO -->
+    <string name="texto_carrito">Products added to your cart:</string>
+    <string name="seleccionar_todos">Select all</string>
+    <string name="precio_placeholder">%s €</string>
 </resources>

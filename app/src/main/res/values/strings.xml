@@ -15,6 +15,8 @@
 
     <!--Fragment Pedidos-->
     <string name="menus">Menus</string>
+    <string name="descripcion"><u>Descripción</u></string>
+
 
     <!--GOOGLE-->
     <string name="repeatPassword">Repetir contraseña</string>
@@ -75,5 +77,9 @@
     <string name="_94672846_683562594">94672846 | 683562594</string>
     <string name="contacto">CONTACTO</string>
     <string name="maps_api_key">AIzaSyDVR_AVXogAW6eCD6iQgdFRaGD5UtN-hDQ</string>
+
+    <string name="texto_carrito">Productos agregados a tu carrito:</string>
+    <string name="seleccionar_todos">Seleccionar todos</string>
+    <string name="precio_placeholder">%s €</string>
 
 </resources>

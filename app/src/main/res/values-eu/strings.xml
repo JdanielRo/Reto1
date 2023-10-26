@@ -17,6 +17,7 @@
     <!--Fragment Pedidos-->
     <string name="menus" >Menuak</string>
     <string name="platos">Platerak</string>
+    <string name="descripcion"><u>Deskribapena</u></string>
 
     <!--GOOGLE-->
     <string name="repeatPassword">Pasahitzaren Errepikapena</string>
@@ -74,5 +75,10 @@
     <string name="_94672846_683562594">94672846 | 683562594</string>
     <string name="contacto">KONTAKTUA</string>
     <string name="maps_api_key">AIzaSyDVR_AVXogAW6eCD6iQgdFRaGD5UtN-hDQ</string>
+
+    <!-- CARRITO -->
+    <string name="texto_carrito">Zure saskian gehitutako produktuak:</string>
+    <string name="seleccionar_todos">Aukeratu guztiak</string>
+    <string name="precio_placeholder">%s €</string>
 
 </resources>

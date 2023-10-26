@@ -76,6 +76,7 @@ class Pedidos(
 
         enviarIdPlatoACarrito = Array(5) { mutableListOf() }
 
+
         dividirListas()
 
         switch = view.findViewById<Switch>(R.id.switch2)
@@ -88,6 +89,7 @@ class Pedidos(
 
         return view
     }
+
 
     private fun dividirListas() {
         for (plato in listaPlatos) {
@@ -197,11 +199,7 @@ class Pedidos(
                         seccion = "Platos Principales"
                         cargarPedidos(inflater, container)
                     } else {
-                        val builder = AlertDialog.Builder(context)
-                        builder.setTitle("Error")
-                        mostrarErrorContinuarMenu(builder)
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
+                        mostrarErrorContinuarMenu()
                     }
 
                 }
@@ -269,11 +267,7 @@ class Pedidos(
                         seccion = "Entrantes"
                         cargarPedidos(inflater, container)
                     } else {
-                        val builder = AlertDialog.Builder(context)
-                        builder.setTitle("Error")
-                        mostrarErrorContinuarMenu(builder)
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
+                        mostrarErrorContinuarMenu()
                     }
 
                 }
@@ -283,11 +277,7 @@ class Pedidos(
                         seccion = "Guarniciones"
                         cargarPedidos(inflater, container)
                     } else {
-                        val builder = AlertDialog.Builder(context)
-                        builder.setTitle("Error")
-                        mostrarErrorContinuarMenu(builder)
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
+                        mostrarErrorContinuarMenu()
                     }
                 }
                 linearLayout.addView(itemLayout)
@@ -354,11 +344,7 @@ class Pedidos(
                         seccion = "Platos Principales"
                         cargarPedidos(inflater, container)
                     } else {
-                        val builder = AlertDialog.Builder(context)
-                        builder.setTitle("Error")
-                        mostrarErrorContinuarMenu(builder)
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
+                        mostrarErrorContinuarMenu()
                     }
 
                 }
@@ -367,11 +353,7 @@ class Pedidos(
                         seccion = "Postres"
                         cargarPedidos(inflater, container)
                     } else {
-                        val builder = AlertDialog.Builder(context)
-                        builder.setTitle("Error")
-                        mostrarErrorContinuarMenu(builder)
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
+                        mostrarErrorContinuarMenu()
                     }
                 }
 
@@ -439,11 +421,7 @@ class Pedidos(
                         seccion = "Guarniciones"
                         cargarPedidos(inflater, container)
                     } else {
-                        val builder = AlertDialog.Builder(context)
-                        builder.setTitle("Error")
-                        mostrarErrorContinuarMenu(builder)
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
+                        mostrarErrorContinuarMenu()
                     }
 
                 }
@@ -452,11 +430,7 @@ class Pedidos(
                         seccion = "Bebidas"
                         cargarPedidos(inflater, container)
                     } else {
-                        val builder = AlertDialog.Builder(context)
-                        builder.setTitle("Error")
-                        mostrarErrorContinuarMenu(builder)
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
+                        mostrarErrorContinuarMenu()
                     }
                 }
                 linearLayout.addView(itemLayout)
@@ -524,11 +498,7 @@ class Pedidos(
                         seccion = "Postres"
                         cargarPedidos(inflater, container)
                     } else {
-                        val builder = AlertDialog.Builder(context)
-                        builder.setTitle("Error")
-                        mostrarErrorContinuarMenu(builder)
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
+                        mostrarErrorContinuarMenu()
                     }
                 }
                 btnSiguiente.setOnClickListener {
@@ -580,7 +550,7 @@ class Pedidos(
                             }
                         }
                         if (hayTrue) {
-                            mostrarErrorContinuarMenu(builder)
+                            mostrarErrorContinuarMenu()
                         } else {
                             builder.setMessage("Se debe seleccionar un plato en cada seccion del menu")
 
@@ -600,7 +570,9 @@ class Pedidos(
         }
     }
 
-    private fun mostrarErrorContinuarMenu(builder: AlertDialog.Builder) {
+    private fun mostrarErrorContinuarMenu() {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Error")
         if (tipo == Tipo.MENU) {
 
             builder.setMessage("No se pueden seleccionar mas de un plato")
@@ -608,9 +580,9 @@ class Pedidos(
             builder.setPositiveButton("Aceptar") { dialog, which ->
                 dialog.cancel()
             }
-
-
         }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     private fun comprobarContinuarMenu(): Boolean {
@@ -699,7 +671,6 @@ class Pedidos(
     private fun comprobarNumeroMenu(): Int {
         var numero: Int = 0
         for (pedido in carritoUsuario) {
-            println(pedido.idMenu)
             if (pedido.idMenu > numero) {
                 numero = pedido.idMenu
             }
