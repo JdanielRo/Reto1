@@ -17,11 +17,11 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
-
+        //Se ejecutan corrutinas
         CoroutineScope(Dispatchers.IO).launch {
             val platosDeferred = async { obtenerPlatos() }
             val extrasDeferred = async { obtenerExtras() }
-
+            //No continua hasta que se terminen de ejecutar las dos funciones
             val listaPlatos = platosDeferred.await()
             val listaExtras = extrasDeferred.await()
 

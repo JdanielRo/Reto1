@@ -24,10 +24,7 @@ import java.util.Locale
 
 class Login : AppCompatActivity() {
 
-    /*companion object {
-        private const val RC_SIGN_IN = 9001
-    }*/
-
+    // Declaraciones de variables
     private lateinit var auth: FirebaseAuth
     private lateinit var btnInicioSesion: Button
     private lateinit var editTextCorreo: EditText
@@ -38,21 +35,20 @@ class Login : AppCompatActivity() {
     private var usuario: Usuario = Usuario()
     private var carritoUsuario: ArrayList<Pedido> = ArrayList()
     private val db = FirebaseFirestore.getInstance()
-    //private lateinit var botonRegisterGoogle: Button
 
-    //lateinit var navigation: BottomNavigationView
-
+    // Función de creación de la actividad
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        // Inicialización de variables y obtención de datos
         auth = FirebaseAuth.getInstance()
-
         listaPlatos = intent.getSerializableExtra("platos") as ArrayList<Plato>
         listaExtras = intent.getSerializableExtra("extras") as ArrayList<Extra>
 
+        // Verificación de usuario existente
         val currentUser = auth.currentUser
         if (currentUser != null) {
+            // Carga de datos y redirección a la actividad principal
             setContentView(R.layout.splash_screen)
             GlobalScope.launch(Dispatchers.IO) {
                 obtenerDatosUsuario()
@@ -66,82 +62,55 @@ class Login : AppCompatActivity() {
                 finish()
             }
         } else {
+            // Configuración de la vista de inicio de sesión
             setContentView(R.layout.login)
 
-            // Asignar vistas a las variables
+            // Asignación de vistas a variables
             btnInicioSesion = findViewById(R.id.btnInicioSesion)
             editTextCorreo = findViewById(R.id.editTextTextEmailAddress)
             editTextContrasena = findViewById(R.id.editTextTextPassword)
             txtRegistro = findViewById(R.id.textViewNoTienesCuenta)
-            //editTextCorreo.setText("dani@gmail.com")
-            //editTextContraseña.setText("123456")
-            //botonRegisterGoogle = findViewById(R.id.signInWithGoogleButton)
 
-            // Inicializar campos con valores de ejemplo (puedes eliminarlos en producción)
-            editTextCorreo.setText("2grupotxurdinaga@gmail.com")
-            editTextContrasena.setText("123456")
+            // Configuración de los clics en botones y campos de texto
+            btnInicioSesion.setOnClickListener { inicioSesion() }
+            editTextContrasena.setOnClickListener { inicioSesion() }
+            txtRegistro.setOnClickListener { startActivity(Intent(this, Registro::class.java)) }
 
-            // Configurar clic en el botón de inicio de sesión
-            btnInicioSesion.setOnClickListener {
-                inicioSesion()
-            }
-
-            // Configurar clic en el campo de contraseña (si es necesario)
-            editTextContrasena.setOnClickListener {
-                inicioSesion()
-            }
-
-            // Configurar clic en el texto de registro
-            txtRegistro.setOnClickListener {
-                val intent = Intent(this, Registro::class.java)
-                startActivity(intent)
-            }
-
-            // botonRegisterGoogle.setOnClickListener { iniciarSesionGoogle() }
-
-
-            //CAMBIO DE IDIOMA
-
+            // Configuración del cambio de idioma
             val englishButton = findViewById<ImageView>(R.id.imageViewEnglish)
             val spanishButton = findViewById<ImageView>(R.id.imageViewEspañol)
             val euskeraButton = findViewById<ImageView>(R.id.imageViewEuskera)
 
             englishButton.setOnClickListener {
-                // Cambiar el idioma a inglés
                 setAppLocale("en")
-                recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+                recreate()
             }
 
             spanishButton.setOnClickListener {
-                // Cambiar el idioma a español
                 setAppLocale("es")
-                recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+                recreate()
             }
 
             euskeraButton.setOnClickListener {
-                // Cambiar el idioma a euskera
                 setAppLocale("eu")
-                recreate() // Reiniciar la actividad para aplicar el cambio de idioma
+                recreate()
             }
 
-            //¿HAS OLVIDADO TU CONTRASEÑA?
             findViewById<TextView>(R.id.textViewPreguntaLogin).setOnClickListener {
-
                 val olvidarContra = Intent(this, NewPassword::class.java)
                 startActivity(olvidarContra)
-
             }
         }
-
     }
 
+    // Función para obtener los pedidos del usuario
     private suspend fun obtenerPedidosUsuario() {
         val idUsuario = auth.currentUser?.uid
         val result = db.collection("Pedido")
             .whereEqualTo("idUsuario", idUsuario)
             .whereEqualTo("idPedido", 0)
             .get()
-            .await() // Esperar la respuesta de Firestore en una corrutina
+            .await()
         for (document in result) {
             val idUsuario = document.getString("idUsuario") ?: ""
             val idPlato = document.getString("idPlato") ?: ""
@@ -154,15 +123,15 @@ class Login : AppCompatActivity() {
         }
     }
 
+    // Función para obtener los datos del usuario
     private suspend fun obtenerDatosUsuario() {
         val idUsuario = auth.currentUser?.uid
         val result = db.collection("Usuarios")
             .whereEqualTo("idUsuario", "$idUsuario")
             .get()
-            .await() // Esperar la respuesta de Firestore en una corrutina
+            .await()
         if (!result.isEmpty) {
             val document = result.documents[0]
-
             val idUsuario = document.getString("IdUsuario") ?: ""
             val nombre = document.getString("Nombre") ?: ""
             val apellido = document.getString("Apellidos") ?: ""
@@ -170,120 +139,16 @@ class Login : AppCompatActivity() {
             val telefono = document.getString("Telefono") ?: ""
             val direccion = document.getString("Direccion") ?: ""
             val fechaNacimiento = document.getString("FechaNacimiento") ?: ""
-
-            usuario =
-                Usuario(idUsuario, nombre, apellido, correo, telefono, direccion, fechaNacimiento)
+            usuario = Usuario(idUsuario, nombre, apellido, correo, telefono, direccion, fechaNacimiento)
         }
-
     }
 
-    /*private fun iniciarSesionGoogle() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }*/
-
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            try {
-                val account = GoogleSignIn.getSignedInAccountFromIntent(data)
-                    .getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account!!.idToken!!)
-            } catch (e: ApiException) {
-                Toast.makeText(this, "Error al iniciar sesión con Google: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }*/
-
-    /*private fun firebaseAuthWithGoogle(idToken: String) {
-
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        val currentUser = auth.currentUser
-
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    guardarDatosUsuario()
-                    if (user == null || user.providerData.none { it.providerId == EmailAuthProvider.PROVIDER_ID }) {
-                        startActivity(Intent(this, ConfirmacionCorreoPopUp::class.java))
-                    }else{
-                    Toast.makeText(this, "Inició sesión como ${user?.displayName}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    startActivity(Intent(this, Main::class.java))
-                    finish()
-
-                }
-                } else {
-                    Toast.makeText(this, "Error de autenticación", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-
-
-    }*/
-
-    /*private fun guardarDatosUsuario() {
-        // Obtén el usuario actualmente autenticado
-        val user = auth.currentUser
-        val uid = user?.uid
-        //val email = user?.email
-        //val displayName = user?.displayName
-        //val partes = displayName!!.split(" ")
-        //val nombre: String? = partes[0]
-        //val apellidos: String? = partes.subList(1, partes.size).joinToString(" ")
-
-
-        // Define los datos que deseas agregar al documento
-        val datos = hashMapOf(
-            "Nombre" to "",
-            "Apellidos" to "",
-            "Correo" to "",
-            "Telefono" to "",
-            "FechaNacimiento" to "",
-            "Direccion" to "",
-            // Agrega más campos y valores según sea necesario
-        )
-
-
-
-        FirebaseFirestore.getInstance()
-            .collection("Usuarios")
-            .document("$uid")
-            .set(datos)
-            .addOnSuccessListener {
-                // Los datos se han agregado exitosamente
-                // Realiza las acciones necesarias en caso de éxito
-                Log.d(
-                    "Firestore",
-                    "Datos agregados con éxito al documento $uid"
-                )
-            }
-            .addOnFailureListener { e ->
-                // Maneja los errores en caso de que ocurra algún problema
-                // Puedes obtener información adicional sobre el error a través de 'e'
-                Log.e(
-                    "Firestore",
-                    "Error al agregar datos al documento $uid: $e"
-                )
-            }
-    }*/
-
+    // Función para el inicio de sesión
     private fun inicioSesion() {
         val correo = editTextCorreo.text.toString()
         val contrasenya = editTextContrasena.text.toString()
 
         if (correo.isNotEmpty() && contrasenya.isNotEmpty()) {
-            //val credential = GoogleAuthProvider.getCredential(googleIdToken, null)
-
             FirebaseAuth.getInstance().signInWithEmailAndPassword(correo, contrasenya)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -299,18 +164,16 @@ class Login : AppCompatActivity() {
                             finish()
                         }
                     } else {
-                        // Fallo el inicio de sesión, muestra un mensaje de error al usuario.
                         val errorMensaje = task.exception?.message ?: "Error al iniciar sesión"
                         Toast.makeText(this, errorMensaje, Toast.LENGTH_SHORT).show()
                     }
                 }
         } else {
-            // Asegúrate de que se ingresen tanto el correo como la contraseña.
             Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
         }
     }
 
-    //Función para el cambio de idiomas
+    // Función para el cambio de idioma
     private fun setAppLocale(languageCode: String) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
