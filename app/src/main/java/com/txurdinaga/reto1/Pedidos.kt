@@ -69,22 +69,25 @@ class Pedidos(
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pedidos, container, false)
+        //LinearLayout para instertar todos los elementos
         linearLayout = view.findViewById(R.id.linearLayoutScrollPedidos)
 
-        nombreSeccion = view.findViewById<TextView>(R.id.txtNombreApartadoPedidos)
-        // Asegúrate de inicializar listaPlatos y listaExtras en algún lugar antes de usarlos.
+        nombreSeccion = view.findViewById(R.id.txtNombreApartadoPedidos)
 
+        //Hacemos que el array tenga 5 de tamaño ya que hay 5 secciones en el MENU/CARTA
         enviarIdPlatoACarrito = Array(5) { mutableListOf() }
 
-
+        //De las 2 listas de platos y menus que recibimos, hacemos que se dividan en su correspondiente lista por cada seccion
         dividirListas()
 
+        //Switch para seleccionar MENU/CARTA
         switch = view.findViewById<Switch>(R.id.switch2)
         switch.setOnCheckedChangeListener { _, isChecked ->
             tipo = if (isChecked) Tipo.CARTA else Tipo.MENU
             cargarPedidos(inflater, container)
         }
 
+        //Cargas todos los pedidos
         cargarPedidos(inflater, container)
 
         return view
@@ -112,6 +115,7 @@ class Pedidos(
         }
     }
 
+    //Vacia el array bidimensional "enviarIdPlatoACarrito" cada vez que cambia de MENU/CARTA
     private fun vaciarEnvioACarrito() {
         for (i in enviarIdPlatoACarrito.indices) {
             enviarIdPlatoACarrito[i].clear()
@@ -137,6 +141,7 @@ class Pedidos(
         var seccionEnviarCarrito: Int = 0
         nombreSeccion.text = seccion
         when (seccion) {
+            //Se añade cada Plato/Extra al layout de cada tipo de seccion
             "Entrantes" -> {
                 seccionEnviarCarrito = 0
                 seleccionCheckBox.ensureCapacity(listaPlatosEntrantes.size)
@@ -189,6 +194,7 @@ class Pedidos(
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
+                //Cada vez que queremos cambiar de seccion se comprueba se es correcta el cambio y si es asi muestra la siguiente seccion y si no error
                 val itemLayout =
                     inflater.inflate(R.layout.layout_pedidos_siguiente_atras, container, false)
                 val btnAtras = itemLayout.findViewById<Button>(R.id.btnAtras)
@@ -258,6 +264,7 @@ class Pedidos(
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
+                //Cada vez que queremos cambiar de seccion se comprueba se es correcta el cambio y si es asi muestra la siguiente seccion y si no error
                 val itemLayout =
                     inflater.inflate(R.layout.layout_pedidos_siguiente_atras, container, false)
                 val btnAtras = itemLayout.findViewById<Button>(R.id.btnAtras)
@@ -335,6 +342,8 @@ class Pedidos(
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
+                //Cada vez que queremos cambiar de seccion se comprueba se es correcta el cambio y si es asi muestra la siguiente seccion y si no error
+
                 val itemLayout =
                     inflater.inflate(R.layout.layout_pedidos_siguiente_atras, container, false)
                 val btnAtras = itemLayout.findViewById<Button>(R.id.btnAtras)
@@ -412,6 +421,7 @@ class Pedidos(
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
+                //Cada vez que queremos cambiar de seccion se comprueba se es correcta el cambio y si es asi muestra la siguiente seccion y si no error
                 val itemLayout =
                     inflater.inflate(R.layout.layout_pedidos_siguiente_atras, container, false)
                 val btnAtras = itemLayout.findViewById<Button>(R.id.btnAtras)
@@ -488,6 +498,7 @@ class Pedidos(
                     linearLayout.addView(itemLayout)
                     numerodeplatosSeccion += 1
                 }
+                //Cada vez que queremos cambiar de seccion se comprueba se es correcta el cambio y si es asi muestra la siguiente seccion y si no error
                 val itemLayout =
                     inflater.inflate(R.layout.layout_pedidos_siguiente_atras, container, false)
                 val btnAtras = itemLayout.findViewById<Button>(R.id.btnAtras)
@@ -629,11 +640,13 @@ class Pedidos(
                 db.collection("Pedido")
                     .add(pedidobd)
                     .addOnSuccessListener { documentReference ->
+                        // Si el pedido se añade correctamente se añade a la lista
                         var pedido =
                             Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
                         carritoUsuario.add(pedido)
                     }
                     .addOnFailureListener { e ->
+                        // Si no, te da error
                         datosSubidos = false
                     }
 
@@ -656,18 +669,20 @@ class Pedidos(
                 db.collection("Pedido")
                     .add(pedidobd)
                     .addOnSuccessListener { documentReference ->
+                        // Si el pedido se añade correctamente se añade a la lista
                         var pedido =
                             Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
                         carritoUsuario.add(pedido)
                     }
                     .addOnFailureListener { e ->
+                        // Si no, te da error
                         datosSubidos = false
                     }
             }
         }
     }
 
-
+    //Comprueba cual es el numero del menu mas alto para añadir el siguiente menu correspondiente
     private fun comprobarNumeroMenu(): Int {
         var numero: Int = 0
         for (pedido in carritoUsuario) {
@@ -678,17 +693,20 @@ class Pedidos(
         return numero + 1
     }
 
+    //Comprobacion si se puede añadir el pedido al carrito devolviendo un booleano
     private fun comprobarAlAñadirAlCarrito(): Boolean {
         var enviar: Boolean = true
         if (tipo == Tipo.MENU) {
             for (i in 0 until enviarIdPlatoACarrito.size) {
                 if (enviarIdPlatoACarrito[i].size != 1) {
+                    //SI en algun momento del array hay alguna fila con ningún o más de uno elemento error porque no hay en esa fila el tamaño de variable correspondiente que seria 1(el id del Plato/Extra dependiendo de la seccion)
                     enviar = false
                     break
                 }
             }
         } else {
             for (i in 0 until enviarIdPlatoACarrito.size) {
+                //En este caso se comprueba unicamente si hay algun elemento en el array bidimensional independientemente de la fila
                 if (enviarIdPlatoACarrito[i].size == 0) {
                     enviar = false
                 } else {
@@ -709,8 +727,10 @@ class Pedidos(
         plato: Extra
     ) {
         if (index >= seleccionCheckBox.size) {
+            // Principalmente crea todos y los añade como false ya que al crearse el checkbox esta en false
             seleccionCheckBox.add(false)
         } else {
+            //En este caso se hace este when para que cuando cambiemos de secciones que se puedan mantener los checkbox si estan selecciconados o no
             var fila = 0
             when (seccion) {
                 "Entrantes" -> {
@@ -770,14 +790,17 @@ class Pedidos(
             }
         }
         if (checkBox.isChecked) {
+            //Del array de booleanos ponemos el que selecciona como deberia ser si true/false
             seleccionCheckBox[numerodeplatosSeccion] = true
         }
         checkBox.setOnCheckedChangeListener { _, isChecked ->
+            //Del array de booleanos ponemos el que selecciona como deberia ser si true/false
             if (index < seleccionCheckBox.size) {
                 seleccionCheckBox[index] = isChecked
             } else {
                 seleccionCheckBox.add(isChecked)
             }
+            //Se elimina/añade el id del Plato/Extra del array bidimensional
             if (isChecked) {
                 enviarIdPlatoACarrito[seccionEnviarCarrito].add(plato.idExtra)
             } else {
@@ -794,8 +817,11 @@ class Pedidos(
         plato: Plato
     ) {
         if (index >= seleccionCheckBox.size) {
+            // Principalmente crea todos y los añade como false ya que al crearse el checkbox esta en false
             seleccionCheckBox.add(false)
         } else {
+            //En este caso se hace este when para que cuando cambiemos de secciones que se puedan mantener los checkbox si estan selecciconados o no
+
             var fila = 0
             when (seccion) {
                 "Entrantes" -> {
@@ -851,15 +877,18 @@ class Pedidos(
 
         }
         if (checkBox.isChecked) {
+            //Del array de booleanos ponemos el que selecciona como deberia ser si true/false
             seleccionCheckBox[numerodeplatosSeccion] = true
         }
         checkBox.setOnCheckedChangeListener { _, isChecked ->
+            //Del array de booleanos ponemos el que selecciona como deberia ser si true/false
             if (index < seleccionCheckBox.size) {
                 seleccionCheckBox[index] = isChecked
             } else {
                 seleccionCheckBox.add(isChecked)
             }
             if (isChecked) {
+                //Se elimina/añade el id del Plato/Extra del array bidimensional
                 enviarIdPlatoACarrito[seccionEnviarCarrito].add(plato.idPlato)
             } else {
                 enviarIdPlatoACarrito[seccionEnviarCarrito].remove(plato.idPlato)
