@@ -12,6 +12,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,6 +34,10 @@ class Carrito(
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    private val db = FirebaseFirestore.getInstance()
 
     private var listaPlatos: ArrayList<Plato> = listaPlatosRe
     private var listaExtras: ArrayList<Extra> = listaExtrasRe
@@ -75,16 +81,15 @@ class Carrito(
         container: ViewGroup?,
         calcularIdMenuMasAlto: Int
     ) {
-
+        linearLayout.removeAllViews()
         for (i in 0 until carritoUsuario.size) {
             if (carritoUsuario[i].idPedido == 0) {
                 if (carritoUsuario[i].idMenu == 0) {
-                    if(carritoUsuario[i].idExtra == ""){
+                    if (carritoUsuario[i].idExtra == "") {
                         for (plato in listaPlatos) {
                             if (plato.idPlato == carritoUsuario[i].idPlato) {
                                 val itemLayout =
-                                    inflater.inflate(R.layout.layout_plato, container, false)
-                                val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
+                                    inflater.inflate(R.layout.item_plato, container, false)
                                 val imgCerrarDescripcion =
                                     itemLayout.findViewById<ImageView>(R.id.imageView5)
                                 val spinner = itemLayout.findViewById<Spinner>(R.id.spinner)
@@ -98,6 +103,40 @@ class Carrito(
                                     itemLayout.findViewById<TextView>(R.id.txtDescripcionPlato)
                                 val txtNombrePlato =
                                     itemLayout.findViewById<TextView>(R.id.txtNombrePlato)
+                                val imgEliminarPlatoMenu =
+                                    itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenu)
+
+                                imgEliminarPlatoMenu.setOnClickListener{
+                                    db.collection("Pedido")
+                                        .whereEqualTo("idUsuario", auth.currentUser?.uid)
+                                        .whereEqualTo("idPedido", 0)
+                                        .get()
+                                        .addOnSuccessListener { documents ->
+                                            for (document in documents) {
+                                                if(document.getString("idPlato")?: "" == plato.idPlato && document.getLong("idMenu")?.toInt() ?: 0 == 0){
+                                                    // Eliminar cada documento que coincida con los criterios de consulta
+                                                    db.collection("Pedido").document(document.id).delete()
+                                                        .addOnSuccessListener {
+                                                            println("Se ha borrado correctamente, ${carritoUsuario[i]}")
+                                                            carritoUsuario.remove(carritoUsuario[i])
+                                                            añadirCarritoAlLinearLayout(inflater, container, calcularIdMenuMasAlto())
+                                                        }
+                                                        .addOnFailureListener { e ->
+                                                            // Manejo de errores si la eliminación falla
+                                                        }
+                                                }
+
+                                            }
+                                        }
+                                        .addOnFailureListener { e ->
+                                            // Manejo de errores si la consulta falla
+                                        }
+                                }
+
+
+
+
+
 
                                 txtNombrePlato.text = plato.nombre
                                 txtDescripcionPlatoPedidos.text = plato.descripcion
@@ -122,12 +161,11 @@ class Carrito(
                             }
 
                         }
-                    }else{
+                    } else {
                         for (extra in listaExtras) {
                             if (extra.idExtra == carritoUsuario[i].idExtra) {
                                 val itemLayout =
-                                    inflater.inflate(R.layout.layout_plato, container, false)
-                                val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
+                                    inflater.inflate(R.layout.item_plato, container, false)
                                 val imgCerrarDescripcion =
                                     itemLayout.findViewById<ImageView>(R.id.imageView5)
                                 val spinner = itemLayout.findViewById<Spinner>(R.id.spinner)
@@ -145,7 +183,6 @@ class Carrito(
                                 txtNombrePlato.text = extra.nombre
                                 txtDescripcionPlatoPedidos.text = extra.descripcion
                                 txtPrecioPlatoPedidos.text = extra.precio.toString()
-
                                 txtDescripcionPlato.setOnClickListener {
                                     layoutMostrarPrecioCantidad.visibility = View.GONE
                                     txtDescripcionPlatoPedidos.visibility = View.VISIBLE
@@ -170,19 +207,22 @@ class Carrito(
 
 
             }
+
         }
-        for(j in 1 until calcularIdMenuMasAlto){
+        for (j in 1 until calcularIdMenuMasAlto) {
             val itemLayout =
                 inflater.inflate(R.layout.plantilla_menu, container, false)
             var layoutItem = itemLayout.findViewById<LinearLayout>(R.id.contenedorMenu)
+
             for (k in 0 until carritoUsuario.size) {
                 if (carritoUsuario[k].idPedido == 0 && carritoUsuario[k].idMenu == j) {
-                    if(carritoUsuario[k].idExtra == ""){
+                    if (carritoUsuario[k].idExtra == "") {
                         for (plato in listaPlatos) {
                             if (plato.idPlato == carritoUsuario[k].idPlato && plato.tipo == "Entrante") {
                                 val itemLayoutMenu =
                                     inflater.inflate(R.layout.item_menu, container, false)
-                                val nombrePlato = itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val nombrePlato =
+                                    itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
                                 nombrePlato.text = plato.nombre
                                 layoutItem.addView(itemLayoutMenu)
                                 break
@@ -193,7 +233,8 @@ class Carrito(
                             if (plato.idPlato == carritoUsuario[k].idPlato && plato.tipo == "PlatoPrincipal") {
                                 val itemLayoutMenu =
                                     inflater.inflate(R.layout.item_menu, container, false)
-                                val nombrePlato = itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val nombrePlato =
+                                    itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
                                 nombrePlato.text = plato.nombre
                                 layoutItem.addView(itemLayoutMenu)
                                 break
@@ -204,19 +245,21 @@ class Carrito(
                             if (plato.idPlato == carritoUsuario[k].idPlato && plato.tipo == "Guarnición") {
                                 val itemLayoutMenu =
                                     inflater.inflate(R.layout.item_menu, container, false)
-                                val nombrePlato = itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val nombrePlato =
+                                    itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
                                 nombrePlato.text = plato.nombre
                                 layoutItem.addView(itemLayoutMenu)
                                 break
                             }
 
                         }
-                    }else{
+                    } else {
                         for (extra in listaExtras) {
                             if (extra.idExtra == carritoUsuario[k].idExtra && extra.tipo == "postre") {
                                 val itemLayoutMenu =
                                     inflater.inflate(R.layout.item_menu, container, false)
-                                val nombrePlato = itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val nombrePlato =
+                                    itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
                                 nombrePlato.text = extra.nombre
                                 layoutItem.addView(itemLayoutMenu)
                                 break
@@ -227,7 +270,8 @@ class Carrito(
                             if (extra.idExtra == carritoUsuario[k].idExtra && extra.tipo == "bebida") {
                                 val itemLayoutMenu =
                                     inflater.inflate(R.layout.item_menu, container, false)
-                                val nombrePlato = itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val nombrePlato =
+                                    itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
                                 nombrePlato.text = extra.nombre
                                 layoutItem.addView(itemLayoutMenu)
                                 break
@@ -241,6 +285,7 @@ class Carrito(
         }
     }
 
+    
 
     companion object {
         fun newInstance(

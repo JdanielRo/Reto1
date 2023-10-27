@@ -26,33 +26,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="@dimen/space_height"
                 android:layout_weight="1"
                 android:text="@string/texto_carrito"
                 android:textSize="22sp" />
 
             <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/seleccionar_todos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:rotationX="0"
-                    android:rotationY="0"
-                    android:text="@string/seleccionar_todos" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/containerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="35dp"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingBottom="100dp">
+                android:orientation="vertical">
                 <!-- Otros elementos -->
             </LinearLayout>
 

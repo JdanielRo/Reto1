@@ -9,8 +9,12 @@
 
 
     <LinearLayout
+        android:id="@+id/navUp"
         android:layout_width="match_parent"
         android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
         android:background="@color/black"
         android:orientation="horizontal">
 
@@ -57,7 +61,8 @@
         android:id="@+id/frameContainer"
         android:layout_width="match_parent"
         android:layout_height="576dp"
-        android:layout_above="@+id/navMenu">
+        android:layout_above="@+id/navMenu"
+        android:layout_below="@+id/navUp">
 
     </FrameLayout>
 

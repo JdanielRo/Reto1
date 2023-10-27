@@ -139,7 +139,8 @@ class Login : AppCompatActivity() {
             val telefono = document.getString("Telefono") ?: ""
             val direccion = document.getString("Direccion") ?: ""
             val fechaNacimiento = document.getString("FechaNacimiento") ?: ""
-            usuario = Usuario(idUsuario, nombre, apellido, correo, telefono, direccion, fechaNacimiento)
+            usuario =
+                Usuario(idUsuario, nombre, apellido, correo, telefono, direccion, fechaNacimiento)
         }
     }
 
