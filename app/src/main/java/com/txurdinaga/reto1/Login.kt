@@ -122,6 +122,10 @@ class Login : AppCompatActivity() {
             carritoUsuario.add(carrito)
         }
     }
+    override fun onBackPressed() {
+        // No realizar ninguna acción
+        // Esto deshabilita la funcionalidad del botón de retroceso
+    }
 
     // Función para obtener los datos del usuario
     private suspend fun obtenerDatosUsuario() {

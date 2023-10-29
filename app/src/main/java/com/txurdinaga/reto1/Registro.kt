@@ -172,7 +172,10 @@ class Registro : AppCompatActivity() {
         return edad
     }*/
 
-
+    override fun onBackPressed() {
+        // No realizar ninguna acción
+        // Esto deshabilita la funcionalidad del botón de retroceso
+    }
 
     private fun guardarDatosUsuario() {
         // Obtén el usuario actualmente autenticado

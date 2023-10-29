@@ -15,7 +15,7 @@
         android:layout_gravity="left"
         android:layout_marginLeft="15dp"
         android:layout_weight="1"
-        android:text="Atras" />
+        android:text="@string/atras" />
 
     <Space
         android:id="@+id/space"
@@ -30,6 +30,6 @@
         android:layout_gravity="right"
         android:layout_marginRight="15dp"
         android:layout_weight="1"
-        android:text="Siguiente" />
+        android:text="@string/siguiente" />
 
 </LinearLayout>

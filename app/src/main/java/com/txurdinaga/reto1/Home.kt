@@ -1,5 +1,7 @@
 package com.txurdinaga.reto1
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -53,6 +55,7 @@ class Home : Fragment(), OnMapReadyCallback {
     }
 
     // Este método se llama cuando el mapa está listo para ser utilizado
+    // En tu función onMapReady
     override fun onMapReady(map: GoogleMap) {
         googleMap = map // Configura el objeto GoogleMap
 
@@ -63,11 +66,28 @@ class Home : Fragment(), OnMapReadyCallback {
         val marker = MarkerOptions().position(location).title("Mi Ubicación") // Crea un marcador
 
         // Agrega el marcador al mapa
-        googleMap.addMarker(marker)
+        val googleMapMarker = googleMap.addMarker(marker)
 
         // Mueve la cámara a la ubicación y establece un nivel de zoom
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+
+        // Configura el listener para el marcador
+        googleMap.setOnMarkerClickListener { clickedMarker ->
+            if (clickedMarker != null && clickedMarker == googleMapMarker) {
+                // Abre Google Maps para dirigirte a la ubicación
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("google.navigation:q=$latitude,$longitude")
+                )
+                intent.setPackage("com.google.android.apps.maps") // Asegura que se abra en Google Maps
+                startActivity(intent)
+                true // Indica que se ha manejado el clic en el marcador
+            } else {
+                false // Permite que el comportamiento predeterminado del marcador continúe
+            }
+        }
     }
+
 
     companion object {
         /**

@@ -1,7 +1,24 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Reto1" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.Reto1" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/light_green</item>
+        <item name="colorPrimaryVariant">@color/light_green</item>
+
     </style>
+
+    <style name="BottomNavigation">
+        <item name="android:background">@color/black</item>
+        <item name="itemIconTint">@color/light_green</item>
+        <item name="itemTextColor">@color/light_green</item>
+    </style>
+
+    <style name="TituloEstilo">
+        <item name="android:textSize">24sp</item> <!-- Tamaño del texto -->
+        <item name="android:textStyle">bold</item> <!-- Negrita -->
+        <item name="android:fontFamily">sans-serif-condensed</item> <!-- Fuente personalizada -->
+    </style>
+
+
+    <style name="Theme.Reto1" parent="Base.Theme.Reto1" />
 </resources>

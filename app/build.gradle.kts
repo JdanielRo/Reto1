@@ -66,5 +66,8 @@ dependencies {
     implementation ("org.threeten:threetenbp:1.5.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0") // Asegúrate de usar la última versión
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation ("com.google.android.libraries.places:places:2.4.0")
+
+    implementation ("com.android.volley:volley:1.2.0")
 
 }

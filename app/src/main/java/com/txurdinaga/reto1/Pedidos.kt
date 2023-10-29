@@ -503,7 +503,7 @@ class Pedidos(
                     inflater.inflate(R.layout.layout_pedidos_siguiente_atras, container, false)
                 val btnAtras = itemLayout.findViewById<Button>(R.id.btnAtras)
                 val btnSiguiente = itemLayout.findViewById<Button>(R.id.btnSiguiente)
-                btnSiguiente.text = "Añadir al Carrito"
+                btnSiguiente.text = getString(R.string.añadir_carrito)
                 btnAtras.setOnClickListener {
                     if (comprobarContinuarMenu()) {
                         seccion = "Postres"

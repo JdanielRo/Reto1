@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Reto1</string>
+    <string name="app_name" translatable="false">FITVIBES</string>
 
     <!--TITULOS DEL MENU-->
     <string name="home">Home</string>
@@ -81,4 +81,7 @@
     <string name="texto_carrito">Products added to your cart:</string>
     <string name="seleccionar_todos">Select all</string>
     <string name="precio_placeholder">%s €</string>
+
+
+
 </resources>

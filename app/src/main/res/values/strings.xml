@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Reto1</string>
+    <string name="app_name" translatable="false">FITVIBES</string>
 
     <!--TITULOS DEL MENU-->
     <string name="home">Inicio</string>
@@ -81,5 +81,14 @@
     <string name="texto_carrito">Productos agregados a tu carrito:</string>
     <string name="seleccionar_todos">Seleccionar todos</string>
     <string name="precio_placeholder">%s €</string>
+
+    <!--PEDIDOS-->
+    <string name="plato">PLATO</string>
+    <string name="menu">MENU</string>
+    <string name="carta">CARTA</string>
+    <string name="atras">ATRAS</string>
+    <string name="siguiente">SIGUIENTE</string>
+    <string name="añadir_carrito">AÑADIR AL CARRITO</string>
+
 
 </resources>

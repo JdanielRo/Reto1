@@ -17,6 +17,7 @@
             android:id="@+id/layout_plato"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/space_height"
             android:layout_marginTop="@dimen/space_height"
             android:orientation="horizontal"
@@ -25,11 +26,13 @@
 
             <TextView
                 android:id="@+id/txtPedidosMenu"
-                android:layout_width="75dp"
+                android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="Menu" />
+                android:gravity="right|clip_vertical"
+                android:text="@string/menu"
+                android:textSize="20sp"
+                style="@style/TituloEstilo"/>
 
             <Switch
                 android:id="@+id/switch2"
@@ -41,8 +44,10 @@
                 android:layout_width="75dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="Carta" />
+                android:gravity="left|center_vertical"
+                android:text="@string/carta"
+                android:textSize="20sp"
+                style="@style/TituloEstilo"/>
         </LinearLayout>
 
         <TextView
@@ -53,10 +58,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:paddingLeft="@dimen/space_height"
-            android:text="Menu"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold|italic" />
+            android:text="@string/menu"
+            style="@style/TituloEstilo"
+            android:textSize="30dp"/>
 
         <LinearLayout
             android:id="@+id/linearLayoutScrollPedidos"

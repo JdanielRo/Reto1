@@ -90,6 +90,10 @@ class Main : AppCompatActivity() {
             showFragment(Home())
         }
     }
+    override fun onBackPressed() {
+        // No realizar ninguna acción
+        // Esto deshabilita la funcionalidad del botón de retroceso
+    }
 
     // Función para configurar el idioma de la aplicación
     private fun setAppLocale(languageCode: String) {
@@ -101,11 +105,46 @@ class Main : AppCompatActivity() {
     }
 
     // Función para cambiar y aplicar el idioma
-    private fun setAndApplyLanguage(languageCode: String) {
+    /*private fun setAndApplyLanguage(languageCode: String) {
         sharedPref.edit().putString("language", languageCode).apply()
         setAppLocale(languageCode)
         updateResources(languageCode)
         recreate()
+    }*/
+
+    private fun setAndApplyLanguage(languageCode: String) {
+        // Guarda el código del idioma en las preferencias compartidas.
+        sharedPref.edit().putString("language", languageCode).apply()
+
+        // Establece el idioma de la aplicación.
+        setAppLocale(languageCode)
+
+        // Actualiza los recursos de la aplicación para reflejar el idioma seleccionado.
+        updateResources(languageCode)
+
+        // Obtiene el nombre de la clase del fragmento actual, si existe.
+        val fragmentName = currentFragment?.let { it::class.simpleName }
+
+        // Asigna a la variable itemId el valor correspondiente al nombre del fragmento en la interfaz de usuario.
+        val itemId = when (fragmentName) {
+            // Si 'fragmentName' es igual a "Home", asignamos 'R.id.itemHome' a 'itemId'.
+            "Home" -> R.id.itemHome
+
+            // Si 'fragmentName' es igual a "Pedidos", asignamos 'R.id.itemPedidos' a 'itemId'.
+            "Pedidos" -> R.id.itemPedidos
+
+            // Si 'fragmentName' es igual a "Carrito", asignamos 'R.id.itemCarrito' a 'itemId'.
+            "Carrito" -> R.id.itemCarrito
+
+            // Si 'fragmentName' es igual a "MiCuenta", asignamos 'R.id.itemMiCuenta' a 'itemId'.
+            "MiCuenta" -> R.id.itemMiCuenta
+
+            // Si 'fragmentName' no coincide con ninguno de los casos anteriores,
+            // asignamos 'R.id.itemHome' a 'itemId' como un valor predeterminado.
+            else -> R.id.itemHome
+        }
+        // Selecciona el elemento de menú correspondiente en la interfaz de usuario.
+        navigation.selectedItemId = itemId
     }
 
     // Función para actualizar los recursos al idioma seleccionado

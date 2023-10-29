@@ -16,6 +16,15 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/textViewTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FITVIBES"
+            style="@style/TituloEstilo"
+            android:textSize="40sp"
+            android:textColor="@color/light_green"/>
+
         <ImageView
             android:id="@+id/imageView11"
             android:layout_width="318dp"
@@ -184,7 +193,8 @@
             android:textColor="@color/dark_green"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="20sp"/>
 
     </LinearLayout>
 
