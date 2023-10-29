@@ -2,12 +2,12 @@ package com.txurdinaga.reto1
 
 import Extra
 import Plato
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
@@ -20,6 +20,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+
+class Stock(
+    var idPlato: String,
+    var idExtra: String
+) {
+    // Resto de tu código...
+}
 
 /**
  * A simple [Fragment] subclass.
@@ -46,6 +53,8 @@ class Carrito(
 
     private var carritoUsuario: ArrayList<Pedido> = carritoUsuarioRe
 
+    private var stockPlatos: MutableList<Stock> = mutableListOf<Stock>()
+    private var stockExtras: MutableList<Stock> = mutableListOf<Stock>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -62,6 +71,12 @@ class Carrito(
         // Inflate the layout for this fragment
         linearLayout = view.findViewById(R.id.containerLayout)
 
+        /*CoroutineScope(Dispatchers.IO).launch {
+            //No continua hasta que se terminen de ejecutar las dos funciones
+            stockPlatos = async { comprobarStock("Plato") }.await()
+            stockExtras = async { comprobarStock("Extra") }.await()
+        }*/
+
         añadirCarritoAlLinearLayout(inflater, container, calcularIdMenuMasAlto())
         return view
     }
@@ -76,6 +91,7 @@ class Carrito(
         return numero + 1
     }
 
+    @SuppressLint("MissingInflatedId")
     private fun añadirCarritoAlLinearLayout(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -106,20 +122,28 @@ class Carrito(
                                 val imgEliminarPlatoMenu =
                                     itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenu)
 
-                                imgEliminarPlatoMenu.setOnClickListener{
+                                imgEliminarPlatoMenu.setOnClickListener {
                                     db.collection("Pedido")
                                         .whereEqualTo("idUsuario", auth.currentUser?.uid)
                                         .whereEqualTo("idPedido", 0)
                                         .get()
                                         .addOnSuccessListener { documents ->
                                             for (document in documents) {
-                                                if(document.getString("idPlato")?: "" == plato.idPlato && document.getLong("idMenu")?.toInt() ?: 0 == 0){
+                                                if (document.getString("idPlato") ?: "" == plato.idPlato && document.getLong(
+                                                        "idMenu"
+                                                    )?.toInt() ?: 0 == 0
+                                                ) {
                                                     // Eliminar cada documento que coincida con los criterios de consulta
-                                                    db.collection("Pedido").document(document.id).delete()
+                                                    db.collection("Pedido").document(document.id)
+                                                        .delete()
                                                         .addOnSuccessListener {
                                                             println("Se ha borrado correctamente, ${carritoUsuario[i]}")
                                                             carritoUsuario.remove(carritoUsuario[i])
-                                                            añadirCarritoAlLinearLayout(inflater, container, calcularIdMenuMasAlto())
+                                                            añadirCarritoAlLinearLayout(
+                                                                inflater,
+                                                                container,
+                                                                calcularIdMenuMasAlto()
+                                                            )
                                                         }
                                                         .addOnFailureListener { e ->
                                                             // Manejo de errores si la eliminación falla
@@ -179,7 +203,43 @@ class Carrito(
                                     itemLayout.findViewById<TextView>(R.id.txtDescripcionPlato)
                                 val txtNombrePlato =
                                     itemLayout.findViewById<TextView>(R.id.txtNombrePlato)
+                                val imgEliminarPlatoMenu =
+                                    itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenu)
 
+                                imgEliminarPlatoMenu.setOnClickListener {
+                                    db.collection("Pedido")
+                                        .whereEqualTo("idUsuario", auth.currentUser?.uid)
+                                        .whereEqualTo("idPedido", 0)
+                                        .get()
+                                        .addOnSuccessListener { documents ->
+                                            for (document in documents) {
+                                                if (document.getString("idExtra") ?: "" == extra.idExtra && document.getLong(
+                                                        "idMenu"
+                                                    )?.toInt() ?: 0 == 0
+                                                ) {
+                                                    // Eliminar cada documento que coincida con los criterios de consulta
+                                                    db.collection("Pedido").document(document.id)
+                                                        .delete()
+                                                        .addOnSuccessListener {
+                                                            println("Se ha borrado correctamente, ${carritoUsuario[i]}")
+                                                            carritoUsuario.remove(carritoUsuario[i])
+                                                            añadirCarritoAlLinearLayout(
+                                                                inflater,
+                                                                container,
+                                                                calcularIdMenuMasAlto()
+                                                            )
+                                                        }
+                                                        .addOnFailureListener { e ->
+                                                            // Manejo de errores si la eliminación falla
+                                                        }
+                                                }
+
+                                            }
+                                        }
+                                        .addOnFailureListener { e ->
+                                            // Manejo de errores si la consulta falla
+                                        }
+                                }
                                 txtNombrePlato.text = extra.nombre
                                 txtDescripcionPlatoPedidos.text = extra.descripcion
                                 txtPrecioPlatoPedidos.text = extra.precio.toString()
@@ -212,7 +272,49 @@ class Carrito(
         for (j in 1 until calcularIdMenuMasAlto) {
             val itemLayout =
                 inflater.inflate(R.layout.plantilla_menu, container, false)
-            var layoutItem = itemLayout.findViewById<LinearLayout>(R.id.contenedorMenu)
+            var txtPrecio = itemLayout.findViewById<TextView>(R.id.txtPrecioMenuCarrito)
+            var itemLayoutContenedor = itemLayout.findViewById<LinearLayout>(R.id.contenedorMenu)
+            var sumarPreciosMenu: Double = 0.0
+            val imgEliminarPlatoMenu =
+                itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenuCarrito)
+            var contador = 0
+            imgEliminarPlatoMenu.setOnClickListener {
+                db.collection("Pedido")
+                    .whereEqualTo("idUsuario", auth.currentUser?.uid)
+                    .whereEqualTo("idPedido", 0)
+                    .whereEqualTo("idMenu", j)
+                    .get()
+                    .addOnSuccessListener { documents ->
+
+                        for (document in documents) {
+                            // Eliminar cada documento que coincida con los criterios de consulta
+                            db.collection("Pedido").document(document.id)
+                                .delete()
+                                .addOnSuccessListener {
+                                    val iterator = carritoUsuario.iterator()
+                                    while (iterator.hasNext()) {
+                                        val pedido = iterator.next()
+                                        if (pedido.idMenu == j) {
+                                            iterator.remove()
+                                        }
+                                    }
+                                    // Eliminación exitosa, realiza las operaciones necesarias
+                                    linearLayout.removeView(itemLayout)
+                                    añadirCarritoAlLinearLayout(
+                                        inflater,
+                                        container,
+                                        calcularIdMenuMasAlto()
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    // Manejo de errores si la eliminación falla
+                                }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Manejo de errores si la consulta falla
+                    }
+            }
 
             for (k in 0 until carritoUsuario.size) {
                 if (carritoUsuario[k].idPedido == 0 && carritoUsuario[k].idMenu == j) {
@@ -223,8 +325,10 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                sumarPreciosMenu += plato.precio
                                 nombrePlato.text = plato.nombre
-                                layoutItem.addView(itemLayoutMenu)
+                                contador += 1
+                                itemLayoutContenedor.addView(itemLayoutMenu)
                                 break
                             }
 
@@ -235,8 +339,10 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                sumarPreciosMenu += plato.precio
                                 nombrePlato.text = plato.nombre
-                                layoutItem.addView(itemLayoutMenu)
+                                contador += 1
+                                itemLayoutContenedor.addView(itemLayoutMenu)
                                 break
                             }
 
@@ -247,8 +353,10 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                sumarPreciosMenu += plato.precio
                                 nombrePlato.text = plato.nombre
-                                layoutItem.addView(itemLayoutMenu)
+                                contador += 1
+                                itemLayoutContenedor.addView(itemLayoutMenu)
                                 break
                             }
 
@@ -260,8 +368,10 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                sumarPreciosMenu += extra.precio
                                 nombrePlato.text = extra.nombre
-                                layoutItem.addView(itemLayoutMenu)
+                                contador += 1
+                                itemLayoutContenedor.addView(itemLayoutMenu)
                                 break
                             }
 
@@ -272,8 +382,10 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                sumarPreciosMenu += extra.precio
                                 nombrePlato.text = extra.nombre
-                                layoutItem.addView(itemLayoutMenu)
+                                contador += 1
+                                itemLayoutContenedor.addView(itemLayoutMenu)
                                 break
                             }
 
@@ -281,11 +393,21 @@ class Carrito(
                     }
                 }
             }
-            linearLayout.addView(itemLayout)
+            txtPrecio.text = "$sumarPreciosMenu€"
+            if(contador == 5){
+                linearLayout.addView(itemLayout)
+            }
+
         }
+
     }
 
-    
+    /*private fun comprobarStock(s: String): ArrayList<Stock>{
+        var listaStock: ArrayList<Stock>
+
+        return listaStock
+    }*/
+
 
     companion object {
         fun newInstance(
