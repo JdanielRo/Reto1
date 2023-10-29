@@ -62,16 +62,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="Total:"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/precioTotalCarrito"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="60.50€"
             android:textColor="@android:color/black"
             android:textSize="20sp"
@@ -82,7 +84,7 @@
             android:layout_height="wrap_content" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/imgPagarCarrito"
             android:layout_width="20dp"
             android:layout_height="60dp"
             android:layout_weight="1"

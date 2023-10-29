@@ -2,43 +2,36 @@ package com.txurdinaga.reto1
 
 import Extra
 import Plato
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-class Stock(
-    var idPlato: String,
-    var idExtra: String
-) {
-    // Resto de tu código...
-}
 
-/**
- * A simple [Fragment] subclass.
- * Use the [Carrito.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Carrito(
     carritoUsuarioRe: ArrayList<Pedido>,
     listaPlatosRe: ArrayList<Plato>,
     listaExtrasRe: ArrayList<Extra>
 ) : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
@@ -53,8 +46,10 @@ class Carrito(
 
     private var carritoUsuario: ArrayList<Pedido> = carritoUsuarioRe
 
-    private var stockPlatos: MutableList<Stock> = mutableListOf<Stock>()
-    private var stockExtras: MutableList<Stock> = mutableListOf<Stock>()
+    private var stockPlatos: MutableList<Stock> = mutableListOf()
+    private var stockExtras: MutableList<Stock> = mutableListOf()
+
+    private var precioTotal: Double = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -71,14 +66,32 @@ class Carrito(
         // Inflate the layout for this fragment
         linearLayout = view.findViewById(R.id.containerLayout)
 
-        /*CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             //No continua hasta que se terminen de ejecutar las dos funciones
             stockPlatos = async { comprobarStock("Plato") }.await()
             stockExtras = async { comprobarStock("Extra") }.await()
-        }*/
+        }
 
-        añadirCarritoAlLinearLayout(inflater, container, calcularIdMenuMasAlto())
+        añadirCarritoAlLinearLayout(inflater, container, calcularIdMenuMasAlto(), view)
+        val imgPagarCarrito: AppCompatImageButton = view.findViewById(R.id.imgPagarCarrito)
+        // Acción de botón de pagar
+        imgPagarCarrito.setOnClickListener {
+            linearLayout.removeAllViews()
+            addSecondXMLViews()  // Llamar a la función para agregar la vista de pago
+        }
+
         return view
+    }
+
+    private fun addSecondXMLViews() {
+        // Crear una instancia de CarritoPagar y realizar la transacción del fragmento
+        val carritoPagarFragment = CarritoPagar.newInstance("param1", "param2", carritoUsuario)
+
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+
+        transaction.replace(R.id.layoutParent, carritoPagarFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     private fun calcularIdMenuMasAlto(): Int {
@@ -91,13 +104,14 @@ class Carrito(
         return numero + 1
     }
 
-    @SuppressLint("MissingInflatedId")
     private fun añadirCarritoAlLinearLayout(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        calcularIdMenuMasAlto: Int
+        calcularIdMenuMasAlto: Int,
+        view: View
     ) {
         linearLayout.removeAllViews()
+        precioTotal = 0.0
         for (i in 0 until carritoUsuario.size) {
             if (carritoUsuario[i].idPedido == 0) {
                 if (carritoUsuario[i].idMenu == 0) {
@@ -122,6 +136,8 @@ class Carrito(
                                 val imgEliminarPlatoMenu =
                                     itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenu)
 
+                                calcularStock(spinner)
+
                                 imgEliminarPlatoMenu.setOnClickListener {
                                     db.collection("Pedido")
                                         .whereEqualTo("idUsuario", auth.currentUser?.uid)
@@ -142,7 +158,8 @@ class Carrito(
                                                             añadirCarritoAlLinearLayout(
                                                                 inflater,
                                                                 container,
-                                                                calcularIdMenuMasAlto()
+                                                                calcularIdMenuMasAlto(),
+                                                                view
                                                             )
                                                         }
                                                         .addOnFailureListener { e ->
@@ -181,6 +198,7 @@ class Carrito(
                                 txtDescripcionPlatoPedidos.visibility = View.GONE
                                 layoutMostrarPrecioCantidad.visibility = View.VISIBLE
                                 imgCerrarDescripcion.visibility = View.GONE
+                                precioTotal += plato.precio
                                 linearLayout.addView(itemLayout)
                             }
 
@@ -226,7 +244,8 @@ class Carrito(
                                                             añadirCarritoAlLinearLayout(
                                                                 inflater,
                                                                 container,
-                                                                calcularIdMenuMasAlto()
+                                                                calcularIdMenuMasAlto(),
+                                                                view
                                                             )
                                                         }
                                                         .addOnFailureListener { e ->
@@ -258,6 +277,7 @@ class Carrito(
                                 txtDescripcionPlatoPedidos.visibility = View.GONE
                                 layoutMostrarPrecioCantidad.visibility = View.VISIBLE
                                 imgCerrarDescripcion.visibility = View.GONE
+                                precioTotal += extra.precio
                                 linearLayout.addView(itemLayout)
                             }
 
@@ -303,7 +323,8 @@ class Carrito(
                                     añadirCarritoAlLinearLayout(
                                         inflater,
                                         container,
-                                        calcularIdMenuMasAlto()
+                                        calcularIdMenuMasAlto(),
+                                        view
                                     )
                                 }
                                 .addOnFailureListener { e ->
@@ -395,18 +416,61 @@ class Carrito(
             }
             txtPrecio.text = "$sumarPreciosMenu€"
             if(contador == 5){
+                precioTotal += sumarPreciosMenu
                 linearLayout.addView(itemLayout)
             }
 
         }
+        cacularTotal(view)
+    }
+
+    private fun calcularStock(spinner: Spinner?) {
 
     }
 
-    /*private fun comprobarStock(s: String): ArrayList<Stock>{
-        var listaStock: ArrayList<Stock>
+    private fun cacularTotal(view: View){
+        var precioTotalCarrito = view.findViewById<TextView>(R.id.precioTotalCarrito)
+        val df = DecimalFormat("#.##")
+        df.roundingMode = java.math.RoundingMode.CEILING
+        precioTotalCarrito.text = "${df.format(precioTotal)}€"
+    }
 
+    private fun comprobarStock(s: String): ArrayList<Stock>{
+        var listaStock: ArrayList<Stock> = ArrayList()
+        when(s){
+            "Plato" -> {
+                db.collection(s)
+                    .get()
+                    .addOnSuccessListener { result ->
+
+                        for (document in result) {
+                            // Eliminar cada documento que coincida con los criterios de consulta
+                            var stock: Stock = Stock(document.id, "", document.getLong("stock")?.toInt() ?: 0)
+                            listaStock.add(stock)
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Manejo de errores si la consulta falla
+                    }
+            }
+            "Extra" -> {
+                db.collection(s)
+                    .get()
+                    .addOnSuccessListener { result ->
+
+                        for (document in result) {
+                            // Eliminar cada documento que coincida con los criterios de consulta
+                            var stock: Stock = Stock("", document.id, document.getLong("stock")?.toInt() ?: 0)
+                            listaStock.add(stock)
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Manejo de errores si la consulta falla
+                    }
+            }
+        }
         return listaStock
-    }*/
+    }
 
 
     companion object {
