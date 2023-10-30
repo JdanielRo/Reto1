@@ -377,8 +377,12 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val txtDescripcion =
+                                    itemLayoutMenu.findViewById<TextView>(R.id.txtDescripcion)
+                                txtDescripcion.text = plato.descripcion
                                 val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
                                 if(imgPlato != null && plato.nombre.isNotEmpty()) {
+                                    println(plato.nombre)
                                     cargarImagenFirebase(imgPlato, plato.nombre)
                                 } else {
                                     Log.e("FirebaseStorage", "Error: imagen o nombre nulos")
@@ -402,12 +406,18 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val txtDescripcion =
+                                    itemLayoutMenu.findViewById<TextView>(R.id.txtDescripcion)
+                                txtDescripcion.text = plato.descripcion
                                 val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
                                 if(imgPlato != null && plato.nombre.isNotEmpty()) {
+                                    println(plato.nombre)
                                     cargarImagenFirebase(imgPlato, plato.nombre)
                                 } else {
                                     Log.e("FirebaseStorage", "Error: imagen o nombre nulos")
                                 }
+
+
                                 if (plato.stock < stockminimo) {
                                     stockminimo = plato.stock
                                 }
@@ -425,12 +435,18 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val txtDescripcion =
+                                    itemLayoutMenu.findViewById<TextView>(R.id.txtDescripcion)
+                                txtDescripcion.text = plato.descripcion
                                 val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
                                 if(imgPlato != null && plato.nombre.isNotEmpty()) {
+                                    println(plato.nombre)
                                     cargarImagenFirebase(imgPlato, plato.nombre)
                                 } else {
                                     Log.e("FirebaseStorage", "Error: imagen o nombre nulos")
                                 }
+
+
                                 if (plato.stock < stockminimo) {
                                     stockminimo = plato.stock
                                 }
@@ -444,17 +460,23 @@ class Carrito(
                         }
                     } else {
                         for (extra in listaExtras) {
-                            if (extra.idExtra == carritoUsuario[k].idExtra && extra.tipo == "postre") {
+                            if (extra.idExtra == carritoUsuario[k].idPlato && extra.tipo == "postre") {
                                 val itemLayoutMenu =
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val txtDescripcion =
+                                    itemLayoutMenu.findViewById<TextView>(R.id.txtDescripcion)
+                                txtDescripcion.text = extra.descripcion
                                 val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
                                 if(imgPlato != null && extra.nombre.isNotEmpty()) {
+                                    println(extra.nombre)
                                     cargarImagenFirebase(imgPlato, extra.nombre)
                                 } else {
                                     Log.e("FirebaseStorage", "Error: imagen o nombre nulos")
                                 }
+
+
                                 if (extra.stock < stockminimo) {
                                     stockminimo = extra.stock
                                 }
@@ -467,17 +489,23 @@ class Carrito(
 
                         }
                         for (extra in listaExtras) {
-                            if (extra.idExtra == carritoUsuario[k].idExtra && extra.tipo == "bebida") {
+                            if (extra.idExtra == carritoUsuario[k].idPlato && extra.tipo == "bebida") {
                                 val itemLayoutMenu =
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val txtDescripcion =
+                                    itemLayoutMenu.findViewById<TextView>(R.id.txtDescripcion)
+                                txtDescripcion.text = extra.descripcion
                                 val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
                                 if(imgPlato != null && extra.nombre.isNotEmpty()) {
+                                    println(extra.nombre)
                                     cargarImagenFirebase(imgPlato, extra.nombre)
                                 } else {
                                     Log.e("FirebaseStorage", "Error: imagen o nombre nulos")
                                 }
+
+
                                 if (extra.stock < stockminimo) {
                                     stockminimo = extra.stock
                                 }
