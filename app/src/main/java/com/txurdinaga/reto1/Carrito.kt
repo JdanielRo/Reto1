@@ -59,6 +59,8 @@ class Carrito(
         }
     }
 
+    private var arrayIdPedido: ArrayList<String> = arrayListOf()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -170,13 +172,15 @@ class Carrito(
                                         .whereEqualTo("idMenu", 0)
                                         .get()
                                         .addOnSuccessListener { documents ->
-                                            for (document in documents) {
+                                            if (!documents.isEmpty) { // Verificar si la lista de documentos no está vacía
+                                                val document = documents.documents[0]
                                                 // Eliminar cada documento que coincida con los criterios de consulta
                                                 db.collection("Pedido").document(document.id)
                                                     .delete()
                                                     .addOnSuccessListener {
                                                         println("Se ha borrado correctamente, ${carritoUsuario[i]}")
-                                                        carritoUsuario.remove(carritoUsuario[i])
+                                                        carritoUsuario.removeAt(i)
+
                                                         añadirCarritoAlLinearLayout(
                                                             inflater,
                                                             container,
@@ -186,9 +190,9 @@ class Carrito(
                                                     }
                                                     .addOnFailureListener { e ->
                                                         // Manejo de errores si la eliminación falla
-
                                                     }
-
+                                            } else {
+                                                // Manejar el caso en el que no hay documentos
                                             }
                                         }
                                         .addOnFailureListener { e ->
@@ -222,6 +226,7 @@ class Carrito(
                                 imgCerrarDescripcion.visibility = View.GONE
                                 precioTotal += plato.precio
                                 linearLayout.addView(itemLayout)
+
                             }
 
                         }
@@ -265,12 +270,15 @@ class Carrito(
                                         .whereEqualTo("idMenu", 0)
                                         .get()
                                         .addOnSuccessListener { documents ->
-                                            for (document in documents) {
+                                            if (!documents.isEmpty) { // Verificar si la lista de documentos no está vacía
+                                                val document = documents.documents[0]
+                                                // Eliminar cada documento que coincida con los criterios de consulta
                                                 db.collection("Pedido").document(document.id)
                                                     .delete()
                                                     .addOnSuccessListener {
                                                         println("Se ha borrado correctamente, ${carritoUsuario[i]}")
                                                         carritoUsuario.removeAt(i)
+
                                                         añadirCarritoAlLinearLayout(
                                                             inflater,
                                                             container,
@@ -280,14 +288,15 @@ class Carrito(
                                                     }
                                                     .addOnFailureListener { e ->
                                                         // Manejo de errores si la eliminación falla
-                                                        println("Error al eliminar el documento: $e")
                                                     }
+                                            } else {
+                                                // Manejar el caso en el que no hay documentos
                                             }
                                         }
                                         .addOnFailureListener { e ->
                                             // Manejo de errores si la consulta falla
-                                            println("Error al realizar la consulta: $e")
                                         }
+
                                 }
 
                                 txtNombrePlato.text = extra.nombre
@@ -324,7 +333,8 @@ class Carrito(
             val itemLayout =
                 inflater.inflate(R.layout.plantilla_menu, container, false)
             var txtPrecio = itemLayout.findViewById<TextView>(R.id.txtPrecioMenuCarrito)
-            var itemLayoutContenedor = itemLayout.findViewById<LinearLayout>(R.id.contenedorMenu)
+            var itemLayoutContenedor =
+                itemLayout.findViewById<LinearLayout>(R.id.contenedorMenu)
             var sumarPreciosMenu: Double = 0.0
             val imgEliminarPlatoMenu =
                 itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenuCarrito)
@@ -387,7 +397,8 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
-                                val txtDescripcion: TextView = itemLayoutMenu.findViewById(R.id.txtDescripcion)
+                                val txtDescripcion: TextView =
+                                    itemLayoutMenu.findViewById(R.id.txtDescripcion)
                                 txtDescripcion.text = plato.descripcion
                                 val imgPlato =
                                     itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
@@ -415,7 +426,8 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
-                                val txtDescripcion: TextView = itemLayoutMenu.findViewById(R.id.txtDescripcion)
+                                val txtDescripcion: TextView =
+                                    itemLayoutMenu.findViewById(R.id.txtDescripcion)
                                 txtDescripcion.text = plato.descripcion
                                 val imgPlato =
                                     itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
@@ -441,7 +453,8 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
-                                val txtDescripcion: TextView = itemLayoutMenu.findViewById(R.id.txtDescripcion)
+                                val txtDescripcion: TextView =
+                                    itemLayoutMenu.findViewById(R.id.txtDescripcion)
                                 txtDescripcion.text = plato.descripcion
                                 val imgPlato =
                                     itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
@@ -468,7 +481,8 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
-                                val txtDescripcion: TextView = itemLayoutMenu.findViewById(R.id.txtDescripcion)
+                                val txtDescripcion: TextView =
+                                    itemLayoutMenu.findViewById(R.id.txtDescripcion)
                                 txtDescripcion.text = extra.descripcion
                                 val imgPlato =
                                     itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
@@ -494,7 +508,8 @@ class Carrito(
                                     inflater.inflate(R.layout.item_menu, container, false)
                                 val nombrePlato =
                                     itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
-                                val txtDescripcion: TextView = itemLayoutMenu.findViewById(R.id.txtDescripcion)
+                                val txtDescripcion: TextView =
+                                    itemLayoutMenu.findViewById(R.id.txtDescripcion)
                                 txtDescripcion.text = extra.descripcion
                                 val imgPlato =
                                     itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
