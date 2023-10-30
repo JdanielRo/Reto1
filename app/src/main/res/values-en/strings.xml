@@ -82,6 +82,16 @@
     <string name="seleccionar_todos">Select all</string>
     <string name="precio_placeholder">%s €</string>
 
+    <!--PEDIDOS-->
+    <string name="plato">DISH</string>
+    <string name="menu">MENU</string>
+    <string name="carta">MENU</string>
+    <string name="atras">BACK</string>
+    <string name="siguiente">NEXT</string>
+    <string name="añadir_carrito">ADD TO CART</string>
+
+
+    
 
 
 </resources>

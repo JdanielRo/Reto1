@@ -81,4 +81,12 @@
     <string name="seleccionar_todos">Aukeratu guztiak</string>
     <string name="precio_placeholder">%s €</string>
 
+    <!--PEDIDOS-->
+    <string name="plato">PLATERA</string>
+    <string name="menu">MENUA</string>
+    <string name="carta">KARTEA</string>
+    <string name="atras">ATZERA</string>
+    <string name="siguiente">HAURREKOA</string>
+    <string name="añadir_carrito">SASKIRA GEHITU</string>
+
 </resources>
