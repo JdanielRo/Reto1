@@ -207,7 +207,7 @@ class Carrito(
 
                                 txtNombrePlato.text = plato.nombre
                                 txtDescripcionPlatoPedidos.text = plato.descripcion
-                                txtPrecioPlatoPedidos.text = plato.precio.toString()
+                                txtPrecioPlatoPedidos.text = "${plato.precio}€"
 
                                 txtDescripcionPlato.setOnClickListener {
                                     layoutMostrarPrecioCantidad.visibility = View.GONE
@@ -301,7 +301,7 @@ class Carrito(
 
                                 txtNombrePlato.text = extra.nombre
                                 txtDescripcionPlatoPedidos.text = extra.descripcion
-                                txtPrecioPlatoPedidos.text = extra.precio.toString()
+                                txtPrecioPlatoPedidos.text = "${extra.precio}€"
                                 txtDescripcionPlato.setOnClickListener {
                                     layoutMostrarPrecioCantidad.visibility = View.GONE
                                     txtDescripcionPlatoPedidos.visibility = View.VISIBLE
