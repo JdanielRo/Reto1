@@ -47,8 +47,7 @@ class Carrito(
 
     private var carritoUsuario: ArrayList<Pedido> = carritoUsuarioRe
 
-    private var stockPlatos: MutableList<Stock> = mutableListOf()
-    private var stockExtras: MutableList<Stock> = mutableListOf()
+
 
     private var precioTotal: Double = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -164,6 +163,7 @@ class Carrito(
                                 val imgPlato =
                                     itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
                                 cargarImagenFirebase(imgPlato, plato.nombre)
+
                                 imgEliminarPlatoMenu.setOnClickListener {
                                     db.collection("Pedido")
                                         .whereEqualTo("idUsuario", auth.currentUser?.uid)

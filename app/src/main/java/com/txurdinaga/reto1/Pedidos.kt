@@ -32,8 +32,8 @@ class Pedidos(
     private var listaExtras: ArrayList<Extra> = listaExtrasRe
     private var carritoUsuario: ArrayList<Pedido> = carritoUsuarioRe
 
-    private var seccion: String =
-        "Entrantes"
+    private var seccion: String = "Entrantes"
+
     private lateinit var linearLayout: LinearLayout
 
     private var datosSubidos: Boolean = true
@@ -45,7 +45,6 @@ class Pedidos(
     private var seleccionCheckBox: ArrayList<Boolean> = ArrayList()
 
     private lateinit var enviarIdPlatoACarrito: Array<MutableList<String>>
-    private lateinit var enviarCantidadPlatoACarrito: Array<MutableList<Int>>
 
     private var listaPlatosEntrantes: ArrayList<Plato> = ArrayList()
     private var listaPlatosPrincipales: ArrayList<Plato> = ArrayList()
@@ -70,8 +69,7 @@ class Pedidos(
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pedidos, container, false)
         //LinearLayout para instertar todos los elementos
@@ -81,7 +79,6 @@ class Pedidos(
 
         //Hacemos que el array tenga 5 de tamaño ya que hay 5 secciones en el MENU/CARTA
         enviarIdPlatoACarrito = Array(5) { mutableListOf() }
-        enviarCantidadPlatoACarrito = Array(5) { mutableListOf() }
 
         //De las 2 listas de platos y menus que recibimos, hacemos que se dividan en su correspondiente lista por cada seccion
         dividirListas()
@@ -101,31 +98,29 @@ class Pedidos(
 
 
     private fun dividirListas() {
+        // Itera sobre la lista de platos y los organiza en sublistas según su tipo
         for (plato in listaPlatos) {
             when (plato.tipo) {
-                "Entrante" -> listaPlatosEntrantes.add(plato)
-                "PlatoPrincipal" -> listaPlatosPrincipales.add(plato)
-                "Guarnición" -> listaPlatosGuarnicion.add(plato)
+                "Entrante" -> listaPlatosEntrantes.add(plato) // Si el tipo es "Entrante", añádelo a la lista de entrantes
+                "PlatoPrincipal" -> listaPlatosPrincipales.add(plato) // Si el tipo es "PlatoPrincipal", añádelo a la lista de platos principales
+                "Guarnición" -> listaPlatosGuarnicion.add(plato) // Si el tipo es "Guarnición", añádelo a la lista de guarniciones
             }
         }
+
+        // Itera sobre la lista de extras y los organiza en sublistas según su tipo
         for (extra in listaExtras) {
-
             when (extra.tipo) {
-                "postre" ->
-                    listaPlatosPostre.add(extra)
-
-                "bebida" ->
-                    listaPlatosBebida.add(extra)
-
+                "postre" -> listaPlatosPostre.add(extra) // Si el tipo es "postre", añádelo a la lista de postres
+                "bebida" -> listaPlatosBebida.add(extra) // Si el tipo es "bebida", añádelo a la lista de bebidas
             }
         }
     }
+
 
     //Vacia el array bidimensional "enviarIdPlatoACarrito" cada vez que cambia de MENU/CARTA
     private fun vaciarEnvioACarrito() {
         for (i in enviarIdPlatoACarrito.indices) {
             enviarIdPlatoACarrito[i].clear()
-            enviarCantidadPlatoACarrito[i].clear()
 
         }
     }
@@ -142,7 +137,6 @@ class Pedidos(
                 seleccionCheckBox[i] = false
             }
             tipo = if (isChecked) Tipo.CARTA else Tipo.MENU
-            println(tipo)
             vaciarEnvioACarrito()
             cargarPedidos(inflater, container)
         }
@@ -157,12 +151,11 @@ class Pedidos(
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
-                    val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
-                    val numberPicker: NumberPicker =
-                        itemLayout.findViewById(R.id.numberPicker)
+                    val imgPlato = itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+                    val numberPicker: NumberPicker = itemLayout.findViewById(R.id.numberPicker)
                     numberPicker.minValue = 1
                     numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
-                    numberPicker.visibility= View.GONE
+                    numberPicker.visibility = View.GONE
                     val txtPrecioPlatoPedidos =
                         itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
                     val layoutMostrarPrecioCantidad =
@@ -233,12 +226,11 @@ class Pedidos(
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
-                    val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
-                    val numberPicker: NumberPicker =
-                        itemLayout.findViewById(R.id.numberPicker)
+                    val imgPlato = itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+                    val numberPicker: NumberPicker = itemLayout.findViewById(R.id.numberPicker)
                     numberPicker.minValue = 1
                     numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
-                    numberPicker.visibility= View.GONE
+                    numberPicker.visibility = View.GONE
                     val txtPrecioPlatoPedidos =
                         itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
                     val layoutMostrarPrecioCantidad =
@@ -317,12 +309,11 @@ class Pedidos(
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
-                    val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
-                    val numberPicker: NumberPicker =
-                        itemLayout.findViewById(R.id.numberPicker)
+                    val imgPlato = itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+                    val numberPicker: NumberPicker = itemLayout.findViewById(R.id.numberPicker)
                     numberPicker.minValue = 1
                     numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
-                    numberPicker.visibility= View.GONE
+                    numberPicker.visibility = View.GONE
                     val txtPrecioPlatoPedidos =
                         itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
                     val layoutMostrarPrecioCantidad =
@@ -402,12 +393,11 @@ class Pedidos(
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
-                    val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
-                    val numberPicker: NumberPicker =
-                        itemLayout.findViewById(R.id.numberPicker)
+                    val imgPlato = itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+                    val numberPicker: NumberPicker = itemLayout.findViewById(R.id.numberPicker)
                     numberPicker.minValue = 1
                     numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
-                    numberPicker.visibility= View.GONE
+                    numberPicker.visibility = View.GONE
                     val txtPrecioPlatoPedidos =
                         itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
                     val layoutMostrarPrecioCantidad =
@@ -485,12 +475,11 @@ class Pedidos(
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
-                    val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
-                    val numberPicker: NumberPicker =
-                        itemLayout.findViewById(R.id.numberPicker)
+                    val imgPlato = itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+                    val numberPicker: NumberPicker = itemLayout.findViewById(R.id.numberPicker)
                     numberPicker.minValue = 1
                     numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
-                    numberPicker.visibility= View.GONE
+                    numberPicker.visibility = View.GONE
                     val txtPrecioPlatoPedidos =
                         itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
                     val layoutMostrarPrecioCantidad =
@@ -552,33 +541,18 @@ class Pedidos(
                 }
                 btnSiguiente.setOnClickListener {
                     if (comprobarAlAñadirAlCarrito()) {
-                        //                      *****EJEMPLO SNACKBAR*****
-                        val rootView = requireActivity().findViewById<View>(android.R.id.content)
-                        /*Snackbar.make(
-                            rootView,
-                            "Este es un mensaje Snackbar",
-                            Snackbar.LENGTH_SHORT
-                        ).show()*/
-
                         val builder = AlertDialog.Builder(context)
-                        builder.setMessage("¿Deseas añadir  $tipo al carrito?")
-                            .setTitle("Mensaje")
+                        builder.setMessage("¿Deseas añadir  $tipo al carrito?").setTitle("Mensaje")
                         builder.setPositiveButton(R.string.aceptar) { dialog, id ->
                             enviarPedidoALaLista()
                             if (datosSubidos) {
                                 for (list in enviarIdPlatoACarrito) {
                                     list.removeAll { true }
                                 }
-                                for (list in enviarCantidadPlatoACarrito) {
-                                    list.removeAll { true }
-                                }
                                 seccion = "Entrantes"
                                 cargarPedidos(inflater, container)
                             } else {
                                 for (list in enviarIdPlatoACarrito) {
-                                    list.removeAll { true }
-                                }
-                                for (list in enviarCantidadPlatoACarrito) {
                                     list.removeAll { true }
                                 }
                                 for (i in 0 until seleccionCheckBox.size) {
@@ -595,8 +569,6 @@ class Pedidos(
                         dialog.show()
 
                     } else {
-                        val builder = AlertDialog.Builder(context)
-                        builder.setTitle("Error")
                         var hayTrue: Boolean = false
                         for (i in 0 until enviarIdPlatoACarrito.size) {
                             if (enviarIdPlatoACarrito[i].size == 2) {
@@ -604,9 +576,12 @@ class Pedidos(
                                 break
                             }
                         }
+                        val builder = AlertDialog.Builder(context)
                         if (hayTrue) {
                             mostrarErrorContinuarMenu()
                         } else {
+                            builder.setTitle("Error")
+
                             builder.setMessage(getString(R.string.debe_seleccionar))
 
                             builder.setPositiveButton(getString(R.string.aceptar)) { dialog, which ->
@@ -634,9 +609,7 @@ class Pedidos(
             val imageUrl = uri.toString()
 
             // Utiliza una biblioteca como Glide para cargar la imagen en un ImageView
-            Glide.with(requireContext())
-                .load(imageUrl)
-                .into(imagen) // 'imagen' es tu ImageView
+            Glide.with(requireContext()).load(imageUrl).into(imagen) // 'imagen' es tu ImageView
         }.addOnFailureListener { exception ->
             // Manejar errores, por ejemplo, si la imagen no se pudo descargar
         }
@@ -689,7 +662,6 @@ class Pedidos(
             for (j in 0 until enviarIdPlatoACarrito[i].size) {
                 val idPlato: String = enviarIdPlatoACarrito[i][j]
                 val idExtra: String = ""
-                cantidad = enviarCantidadPlatoACarrito[i][j]
                 val pedidobd = hashMapOf(
                     "idPedido" to idPedido,
                     "idUsuario" to idUsuario,
@@ -698,15 +670,11 @@ class Pedidos(
                     "idExtra" to idExtra,
                     "cantidad" to cantidad
                 )
-                db.collection("Pedido")
-                    .add(pedidobd)
-                    .addOnSuccessListener { documentReference ->
+                db.collection("Pedido").add(pedidobd).addOnSuccessListener { documentReference ->
                         // Si el pedido se añade correctamente se añade a la lista
-                        var pedido =
-                            Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
+                        var pedido = Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
                         carritoUsuario.add(pedido)
-                    }
-                    .addOnFailureListener { e ->
+                    }.addOnFailureListener { e ->
                         // Si no, te da error
                         datosSubidos = false
                     }
@@ -719,7 +687,6 @@ class Pedidos(
             for (j in 0 until enviarIdPlatoACarrito[i].size) {
                 val idPlato: String = ""
                 val idExtra: String = enviarIdPlatoACarrito[i][j]
-                cantidad = enviarCantidadPlatoACarrito[i][j]
                 val pedidobd = hashMapOf(
                     "idPedido" to idPedido,
                     "idUsuario" to idUsuario,
@@ -728,15 +695,11 @@ class Pedidos(
                     "idExtra" to idExtra,
                     "cantidad" to cantidad
                 )
-                db.collection("Pedido")
-                    .add(pedidobd)
-                    .addOnSuccessListener { documentReference ->
+                db.collection("Pedido").add(pedidobd).addOnSuccessListener { documentReference ->
                         // Si el pedido se añade correctamente se añade a la lista
-                        var pedido =
-                            Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
+                        var pedido = Pedido(idPedido, idUsuario, idMenu, idPlato, idExtra, cantidad)
                         carritoUsuario.add(pedido)
-                    }
-                    .addOnFailureListener { e ->
+                    }.addOnFailureListener { e ->
                         // Si no, te da error
                         datosSubidos = false
                     }
@@ -783,10 +746,7 @@ class Pedidos(
     }
 
     private fun cargarCheckBox(
-        checkBox: CheckBox,
-        index: Int,
-        seccionEnviarCarrito: Int,
-        plato: Extra
+        checkBox: CheckBox, index: Int, seccionEnviarCarrito: Int, plato: Extra
     ) {
         if (index >= seleccionCheckBox.size) {
             // Principalmente crea todos y los añade como false ya que al crearse el checkbox esta en false
@@ -865,20 +825,15 @@ class Pedidos(
             //Se elimina/añade el id del Plato/Extra del array bidimensional
             if (isChecked) {
                 enviarIdPlatoACarrito[seccionEnviarCarrito].add(plato.idExtra)
-                enviarCantidadPlatoACarrito[seccionEnviarCarrito].add(plato.stock)
             } else {
                 enviarIdPlatoACarrito[seccionEnviarCarrito].remove(plato.idExtra)
-                enviarCantidadPlatoACarrito[seccionEnviarCarrito].remove(plato.stock)
             }
         }
 
     }
 
     private fun cargarCheckBox(
-        checkBox: CheckBox,
-        index: Int,
-        seccionEnviarCarrito: Int,
-        plato: Plato
+        checkBox: CheckBox, index: Int, seccionEnviarCarrito: Int, plato: Plato
     ) {
         if (index >= seleccionCheckBox.size) {
             // Principalmente crea todos y los añade como false ya que al crearse el checkbox esta en false
@@ -954,10 +909,8 @@ class Pedidos(
             if (isChecked) {
                 //Se elimina/añade el id del Plato/Extra del array bidimensional
                 enviarIdPlatoACarrito[seccionEnviarCarrito].add(plato.idPlato)
-                enviarCantidadPlatoACarrito[seccionEnviarCarrito].add(plato.stock)
             } else {
                 enviarIdPlatoACarrito[seccionEnviarCarrito].remove(plato.idPlato)
-                enviarCantidadPlatoACarrito[seccionEnviarCarrito].remove(plato.stock)
             }
         }
 

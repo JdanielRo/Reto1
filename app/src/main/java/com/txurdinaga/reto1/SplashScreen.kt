@@ -15,28 +15,32 @@ class SplashScreen : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.splash_screen)
-        //Se ejecutan corrutinas
+        super.onCreate(savedInstanceState) // Llama al método onCreate de la clase base
+
+        setContentView(R.layout.splash_screen) // Establece el diseño de la actividad a "splash_screen"
+
+        // Se ejecutan corrutinas para operaciones asincrónicas
         CoroutineScope(Dispatchers.IO).launch {
-            val platosDeferred = async { obtenerPlatos() }
-            val extrasDeferred = async { obtenerExtras() }
-            //No continua hasta que se terminen de ejecutar las dos funciones
+            val platosDeferred = async { obtenerPlatos() } // Inicia una corrutina para obtener datos de platos
+            val extrasDeferred = async { obtenerExtras() } // Inicia una corrutina para obtener datos adicionales
+
+            // Espera hasta que ambas corrutinas terminen
             val listaPlatos = platosDeferred.await()
             val listaExtras = extrasDeferred.await()
 
+            // Cambia al contexto principal (UI thread) para realizar operaciones de interfaz de usuario
             withContext(Dispatchers.Main) {
-                val intent = Intent(this@SplashScreen, Login::class.java)
-                intent.putExtra("platos", listaPlatos)
-                intent.putExtra("extras", listaExtras)
+                val intent = Intent(this@SplashScreen, Login::class.java) // Crea un intent para iniciar la actividad "Login"
+                intent.putExtra("platos", listaPlatos) // Agrega la lista de platos al intent
+                intent.putExtra("extras", listaExtras) // Agrega la lista de extras al intent
 
-                startActivity(intent)
-                overridePendingTransition(0, 0)
-
-                finish() // Finaliza la actividad actual después de iniciar la siguiente
+                startActivity(intent) // Inicia la actividad "Login" con el intent
+                overridePendingTransition(0, 0) // Aplica una transición sin animación
+                finish() // Finaliza la actividad actual ("SplashScreen") después de iniciar la siguiente
             }
         }
     }
+
 
     private suspend fun obtenerPlatos(): ArrayList<Plato> {
         val listaPlatos: ArrayList<Plato> = ArrayList()
