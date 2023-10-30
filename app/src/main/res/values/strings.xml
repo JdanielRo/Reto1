@@ -89,6 +89,13 @@
     <string name="atras">ATRAS</string>
     <string name="siguiente">SIGUIENTE</string>
     <string name="añadir_carrito">AÑADIR AL CARRITO</string>
+    <string name="total">TOTAL:</string>
+    <string name="realizar_pago">REALIZAR PAGO:</string>
+    <string name="escoge_direccion">ESCOGE LA DIRECCIÓN:</string>
+    <string name="comer_restaurante">Comer en restaurante</string>
+    <string name="pedido_recoger">Pedido a recoger</string>
+    <string name="pedido_domicilio">Pedido a domicilio</string>
+    <string name="metodo_entraga">MÉTODO DE ENTREGA:</string>
 
 
 </resources>
