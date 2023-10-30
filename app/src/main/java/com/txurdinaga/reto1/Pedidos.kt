@@ -554,11 +554,11 @@ class Pedidos(
                     if (comprobarAlAñadirAlCarrito()) {
                         //                      *****EJEMPLO SNACKBAR*****
                         val rootView = requireActivity().findViewById<View>(android.R.id.content)
-                        Snackbar.make(
+                        /*Snackbar.make(
                             rootView,
                             "Este es un mensaje Snackbar",
                             Snackbar.LENGTH_SHORT
-                        ).show()
+                        ).show()*/
 
                         val builder = AlertDialog.Builder(context)
                         builder.setMessage("¿Deseas añadir el $tipo al carrito?")
