@@ -260,6 +260,7 @@ class CarritoPagar(
                     ) {
                         datoSeleccionado = listaDatos[position]
                         // Realiza acciones basadas en el dato seleccionado
+                        carritoUsuario.clear()//vaciar carrito
 
                     }
 

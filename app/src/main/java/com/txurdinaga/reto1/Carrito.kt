@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.NumberPicker
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -67,10 +68,16 @@ class Carrito(
         linearLayout = view.findViewById(R.id.containerLayout)
         añadirCarritoAlLinearLayout(inflater, container, calcularIdMenuMasAlto(), view)
         val imgPagarCarrito: AppCompatImageButton = view.findViewById(R.id.imgPagarCarrito)
+        //imgPagarCarrito.isEnabled = true
         // Acción de botón de pagar
         imgPagarCarrito.setOnClickListener {
+
+            //imgPagarCarrito.isEnabled = false
+
+            Log.d("MiTag", "Tamaño de carritoUsuario: " + carritoUsuario.size)
             linearLayout.removeAllViews()
             if (carritoUsuario.size == 0) {
+
                 val builder = AlertDialog.Builder(context)
                 builder.setMessage("Debes añadir un plato o un menu al carrito para poder realizar el pago")
                     .setTitle("ERROR")
@@ -80,6 +87,7 @@ class Carrito(
                 dialog.show()
             } else {
                 addSecondXMLViews()
+                imgPagarCarrito.visibility = View.GONE
             }
             // Llamar a la función para agregar la vista de pago
         }
