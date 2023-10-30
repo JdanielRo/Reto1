@@ -159,6 +159,7 @@ class CarritoPagar(
                             val idPedido = document.getLong("idPedido")
                             if (idPedido != null && idPedido > maxId) {
                                 maxId = idPedido.toInt()
+
                             }
                         }
                         Log.d("MAXID", "$maxId")
@@ -173,7 +174,9 @@ class CarritoPagar(
                                         .addOnSuccessListener {
                                             for (pedido in carritoUsuario) {
                                                 pedido.idPedido = maxId
+
                                             }
+                                            carritoUsuario.clear()//vaciar carrito
                                             //Toast.makeText(requireContext(), "Pedido realizado correctamente", Toast.LENGTH_SHORT).show()
                                         }
                                         .addOnFailureListener { e ->
@@ -260,7 +263,7 @@ class CarritoPagar(
                     ) {
                         datoSeleccionado = listaDatos[position]
                         // Realiza acciones basadas en el dato seleccionado
-                        carritoUsuario.clear()//vaciar carrito
+
 
                     }
 

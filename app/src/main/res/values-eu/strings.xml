@@ -84,16 +84,22 @@
     <!--PEDIDOS-->
     <string name="plato">PLATERA</string>
     <string name="menu">MENUA</string>
-    <string name="carta">KARTEA</string>
+    <string name="carta">KARTA</string>
     <string name="atras">ATZERA</string>
-    <string name="siguiente">HAURREKOA</string>
+    <string name="siguiente">AURREKOA</string>
     <string name="añadir_carrito">SASKIRA GEHITU</string>
     <string name="total">GUZTIRA:</string>
-    <string name="realizar_pago">ORDAINKETAK EGIN:</string>
+    <string name="realizar_pago">ORDAINKETAK EGIN</string>
     <string name="escoge_direccion">HELBIDEA AUKERATU:</string>
     <string name="comer_restaurante">Jatetxean jatea</string>
     <string name="pedido_recoger">Jasotzeko eskaera</string>
     <string name="pedido_domicilio">Etetako eskaera</string>
     <string name="metodo_entraga">ENTREGA METODOA:</string>
+
+    <string name="anadir_algo">Platerik edo menua gehitu behar duzu saskira ordainketa egin ahal izateko</string>
+    <string name="aceptar">Onartu</string>
+    <string name="cancelar">Utzi</string>
+    <string name="debe_seleccionar">Menuaren atale bakoitzean platerik hautatu behar da</string>
+    <string name="no_mas">Platerik ezin da gehiago hautatu</string>
 
 </resources>

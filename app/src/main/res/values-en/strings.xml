@@ -90,12 +90,19 @@
     <string name="siguiente">NEXT</string>
     <string name="añadir_carrito">ADD TO CART</string>
     <string name="total">TOTAL:</string>
-    <string name="realizar_pago">MAKE PAYMENT:</string>
+    <string name="realizar_pago">MAKE PAYMENT</string>
     <string name="escoge_direccion">CHOOSE ADDRESS:</string>
     <string name="comer_restaurante">Dine In Restaurant</string>
     <string name="pedido_recoger">Pickup Order</string>
     <string name="pedido_domicilio">Delivery Order</string>
     <string name="metodo_entraga">DELIVERY METHOD:</string>
+
+    <string name="anadir_algo">You must add a dish or a menu to the cart to proceed with the payment</string>
+    <string name="aceptar">Accept</string>
+    <string name="cancelar">Cancel</string>
+    <string name="debe_seleccionar">A dish must be selected in each section of the menu</string>
+    <string name="no_mas">No more than one dish can be selected</string>
+
 
 
 </resources>

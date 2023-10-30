@@ -561,9 +561,9 @@ class Pedidos(
                         ).show()*/
 
                         val builder = AlertDialog.Builder(context)
-                        builder.setMessage("¿Deseas añadir el $tipo al carrito?")
+                        builder.setMessage("¿Deseas añadir  $tipo al carrito?")
                             .setTitle("Mensaje")
-                        builder.setPositiveButton("Aceptar") { dialog, id ->
+                        builder.setPositiveButton(R.string.aceptar) { dialog, id ->
                             enviarPedidoALaLista()
                             if (datosSubidos) {
                                 for (list in enviarIdPlatoACarrito) {
@@ -588,7 +588,7 @@ class Pedidos(
                                 cargarPedidos(inflater, container)
                             }
                         }
-                        builder.setNegativeButton("Cancelar") { dialog, id ->
+                        builder.setNegativeButton(R.string.cancelar) { dialog, id ->
                             dialog.cancel()
                         }
                         val dialog = builder.create()
@@ -607,9 +607,9 @@ class Pedidos(
                         if (hayTrue) {
                             mostrarErrorContinuarMenu()
                         } else {
-                            builder.setMessage("Se debe seleccionar un plato en cada seccion del menu")
+                            builder.setMessage(getString(R.string.debe_seleccionar))
 
-                            builder.setPositiveButton("Aceptar") { dialog, which ->
+                            builder.setPositiveButton(getString(R.string.aceptar)) { dialog, which ->
                                 dialog.cancel()
                             }
                         }
@@ -647,9 +647,9 @@ class Pedidos(
         builder.setTitle("Error")
         if (tipo == Tipo.MENU) {
 
-            builder.setMessage("No se pueden seleccionar mas de un plato")
+            builder.setMessage(getString(R.string.no_mas))
 
-            builder.setPositiveButton("Aceptar") { dialog, which ->
+            builder.setPositiveButton(getString(R.string.aceptar)) { dialog, which ->
                 dialog.cancel()
             }
         }

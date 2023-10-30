@@ -79,9 +79,9 @@ class Carrito(
             if (carritoUsuario.size == 0) {
 
                 val builder = AlertDialog.Builder(context)
-                builder.setMessage("Debes añadir un plato o un menu al carrito para poder realizar el pago")
+                builder.setMessage(getString(R.string.anadir_algo))
                     .setTitle("ERROR")
-                builder.setPositiveButton("Aceptar") { dialog, id ->
+                builder.setPositiveButton(R.string.aceptar) { dialog, id ->
                 }
                 val dialog = builder.create()
                 dialog.show()

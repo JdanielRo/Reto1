@@ -90,12 +90,18 @@
     <string name="siguiente">SIGUIENTE</string>
     <string name="añadir_carrito">AÑADIR AL CARRITO</string>
     <string name="total">TOTAL:</string>
-    <string name="realizar_pago">REALIZAR PAGO:</string>
+    <string name="realizar_pago">REALIZAR PAGO</string>
     <string name="escoge_direccion">ESCOGE LA DIRECCIÓN:</string>
     <string name="comer_restaurante">Comer en restaurante</string>
     <string name="pedido_recoger">Pedido a recoger</string>
     <string name="pedido_domicilio">Pedido a domicilio</string>
     <string name="metodo_entraga">MÉTODO DE ENTREGA:</string>
+    <string name="anadir_algo">Debes añadir un plato o un menu al carrito para poder realizar el pago</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="debe_seleccionar">Se debe seleccionar un plato en cada seccion del menu</string>
+    <string name="no_mas">No se pueden seleccionar mas de un plato</string>
+
 
 
 </resources>
