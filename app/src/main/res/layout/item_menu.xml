@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView10"
+            android:id="@+id/imgPlatoLayoutMenuCarrito"
             android:layout_width="140dp"
             android:layout_height="100dp"
             android:background="@color/white"

@@ -3,7 +3,7 @@ package com.txurdinaga.reto1
 import java.io.Serializable
 
 class Pedido(
-    val idPedido: Int,
+    var idPedido: Int,
     val idUsuario: String,
     val idMenu: Int,
     val idPlato: String,

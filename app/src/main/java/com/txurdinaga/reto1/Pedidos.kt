@@ -9,9 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.storage.FirebaseStorage
+import java.net.URLDecoder
+import kotlin.math.roundToInt
 
 
 private const val ARG_PARAM1 = "param1"
@@ -41,6 +45,7 @@ class Pedidos(
     private var seleccionCheckBox: ArrayList<Boolean> = ArrayList()
 
     private lateinit var enviarIdPlatoACarrito: Array<MutableList<String>>
+    private lateinit var enviarCantidadPlatoACarrito: Array<MutableList<Int>>
 
     private var listaPlatosEntrantes: ArrayList<Plato> = ArrayList()
     private var listaPlatosPrincipales: ArrayList<Plato> = ArrayList()
@@ -76,6 +81,7 @@ class Pedidos(
 
         //Hacemos que el array tenga 5 de tamaño ya que hay 5 secciones en el MENU/CARTA
         enviarIdPlatoACarrito = Array(5) { mutableListOf() }
+        enviarCantidadPlatoACarrito = Array(5) { mutableListOf() }
 
         //De las 2 listas de platos y menus que recibimos, hacemos que se dividan en su correspondiente lista por cada seccion
         dividirListas()
@@ -119,6 +125,8 @@ class Pedidos(
     private fun vaciarEnvioACarrito() {
         for (i in enviarIdPlatoACarrito.indices) {
             enviarIdPlatoACarrito[i].clear()
+            enviarCantidadPlatoACarrito[i].clear()
+
         }
     }
 
@@ -149,7 +157,12 @@ class Pedidos(
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
-                    val spinner = itemLayout.findViewById<Spinner>(R.id.spinner)
+                    val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+                    val numberPicker: NumberPicker =
+                        itemLayout.findViewById(R.id.numberPicker)
+                    numberPicker.minValue = 1
+                    numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
+                    numberPicker.visibility= View.GONE
                     val txtPrecioPlatoPedidos =
                         itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
                     val layoutMostrarPrecioCantidad =
@@ -162,7 +175,8 @@ class Pedidos(
 
                     txtNombrePlato.text = plato.nombre
                     txtDescripcionPlatoPedidos.text = plato.descripcion
-                    txtPrecioPlatoPedidos.text = plato.precio.toString()
+                    txtPrecioPlatoPedidos.text = "${plato.precio}€"
+                    cargarImagenFirebase(imgPlato, plato.nombre)
 
                     txtDescripcionPlato.setOnClickListener {
                         if (tipo == Tipo.CARTA) {
@@ -219,7 +233,12 @@ class Pedidos(
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
-                    val spinner = itemLayout.findViewById<Spinner>(R.id.spinner)
+                    val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+                    val numberPicker: NumberPicker =
+                        itemLayout.findViewById(R.id.numberPicker)
+                    numberPicker.minValue = 1
+                    numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
+                    numberPicker.visibility= View.GONE
                     val txtPrecioPlatoPedidos =
                         itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
                     val layoutMostrarPrecioCantidad =
@@ -232,7 +251,8 @@ class Pedidos(
 
                     txtNombrePlato.text = plato.nombre
                     txtDescripcionPlatoPedidos.text = plato.descripcion
-                    txtPrecioPlatoPedidos.text = plato.precio.toString()
+                    txtPrecioPlatoPedidos.text = "${plato.precio}€"
+                    cargarImagenFirebase(imgPlato, plato.nombre)
 
                     txtDescripcionPlato.setOnClickListener {
                         if (tipo == Tipo.CARTA) {
@@ -297,7 +317,12 @@ class Pedidos(
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
-                    val spinner = itemLayout.findViewById<Spinner>(R.id.spinner)
+                    val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+                    val numberPicker: NumberPicker =
+                        itemLayout.findViewById(R.id.numberPicker)
+                    numberPicker.minValue = 1
+                    numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
+                    numberPicker.visibility= View.GONE
                     val txtPrecioPlatoPedidos =
                         itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
                     val layoutMostrarPrecioCantidad =
@@ -310,7 +335,8 @@ class Pedidos(
 
                     txtNombrePlato.text = plato.nombre
                     txtDescripcionPlatoPedidos.text = plato.descripcion
-                    txtPrecioPlatoPedidos.text = plato.precio.toString()
+                    txtPrecioPlatoPedidos.text = "${plato.precio}€"
+                    cargarImagenFirebase(imgPlato, plato.nombre)
 
                     txtDescripcionPlato.setOnClickListener {
                         if (tipo == Tipo.CARTA) {
@@ -376,7 +402,12 @@ class Pedidos(
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
-                    val spinner = itemLayout.findViewById<Spinner>(R.id.spinner)
+                    val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+                    val numberPicker: NumberPicker =
+                        itemLayout.findViewById(R.id.numberPicker)
+                    numberPicker.minValue = 1
+                    numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
+                    numberPicker.visibility= View.GONE
                     val txtPrecioPlatoPedidos =
                         itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
                     val layoutMostrarPrecioCantidad =
@@ -389,7 +420,8 @@ class Pedidos(
 
                     txtNombrePlato.text = plato.nombre
                     txtDescripcionPlatoPedidos.text = plato.descripcion
-                    txtPrecioPlatoPedidos.text = plato.precio.toString()
+                    txtPrecioPlatoPedidos.text = "${plato.precio}€"
+                    cargarImagenFirebase(imgPlato, plato.nombre)
 
                     txtDescripcionPlato.setOnClickListener {
                         if (tipo == Tipo.CARTA) {
@@ -453,7 +485,12 @@ class Pedidos(
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
                     val checkBox = itemLayout.findViewById<CheckBox>(R.id.checkBox)
                     val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
-                    val spinner = itemLayout.findViewById<Spinner>(R.id.spinner)
+                    val imgPlato =itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+                    val numberPicker: NumberPicker =
+                        itemLayout.findViewById(R.id.numberPicker)
+                    numberPicker.minValue = 1
+                    numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
+                    numberPicker.visibility= View.GONE
                     val txtPrecioPlatoPedidos =
                         itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
                     val layoutMostrarPrecioCantidad =
@@ -466,7 +503,8 @@ class Pedidos(
 
                     txtNombrePlato.text = plato.nombre
                     txtDescripcionPlatoPedidos.text = plato.descripcion
-                    txtPrecioPlatoPedidos.text = plato.precio.toString()
+                    txtPrecioPlatoPedidos.text = "${plato.precio}€"
+                    cargarImagenFirebase(imgPlato, plato.nombre)
 
                     txtDescripcionPlato.setOnClickListener {
                         if (tipo == Tipo.CARTA) {
@@ -531,10 +569,16 @@ class Pedidos(
                                 for (list in enviarIdPlatoACarrito) {
                                     list.removeAll { true }
                                 }
+                                for (list in enviarCantidadPlatoACarrito) {
+                                    list.removeAll { true }
+                                }
                                 seccion = "Entrantes"
                                 cargarPedidos(inflater, container)
                             } else {
                                 for (list in enviarIdPlatoACarrito) {
+                                    list.removeAll { true }
+                                }
+                                for (list in enviarCantidadPlatoACarrito) {
                                     list.removeAll { true }
                                 }
                                 for (i in 0 until seleccionCheckBox.size) {
@@ -581,6 +625,23 @@ class Pedidos(
         }
     }
 
+    private fun cargarImagenFirebase(imagen: ImageView, nombre: String) {
+        val storageReference = FirebaseStorage.getInstance()
+            .getReferenceFromUrl("gs://reto1-d31c7.appspot.com/${nombre}.jpg")
+
+        storageReference.downloadUrl.addOnSuccessListener { uri ->
+            // uri contiene la URL de descarga de la imagen
+            val imageUrl = uri.toString()
+
+            // Utiliza una biblioteca como Glide para cargar la imagen en un ImageView
+            Glide.with(requireContext())
+                .load(imageUrl)
+                .into(imagen) // 'imagen' es tu ImageView
+        }.addOnFailureListener { exception ->
+            // Manejar errores, por ejemplo, si la imagen no se pudo descargar
+        }
+    }
+
     private fun mostrarErrorContinuarMenu() {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Error")
@@ -623,12 +684,12 @@ class Pedidos(
         var cantidad = 0
         if (tipo == Tipo.MENU) {
             idMenu = comprobarNumeroMenu()
-            cantidad = 1
         }
         for (i in 0 until 3) {
             for (j in 0 until enviarIdPlatoACarrito[i].size) {
                 val idPlato: String = enviarIdPlatoACarrito[i][j]
                 val idExtra: String = ""
+                cantidad = enviarCantidadPlatoACarrito[i][j]
                 val pedidobd = hashMapOf(
                     "idPedido" to idPedido,
                     "idUsuario" to idUsuario,
@@ -658,6 +719,7 @@ class Pedidos(
             for (j in 0 until enviarIdPlatoACarrito[i].size) {
                 val idPlato: String = ""
                 val idExtra: String = enviarIdPlatoACarrito[i][j]
+                cantidad = enviarCantidadPlatoACarrito[i][j]
                 val pedidobd = hashMapOf(
                     "idPedido" to idPedido,
                     "idUsuario" to idUsuario,
@@ -803,8 +865,10 @@ class Pedidos(
             //Se elimina/añade el id del Plato/Extra del array bidimensional
             if (isChecked) {
                 enviarIdPlatoACarrito[seccionEnviarCarrito].add(plato.idExtra)
+                enviarCantidadPlatoACarrito[seccionEnviarCarrito].add(plato.stock)
             } else {
                 enviarIdPlatoACarrito[seccionEnviarCarrito].remove(plato.idExtra)
+                enviarCantidadPlatoACarrito[seccionEnviarCarrito].remove(plato.stock)
             }
         }
 
@@ -890,8 +954,10 @@ class Pedidos(
             if (isChecked) {
                 //Se elimina/añade el id del Plato/Extra del array bidimensional
                 enviarIdPlatoACarrito[seccionEnviarCarrito].add(plato.idPlato)
+                enviarCantidadPlatoACarrito[seccionEnviarCarrito].add(plato.stock)
             } else {
                 enviarIdPlatoACarrito[seccionEnviarCarrito].remove(plato.idPlato)
+                enviarCantidadPlatoACarrito[seccionEnviarCarrito].remove(plato.stock)
             }
         }
 

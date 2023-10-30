@@ -12,7 +12,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="62.5dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -57,12 +57,11 @@
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/spinner2"
-                android:layout_width="50dp"
+            <NumberPicker
+                android:id="@+id/numberPicker"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1" />
+                android:layout_centerInParent="true" />
 
             <ImageView
                 android:id="@+id/imgEliminarPlatoMenuCarrito"

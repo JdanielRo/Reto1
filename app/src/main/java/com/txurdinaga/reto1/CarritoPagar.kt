@@ -2,6 +2,7 @@ package com.txurdinaga.reto1
 
 import Extra
 import Plato
+import android.app.AlertDialog
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -103,84 +104,97 @@ class CarritoPagar(
 
         // Acción de botón de pagar
         btnPagar.setOnClickListener {
-            val layoutParent = rootView.findViewById<ConstraintLayout>(R.id.parentLayout)
-            layoutParent.removeAllViews()
+            if (radioGroup.checkedRadioButtonId != -1) {
+                val layoutParent = rootView.findViewById<ConstraintLayout>(R.id.parentLayout)
+                layoutParent.removeAllViews()
 
-            // Crear TextView dinamicamente
-            val newTextView1 = TextView(requireContext())
-            newTextView1.text = "\n       Pedido realizado correctamente. \n \n       Su pedido está siendo procesado. \n       " +
-                    "Muchas gracias por su compra."
-            newTextView1.textSize = 20f
-            // Establecer el estilo del texto en negrita
-            newTextView1.setTypeface(null, Typeface.BOLD)
+                // Crear TextView dinamicamente
+                val newTextView1 = TextView(requireContext())
+                newTextView1.text =
+                    "\n       Pedido realizado correctamente. \n \n       Su pedido está siendo procesado. \n       " +
+                            "Muchas gracias por su compra."
+                newTextView1.textSize = 20f
+                // Establecer el estilo del texto en negrita
+                newTextView1.setTypeface(null, Typeface.BOLD)
 
-            layoutParent.addView(newTextView1)
+                layoutParent.addView(newTextView1)
 
-            //Crear animacion dinamicamente
-            val animationView = LottieAnimationView(requireContext())
-            animationView.id = View.generateViewId()
-            animationView.layoutParams = ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.MATCH_PARENT,
-                ConstraintLayout.LayoutParams.MATCH_PARENT // Ajusta la altura según tus necesidades
-            )
-            animationView.setAnimation(R.raw.animation_lo8gowce) // Asegúrate de que el archivo de animación esté en la carpeta 'res/raw'
-            animationView.playAnimation()
-            animationView.loop(true)
+                //Crear animacion dinamicamente
+                val animationView = LottieAnimationView(requireContext())
+                animationView.id = View.generateViewId()
+                animationView.layoutParams = ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    ConstraintLayout.LayoutParams.MATCH_PARENT // Ajusta la altura según tus necesidades
+                )
+                animationView.setAnimation(R.raw.animation_lo8gowce) // Asegúrate de que el archivo de animación esté en la carpeta 'res/raw'
+                animationView.playAnimation()
+                animationView.loop(true)
 
-            // Configurar restricciones de la vista
-            val params = ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.MATCH_PARENT,
-                ConstraintLayout.LayoutParams.MATCH_PARENT // Ajusta la altura según tus necesidades
-            )
-            params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-            params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-            params.topMargin = 124 // Aplicar el margen superior en píxeles
-            params.bottomMargin = 139 // Aplicar el margen inferior en píxeles
+                // Configurar restricciones de la vista
+                val params = ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    ConstraintLayout.LayoutParams.MATCH_PARENT // Ajusta la altura según tus necesidades
+                )
+                params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                params.topMargin = 124 // Aplicar el margen superior en píxeles
+                params.bottomMargin = 139 // Aplicar el margen inferior en píxeles
 
-            // Aplicar restricciones a la vista
-            animationView.layoutParams = params
+                // Aplicar restricciones a la vista
+                animationView.layoutParams = params
 
-            // Añadir la vista al ConstraintLayout
-            layoutParent.addView(animationView)
+                // Añadir la vista al ConstraintLayout
+                layoutParent.addView(animationView)
 
 
-            //Realizar pago y modificar la base de datos
-            val db = FirebaseFirestore.getInstance()
-            val pedidosdb = db.collection("Pedido")
-            val query = pedidosdb.whereEqualTo("idPedido", 0)
+                //Realizar pago y modificar la base de datos
+                val db = FirebaseFirestore.getInstance()
+                val pedidosdb = db.collection("Pedido")
+                val query = pedidosdb.whereEqualTo("idPedido", 0)
 
-            pedidosdb.get()
-                .addOnSuccessListener { result ->
-                    var maxId = 0
-                    for (document in result) {
-                        val idPedido = document.getLong("idPedido")
-                        if (idPedido != null && idPedido > maxId) {
-                            maxId = idPedido.toInt()
-                        }
-                    }
-                    Log.d("MAXID", "$maxId")
-                    maxId++
-
-                    query.get()
-                        .addOnSuccessListener { result ->
-                            for (document in result) {
-                                val pedidoRef = pedidosdb.document(document.id)
-                                // Actualizar el campo 'idPedido' a un nuevo valor
-                                pedidoRef.update("idPedido", maxId)
-                                    .addOnSuccessListener {
-                                        //Toast.makeText(requireContext(), "Pedido realizado correctamente", Toast.LENGTH_SHORT).show()
-                                    }
-                                    .addOnFailureListener { e ->
-                                        //Toast.makeText(requireContext(), "No se ha podido realizar el pedido", Toast.LENGTH_SHORT).show()
-                                    }
+                pedidosdb.get()
+                    .addOnSuccessListener { result ->
+                        var maxId = 0
+                        for (document in result) {
+                            val idPedido = document.getLong("idPedido")
+                            if (idPedido != null && idPedido > maxId) {
+                                maxId = idPedido.toInt()
                             }
                         }
-                }
-                .addOnFailureListener { exception ->
-                    Log.w("MiApp", "Error obteniendo documentos")
-                }
-        }
+                        Log.d("MAXID", "$maxId")
+                        maxId++
 
+                        query.get()
+                            .addOnSuccessListener { result ->
+                                for (document in result) {
+                                    val pedidoRef = pedidosdb.document(document.id)
+                                    // Actualizar el campo 'idPedido' a un nuevo valor
+                                    pedidoRef.update("idPedido", maxId)
+                                        .addOnSuccessListener {
+                                            for (pedido in carritoUsuario) {
+                                                pedido.idPedido = maxId
+                                            }
+                                            //Toast.makeText(requireContext(), "Pedido realizado correctamente", Toast.LENGTH_SHORT).show()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            //Toast.makeText(requireContext(), "No se ha podido realizar el pedido", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
+                            }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w("MiApp", "Error obteniendo documentos")
+                    }
+            } else {
+                val builder = AlertDialog.Builder(context)
+                builder.setMessage("Debes de selecionar un metodo de entrega")
+                    .setTitle("ERROR")
+                builder.setPositiveButton("Aceptar") { dialog, id ->
+                }
+                val dialog = builder.create()
+                dialog.show()
+            }
+        }
 
 
         return rootView
