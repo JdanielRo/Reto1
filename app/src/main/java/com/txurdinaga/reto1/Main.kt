@@ -24,6 +24,8 @@ class Main : AppCompatActivity() {
     private var listaExtras: ArrayList<Extra> = ArrayList()
     private var usuario: Usuario = Usuario()
     var carritoUsuario: ArrayList<Pedido> = ArrayList()
+    private var savedLanguage: String = "es"
+
 
     // Listener para las selecciones de elementos del menú de navegación
     private val onNavMenuListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -52,6 +54,8 @@ class Main : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
+        sharedPref = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        savedLanguage = sharedPref.getString("language", "es") ?: "es"
 
         // Inicialización de variables y obtención de datos
         listaPlatos = intent.getSerializableExtra("platos") as ArrayList<Plato>
@@ -62,8 +66,8 @@ class Main : AppCompatActivity() {
         // Configuración del BottomNavigationView y del cambio de idioma
         navigation = findViewById(R.id.navMenu)
         navigation.setOnNavigationItemSelectedListener(onNavMenuListener)
-        sharedPref = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
-        val savedLanguage = sharedPref.getString("language", "es") ?: "es"
+
+
         setAppLocale(savedLanguage)
         setMenuItemsLanguage(savedLanguage)
 
@@ -116,6 +120,8 @@ class Main : AppCompatActivity() {
         // Guarda el código del idioma en las preferencias compartidas.
         sharedPref.edit().putString("language", languageCode).apply()
 
+        setMenuItemsLanguage(languageCode)
+
         // Establece el idioma de la aplicación.
         setAppLocale(languageCode)
 
@@ -145,6 +151,7 @@ class Main : AppCompatActivity() {
         }
         // Selecciona el elemento de menú correspondiente en la interfaz de usuario.
         navigation.selectedItemId = itemId
+
     }
 
     // Función para actualizar los recursos al idioma seleccionado
