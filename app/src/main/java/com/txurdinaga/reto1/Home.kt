@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -51,6 +52,14 @@ class Home : Fragment(), OnMapReadyCallback {
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this) // Registra el callback para la carga asincrónica del mapa
 
+        val textView = root.findViewById<TextView>(R.id.textView44)
+        textView.setOnClickListener {
+            val phoneNumber = textView.text.toString()
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:$phoneNumber")
+            startActivity(intent)
+        }
+
         return root
     }
 
@@ -86,6 +95,7 @@ class Home : Fragment(), OnMapReadyCallback {
                 false // Permite que el comportamiento predeterminado del marcador continúe
             }
         }
+
     }
 
 

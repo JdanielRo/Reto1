@@ -165,12 +165,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/_94672846_683562594"
+            android:text="@string/_94672846"
             android:textColor="@color/dark_green"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:autoLink="phone" />
 
         <TextView
             android:id="@+id/textView45"
