@@ -10,11 +10,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.NumberPicker
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -139,15 +139,31 @@ class Carrito(
 
                                 val itemLayout = inflater.inflate(R.layout.item_plato, container, false)
 
-                                val numberPicker: NumberPicker = itemLayout.findViewById(R.id.numberPicker)
+                                val textViewCantidad: TextView = itemLayout.findViewById(R.id.txtCantidad)
 
-                                numberPicker.minValue = 1
-                                numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
-                                numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-                                    val diferencia =
-                                        newVal - oldVal // Obtén la diferencia entre el nuevo y el antiguo valor
-                                    precioTotal += plato.precio * diferencia // Calcula el cambio en el precio total
+                                val btnRestar: Button = itemLayout.findViewById(R.id.btnRestar)
+                                val btnSumar: Button = itemLayout.findViewById(R.id.btnSumar)
+
+
+                                btnRestar.setOnClickListener{
+                                    textViewCantidad.text = (textViewCantidad.text.toString().toInt() - 1).toString()
+                                    precioTotal -= plato.precio // Calcula el cambio en el precio total
                                     calcularTotal(view) // Actualiza la vista del precio total
+                                    btnSumar.isEnabled = true
+                                    if(!(conprobarnumeroRestar(textViewCantidad.text.toString().toInt(), plato))){
+                                        btnRestar.isEnabled = false
+                                    }
+
+                                }
+                                btnSumar.setOnClickListener{
+                                    textViewCantidad.text = (textViewCantidad.text.toString().toInt() + 1).toString()
+                                    precioTotal += plato.precio // Calcula el cambio en el precio total
+                                    calcularTotal(view) // Actualiza la vista del precio total
+                                    btnRestar.isEnabled = true
+                                    if(!(conprobarnumeroSumar(textViewCantidad.text.toString().toInt(), plato))){
+                                        btnSumar.isEnabled = false
+                                    }
+
                                 }
 
                                 val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
@@ -227,15 +243,32 @@ class Carrito(
                             if (extra.idExtra == carritoUsuario[i].idExtra) {
 
                                 val itemLayout = inflater.inflate(R.layout.item_plato, container, false)
-                                val numberPicker: NumberPicker = itemLayout.findViewById(R.id.numberPicker)
 
-                                numberPicker.minValue = 1
-                                numberPicker.maxValue = (extra.stock * 0.1).roundToInt()
-                                numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-                                    val diferencia =
-                                        newVal - oldVal // Obtén la diferencia entre el nuevo y el antiguo valor
-                                    precioTotal += extra.precio * diferencia // Calcula el cambio en el precio total
+                                val textViewCantidad: TextView = itemLayout.findViewById(R.id.txtCantidad)
+
+                                val btnRestar: Button = itemLayout.findViewById(R.id.btnRestar)
+                                val btnSumar: Button = itemLayout.findViewById(R.id.btnSumar)
+
+
+                                btnRestar.setOnClickListener{
+                                    textViewCantidad.text = (textViewCantidad.text.toString().toInt() - 1).toString()
+                                    precioTotal -= extra.precio // Calcula el cambio en el precio total
                                     calcularTotal(view) // Actualiza la vista del precio total
+                                    btnSumar.isEnabled = true
+                                    if(!(conprobarnumeroRestar(textViewCantidad.text.toString().toInt(), extra))){
+                                        btnRestar.isEnabled = false
+                                    }
+
+                                }
+                                btnSumar.setOnClickListener{
+                                    textViewCantidad.text = (textViewCantidad.text.toString().toInt() + 1).toString()
+                                    precioTotal += extra.precio // Calcula el cambio en el precio total
+                                    calcularTotal(view) // Actualiza la vista del precio total
+                                    btnRestar.isEnabled = true
+                                    if(!(conprobarnumeroSumar(textViewCantidad.text.toString().toInt(), extra))){
+                                        btnSumar.isEnabled = false
+                                    }
+
                                 }
 
                                 val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
@@ -555,6 +588,35 @@ class Carrito(
 
         }
         calcularTotal(view)// Llama a una función para calcular el precio total general
+    }
+
+    private fun conprobarnumeroSumar(int: Int, plato: Plato): Boolean {
+        var devolver = true
+        if((plato.stock * 0.1).roundToInt() == int){
+            devolver = false
+        }
+        return devolver
+    }
+    private fun conprobarnumeroRestar(int: Int, plato: Plato): Boolean {
+        var devolver = true
+        if(1 == int){
+            devolver = false
+        }
+        return devolver
+    }
+    private fun conprobarnumeroSumar(int: Int, extra: Extra): Boolean {
+        var devolver = true
+        if((extra.stock * 0.1).roundToInt() == int){
+            devolver = false
+        }
+        return devolver
+    }
+    private fun conprobarnumeroRestar(int: Int, extra: Extra): Boolean {
+        var devolver = true
+        if(1 == int){
+            devolver = false
+        }
+        return devolver
     }
 
     private fun calcularTotal(view: View) {

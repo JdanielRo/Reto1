@@ -102,15 +102,42 @@
                     android:id="@+id/txtPrecioPlatoPedidos"
                     android:layout_width="75dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/space_height"
                     android:gravity="center"
                     android:text="1€" />
 
-                <NumberPicker
-                    android:id="@+id/numberPicker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp">
+
+                    <Button
+                        android:id="@+id/btnRestar"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:text="-" />
+
+                    <TextView
+                        android:id="@+id/txtCantidad"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="1" />
+
+                    <Button
+                        android:id="@+id/btnSumar"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:text="+" />
+                </LinearLayout>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
