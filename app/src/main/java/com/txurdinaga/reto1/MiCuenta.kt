@@ -115,12 +115,12 @@ class MiCuenta(usuarioRe: Usuario) : Fragment() {
 
             val nuevoTelefono = editTextTelefono.text.toString()
             val nuevoNombre = editTextNombre.text.toString()
-            val nuevoAplellido = editTextApellidos.text.toString()
+            val nuevoApellido = editTextApellidos.text.toString()
 
             val nuevosDatos = HashMap<String, Any>()
             nuevosDatos["Telefono"] = nuevoTelefono
             nuevosDatos["Nombre"] = nuevoNombre
-            nuevosDatos["Apellidos"] = nuevoAplellido
+            nuevosDatos["Apellidos"] = nuevoApellido
 
             db.collection("Usuarios")
                 .document("$uid")
@@ -129,6 +129,8 @@ class MiCuenta(usuarioRe: Usuario) : Fragment() {
 
                     //Quitar los focus en caso de que se hayan actualizado los datos
                     editTextTelefono.clearFocus()
+                    editTextNombre.clearFocus()
+                    editTextApellidos.clearFocus()
 
                     // Los datos se actualizaron con éxito
                     Toast.makeText(
@@ -137,6 +139,8 @@ class MiCuenta(usuarioRe: Usuario) : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
 
+                    val intent = Intent(requireContext(), SplashScreen::class.java)
+                    startActivity(intent)
 
                 }
                 .addOnFailureListener { e ->
@@ -144,8 +148,7 @@ class MiCuenta(usuarioRe: Usuario) : Fragment() {
                     Log.w("MiCuenta", "Error al actualizar los datos", e)
                     // Puedes registrar el error o mostrar un mensaje de error al usuario, o realizar cualquier acción de manejo de errores necesaria.
                 }
-            val irLogin = Intent(requireContext(), SplashScreen::class.java)
-            startActivity(irLogin)
+
         }
 
 

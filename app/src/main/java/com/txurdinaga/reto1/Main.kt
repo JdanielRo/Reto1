@@ -69,7 +69,7 @@ class Main : AppCompatActivity() {
 
 
         setAppLocale(savedLanguage)
-        setMenuItemsLanguage(savedLanguage)
+        //setMenuItemsLanguage(savedLanguage)
 
         // Configuración de botones para cambiar el idioma
         val englishButton = findViewById<ImageView>(R.id.imageViewEnglish)

@@ -52,12 +52,28 @@ class Home : Fragment(), OnMapReadyCallback {
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this) // Registra el callback para la carga asincrónica del mapa
 
+        // Opción de llamar
         val textView = root.findViewById<TextView>(R.id.textView44)
         textView.setOnClickListener {
             val phoneNumber = textView.text.toString()
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse("tel:$phoneNumber")
             startActivity(intent)
+        }
+
+        //Opción de mandar email
+        val textViewGmail = root.findViewById<TextView>(R.id.textView45)
+        textViewGmail.setOnClickListener {
+            val emailAddress = textViewGmail.text.toString()
+            val subject = "Asunto del correo"
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:$emailAddress")
+            intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            } else {
+                // Manejar caso en el que no se encuentra ninguna actividad que pueda manejar el intent
+            }
         }
 
         return root
