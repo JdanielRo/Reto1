@@ -72,8 +72,8 @@ class MiCuenta(usuarioRe: Usuario) : Fragment() {
         val editTextDireccion = view.findViewById<EditText>(R.id.editTextPostalAddress)
 
         //Para que no deje modificar
-        editTextNombre.isEnabled = false
-        editTextApellidos.isEnabled = false
+        /*editTextNombre.isEnabled = false
+        editTextApellidos.isEnabled = false*/
         editTextCorreoElectronico.isEnabled = false
         editTextFechaNacimiento.isEnabled = false
 
@@ -114,11 +114,13 @@ class MiCuenta(usuarioRe: Usuario) : Fragment() {
         view.findViewById<Button>(R.id.btnGuardarCambios).setOnClickListener() {
 
             val nuevoTelefono = editTextTelefono.text.toString()
-
+            val nuevoNombre = editTextNombre.text.toString()
+            val nuevoAplellido = editTextApellidos.text.toString()
 
             val nuevosDatos = HashMap<String, Any>()
             nuevosDatos["Telefono"] = nuevoTelefono
-            //nuevosDatos["Direccion"] = nuevoDireccion
+            nuevosDatos["Nombre"] = nuevoNombre
+            nuevosDatos["Apellidos"] = nuevoAplellido
 
             db.collection("Usuarios")
                 .document("$uid")
@@ -142,7 +144,8 @@ class MiCuenta(usuarioRe: Usuario) : Fragment() {
                     Log.w("MiCuenta", "Error al actualizar los datos", e)
                     // Puedes registrar el error o mostrar un mensaje de error al usuario, o realizar cualquier acción de manejo de errores necesaria.
                 }
-
+            val irLogin = Intent(requireContext(), SplashScreen::class.java)
+            startActivity(irLogin)
         }
 
 
