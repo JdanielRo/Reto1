@@ -483,15 +483,15 @@ class Pedidos(
 
 
             // Cuando la sección actual es "Guarniciones"
-            "Guarniciones" -> {
+            "Postres" -> {
                 // Configuramos la sección para enviar al carrito (valor 2 para "Guarniciones")
-                seccionEnviarCarrito = 2
+                seccionEnviarCarrito = 3
 
                 // Aseguramos que la lista 'seleccionCheckBox' tenga suficiente capacidad
                 seleccionCheckBox.ensureCapacity(listaPlatosGuarnicion.size)
 
                 // Recorremos la lista de platos en la sección "Guarniciones"
-                for (plato in listaPlatosGuarnicion) {
+                for (plato in listaPlatosPostre) {
                     // Inflamos un diseño de elemento de plato desde un archivo XML
                     val itemLayout = inflater.inflate(R.layout.layout_plato, container, false)
 
@@ -566,7 +566,7 @@ class Pedidos(
                     // Comprobamos si es posible retroceder a la sección anterior del menú
                     if (comprobarContinuarMenu()) {
                         // Cambiamos la sección actual a "Platos Principales" y recargamos los pedidos
-                        seccion = "Platos Principales"
+                        seccion = "Guarniciones"
                         cargarPedidos(inflater, container)
                     } else {
                         // Mostramos un mensaje de error si no es posible continuar
@@ -579,7 +579,7 @@ class Pedidos(
                     // Comprobamos si es posible avanzar a la siguiente sección del menú
                     if (comprobarContinuarMenu()) {
                         // Cambiamos la sección actual a "Postres" y recargamos los pedidos
-                        seccion = "Postres"
+                        seccion = "Bebidas"
                         cargarPedidos(inflater, container)
                     } else {
                         // Mostramos un mensaje de error si no es posible continuar
