@@ -84,7 +84,7 @@
                 android:padding="2dp"
                 android:text="Esta es la descripcion"
                 android:textColor="@android:color/black"
-                android:textSize="9sp" />
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:id="@+id/layoutMostrarPrecioCantidad"
