@@ -124,18 +124,23 @@ class Carrito(
         calcularIdMenuMasAlto: Int,
         view: View
     ) {
+        // Limpia la vista actual del LinearLayout
         linearLayout.removeAllViews()
+
+        // Inicializa el precio total a 0
         precioTotal = 0.0
-        for (i in 0 until carritoUsuario.size) {
+
+        for (i in 0 until carritoUsuario.size) {// Recorre los elementos en el carrito del usuario
             if (carritoUsuario[i].idPedido == 0) {
                 if (carritoUsuario[i].idMenu == 0) {
                     if (carritoUsuario[i].idExtra == "") {
                         for (plato in listaPlatos) {
                             if (plato.idPlato == carritoUsuario[i].idPlato) {
-                                val itemLayout =
-                                    inflater.inflate(R.layout.item_plato, container, false)
-                                val numberPicker: NumberPicker =
-                                    itemLayout.findViewById(R.id.numberPicker)
+
+                                val itemLayout = inflater.inflate(R.layout.item_plato, container, false)
+
+                                val numberPicker: NumberPicker = itemLayout.findViewById(R.id.numberPicker)
+
                                 numberPicker.minValue = 1
                                 numberPicker.maxValue = (plato.stock * 0.1).roundToInt()
                                 numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
@@ -145,23 +150,15 @@ class Carrito(
                                     calcularTotal(view) // Actualiza la vista del precio total
                                 }
 
-                                val imgCerrarDescripcion =
-                                    itemLayout.findViewById<ImageView>(R.id.imageView5)
-                                val txtPrecioPlatoPedidos =
-                                    itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
-                                val layoutMostrarPrecioCantidad =
-                                    itemLayout.findViewById<LinearLayout>(R.id.layoutMostrarPrecioCantidad)
-                                val txtDescripcionPlatoPedidos =
-                                    itemLayout.findViewById<TextView>(R.id.txtDescripcionPlatoPedidos)
-                                val txtDescripcionPlato =
-                                    itemLayout.findViewById<TextView>(R.id.txtDescripcionPlato)
-                                val txtNombrePlato =
-                                    itemLayout.findViewById<TextView>(R.id.txtNombrePlato)
-                                val imgEliminarPlatoMenu =
-                                    itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenu)
+                                val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
+                                val txtPrecioPlatoPedidos = itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
+                                val layoutMostrarPrecioCantidad = itemLayout.findViewById<LinearLayout>(R.id.layoutMostrarPrecioCantidad)
+                                val txtDescripcionPlatoPedidos = itemLayout.findViewById<TextView>(R.id.txtDescripcionPlatoPedidos)
+                                val txtDescripcionPlato = itemLayout.findViewById<TextView>(R.id.txtDescripcionPlato)
+                                val txtNombrePlato = itemLayout.findViewById<TextView>(R.id.txtNombrePlato)
+                                val imgEliminarPlatoMenu = itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenu)
+                                val imgPlato = itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
 
-                                val imgPlato =
-                                    itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
                                 cargarImagenFirebase(imgPlato, plato.nombre)
 
                                 imgEliminarPlatoMenu.setOnClickListener {
@@ -200,11 +197,6 @@ class Carrito(
                                         }
                                 }
 
-
-
-
-
-
                                 txtNombrePlato.text = plato.nombre
                                 txtDescripcionPlatoPedidos.text = plato.descripcion
                                 txtPrecioPlatoPedidos.text = "${plato.precio}€"
@@ -233,10 +225,10 @@ class Carrito(
                     } else {
                         for (extra in listaExtras) {
                             if (extra.idExtra == carritoUsuario[i].idExtra) {
-                                val itemLayout =
-                                    inflater.inflate(R.layout.item_plato, container, false)
-                                val numberPicker: NumberPicker =
-                                    itemLayout.findViewById(R.id.numberPicker)
+
+                                val itemLayout = inflater.inflate(R.layout.item_plato, container, false)
+                                val numberPicker: NumberPicker = itemLayout.findViewById(R.id.numberPicker)
+
                                 numberPicker.minValue = 1
                                 numberPicker.maxValue = (extra.stock * 0.1).roundToInt()
                                 numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
@@ -245,23 +237,18 @@ class Carrito(
                                     precioTotal += extra.precio * diferencia // Calcula el cambio en el precio total
                                     calcularTotal(view) // Actualiza la vista del precio total
                                 }
-                                val imgCerrarDescripcion =
-                                    itemLayout.findViewById<ImageView>(R.id.imageView5)
-                                val txtPrecioPlatoPedidos =
-                                    itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
-                                val layoutMostrarPrecioCantidad =
-                                    itemLayout.findViewById<LinearLayout>(R.id.layoutMostrarPrecioCantidad)
-                                val txtDescripcionPlatoPedidos =
-                                    itemLayout.findViewById<TextView>(R.id.txtDescripcionPlatoPedidos)
-                                val txtDescripcionPlato =
-                                    itemLayout.findViewById<TextView>(R.id.txtDescripcionPlato)
-                                val txtNombrePlato =
-                                    itemLayout.findViewById<TextView>(R.id.txtNombrePlato)
-                                val imgEliminarPlatoMenu =
-                                    itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenu)
-                                val imgPlato =
-                                    itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+
+                                val imgCerrarDescripcion = itemLayout.findViewById<ImageView>(R.id.imageView5)
+                                val txtPrecioPlatoPedidos = itemLayout.findViewById<TextView>(R.id.txtPrecioPlatoPedidos)
+                                val layoutMostrarPrecioCantidad = itemLayout.findViewById<LinearLayout>(R.id.layoutMostrarPrecioCantidad)
+                                val txtDescripcionPlatoPedidos = itemLayout.findViewById<TextView>(R.id.txtDescripcionPlatoPedidos)
+                                val txtDescripcionPlato = itemLayout.findViewById<TextView>(R.id.txtDescripcionPlato)
+                                val txtNombrePlato = itemLayout.findViewById<TextView>(R.id.txtNombrePlato)
+                                val imgEliminarPlatoMenu = itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenu)
+                                val imgPlato = itemLayout.findViewById<ImageView>(R.id.imgPlatoLayout)
+
                                 cargarImagenFirebase(imgPlato, extra.nombre)
+
                                 imgEliminarPlatoMenu.setOnClickListener {
                                     db.collection("Pedido")
                                         .whereEqualTo("idUsuario", auth.currentUser?.uid)
@@ -302,6 +289,7 @@ class Carrito(
                                 txtNombrePlato.text = extra.nombre
                                 txtDescripcionPlatoPedidos.text = extra.descripcion
                                 txtPrecioPlatoPedidos.text = "${extra.precio}€"
+
                                 txtDescripcionPlato.setOnClickListener {
                                     layoutMostrarPrecioCantidad.visibility = View.GONE
                                     txtDescripcionPlatoPedidos.visibility = View.VISIBLE
@@ -320,34 +308,32 @@ class Carrito(
                                 precioTotal += extra.precio
                                 linearLayout.addView(itemLayout)
                             }
-
                         }
                     }
                 }
-
-
             }
 
         }
+
         for (j in 1 until calcularIdMenuMasAlto) {
-            val itemLayout =
-                inflater.inflate(R.layout.plantilla_menu, container, false)
+
+            val itemLayout = inflater.inflate(R.layout.plantilla_menu, container, false)
             var txtPrecio = itemLayout.findViewById<TextView>(R.id.txtPrecioMenuCarrito)
-            var itemLayoutContenedor =
-                itemLayout.findViewById<LinearLayout>(R.id.contenedorMenu)
+            var itemLayoutContenedor = itemLayout.findViewById<LinearLayout>(R.id.contenedorMenu)
             var sumarPreciosMenu: Double = 0.0
-            val imgEliminarPlatoMenu =
-                itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenuCarrito)
-            val numberPicker: NumberPicker =
-                itemLayout.findViewById(R.id.numberPicker)
+            val imgEliminarPlatoMenu = itemLayout.findViewById<ImageView>(R.id.imgEliminarPlatoMenuCarrito)
+            val numberPicker: NumberPicker = itemLayout.findViewById(R.id.numberPicker)
+
             numberPicker.minValue = 1
+
             var stockminimo = 10000
+
             numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-                val diferencia =
-                    newVal - oldVal // Obtén la diferencia entre el nuevo y el antiguo valor
+                val diferencia = newVal - oldVal // Obtén la diferencia entre el nuevo y el antiguo valor
                 precioTotal += sumarPreciosMenu * diferencia // Calcula el cambio en el precio total
                 calcularTotal(view) // Actualiza la vista del precio total
             }
+
             var contador = 0
             imgEliminarPlatoMenu.setOnClickListener {
                 db.collection("Pedido")
@@ -388,57 +374,75 @@ class Carrito(
                     }
             }
 
+            // Recorre los elementos en el carrito del usuario
             for (k in 0 until carritoUsuario.size) {
                 if (carritoUsuario[k].idPedido == 0 && carritoUsuario[k].idMenu == j) {
+                    // Verifica si el elemento en el carrito es un menú con una coincidencia en el "idMenu"
+
                     if (carritoUsuario[k].idExtra == "") {
+                        // Este bloque se ejecuta si el elemento en el carrito es un plato
+
+                        // Recorre la lista de platos
                         for (plato in listaPlatos) {
                             if (plato.idPlato == carritoUsuario[k].idPlato && plato.tipo == "Entrante") {
-                                val itemLayoutMenu =
-                                    inflater.inflate(R.layout.item_menu, container, false)
-                                val nombrePlato =
-                                    itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
-                                val txtDescripcion: TextView =
-                                    itemLayoutMenu.findViewById(R.id.txtDescripcion)
+                                // Verifica si el plato coincide con el "idPlato" y tiene un tipo "Entrante"
+
+                                // Crea una vista de menú para el plato
+                                val itemLayoutMenu = inflater.inflate(R.layout.item_menu, container, false)
+                                val nombrePlato = itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val txtDescripcion: TextView = itemLayoutMenu.findViewById(R.id.txtDescripcion)
                                 txtDescripcion.text = plato.descripcion
-                                val imgPlato =
-                                    itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
+                                val imgPlato = itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
+
+                                // Carga la imagen del plato desde Firebase
                                 if (imgPlato != null && plato.nombre.isNotEmpty()) {
                                     cargarImagenFirebase(imgPlato, plato.nombre)
                                 } else {
                                     Log.e("FirebaseStorage", "Error: imagen o nombre nulos")
                                 }
 
-
+                                // Actualiza el stock mínimo si es necesario
                                 if (plato.stock < stockminimo) {
                                     stockminimo = plato.stock
                                 }
+
+                                // Suma el precio del plato al precio total del menú
                                 sumarPreciosMenu += plato.precio
+
+                                // Configura el nombre del plato
                                 nombrePlato.text = plato.nombre
+
+                                // Incrementa el contador
                                 contador += 1
+
+                                // Agrega la vista del plato al contenedor del menú
                                 itemLayoutContenedor.addView(itemLayoutMenu)
+
+                                // Sale del bucle para evitar agregar más platos
                                 break
                             }
-
                         }
+
+                        // Repite el proceso anterior para platos principales y guarniciones
                         for (plato in listaPlatos) {
                             if (plato.idPlato == carritoUsuario[k].idPlato && plato.tipo == "PlatoPrincipal") {
-                                val itemLayoutMenu =
-                                    inflater.inflate(R.layout.item_menu, container, false)
-                                val nombrePlato =
-                                    itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
-                                val txtDescripcion: TextView =
-                                    itemLayoutMenu.findViewById(R.id.txtDescripcion)
+
+                                val itemLayoutMenu = inflater.inflate(R.layout.item_menu, container, false)
+                                val nombrePlato = itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val txtDescripcion: TextView = itemLayoutMenu.findViewById(R.id.txtDescripcion)
                                 txtDescripcion.text = plato.descripcion
-                                val imgPlato =
-                                    itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
+                                val imgPlato = itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
+
                                 if (imgPlato != null && plato.nombre.isNotEmpty()) {
                                     cargarImagenFirebase(imgPlato, plato.nombre)
                                 } else {
                                     Log.e("FirebaseStorage", "Error: imagen o nombre nulos")
                                 }
+
                                 if (plato.stock < stockminimo) {
                                     stockminimo = plato.stock
                                 }
+
                                 sumarPreciosMenu += plato.precio
                                 nombrePlato.text = plato.nombre
                                 contador += 1
@@ -449,48 +453,47 @@ class Carrito(
                         }
                         for (plato in listaPlatos) {
                             if (plato.idPlato == carritoUsuario[k].idPlato && plato.tipo == "Guarnición") {
-                                val itemLayoutMenu =
-                                    inflater.inflate(R.layout.item_menu, container, false)
-                                val nombrePlato =
-                                    itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
-                                val txtDescripcion: TextView =
-                                    itemLayoutMenu.findViewById(R.id.txtDescripcion)
+
+                                val itemLayoutMenu = inflater.inflate(R.layout.item_menu, container, false)
+                                val nombrePlato = itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val txtDescripcion: TextView = itemLayoutMenu.findViewById(R.id.txtDescripcion)
                                 txtDescripcion.text = plato.descripcion
-                                val imgPlato =
-                                    itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
+                                val imgPlato = itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
+
                                 if (imgPlato != null && plato.nombre.isNotEmpty()) {
                                     cargarImagenFirebase(imgPlato, plato.nombre)
                                 } else {
                                     Log.e("FirebaseStorage", "Error: imagen o nombre nulos")
                                 }
+
                                 if (plato.stock < stockminimo) {
                                     stockminimo = plato.stock
                                 }
+
                                 sumarPreciosMenu += plato.precio
                                 nombrePlato.text = plato.nombre
                                 contador += 1
                                 itemLayoutContenedor.addView(itemLayoutMenu)
+
                                 break
                             }
-
                         }
                     } else {
                         for (extra in listaExtras) {
                             if (extra.idExtra == carritoUsuario[k].idExtra && extra.tipo == "postre") {
-                                val itemLayoutMenu =
-                                    inflater.inflate(R.layout.item_menu, container, false)
-                                val nombrePlato =
-                                    itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
-                                val txtDescripcion: TextView =
-                                    itemLayoutMenu.findViewById(R.id.txtDescripcion)
+
+                                val itemLayoutMenu = inflater.inflate(R.layout.item_menu, container, false)
+                                val nombrePlato = itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val txtDescripcion: TextView = itemLayoutMenu.findViewById(R.id.txtDescripcion)
                                 txtDescripcion.text = extra.descripcion
-                                val imgPlato =
-                                    itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
+                                val imgPlato = itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
+
                                 if (imgPlato != null && extra.nombre.isNotEmpty()) {
                                     cargarImagenFirebase(imgPlato, extra.nombre)
                                 } else {
                                     Log.e("FirebaseStorage", "Error: imagen o nombre nulos")
                                 }
+
                                 if (extra.stock < stockminimo) {
                                     stockminimo = extra.stock
                                 }
@@ -498,33 +501,35 @@ class Carrito(
                                 nombrePlato.text = extra.nombre
                                 contador += 1
                                 itemLayoutContenedor.addView(itemLayoutMenu)
+
                                 break
                             }
 
                         }
                         for (extra in listaExtras) {
                             if (extra.idExtra == carritoUsuario[k].idExtra && extra.tipo == "bebida") {
-                                val itemLayoutMenu =
-                                    inflater.inflate(R.layout.item_menu, container, false)
-                                val nombrePlato =
-                                    itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
-                                val txtDescripcion: TextView =
-                                    itemLayoutMenu.findViewById(R.id.txtDescripcion)
+
+                                val itemLayoutMenu = inflater.inflate(R.layout.item_menu, container, false)
+                                val nombrePlato = itemLayoutMenu.findViewById<TextView>(R.id.NombrePlatoItemMenuCarrito)
+                                val txtDescripcion: TextView = itemLayoutMenu.findViewById(R.id.txtDescripcion)
                                 txtDescripcion.text = extra.descripcion
-                                val imgPlato =
-                                    itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
+                                val imgPlato = itemLayoutMenu.findViewById<ImageView>(R.id.imgPlatoLayoutMenuCarrito)
+
                                 if (imgPlato != null && extra.nombre.isNotEmpty()) {
                                     cargarImagenFirebase(imgPlato, extra.nombre)
                                 } else {
                                     Log.e("FirebaseStorage", "Error: imagen o nombre nulos")
                                 }
+
                                 if (extra.stock < stockminimo) {
                                     stockminimo = extra.stock
                                 }
+
                                 sumarPreciosMenu += extra.precio
                                 nombrePlato.text = extra.nombre
                                 contador += 1
                                 itemLayoutContenedor.addView(itemLayoutMenu)
+
                                 break
                             }
 
@@ -532,51 +537,73 @@ class Carrito(
                     }
                 }
             }
+
+            // Configura el valor máximo para el NumberPicker según el stock mínimo
             numberPicker.maxValue = (stockminimo * 0.1).roundToInt()
+
+            // Realiza cálculos y formatea el precio total del menú
             val df = DecimalFormat("#.##")
             df.roundingMode = java.math.RoundingMode.CEILING
             sumarPreciosMenu *= 0.9
             txtPrecio.text = "${df.format(sumarPreciosMenu)}€"
+
+            // Si se han agregado 5 elementos al menú, agrega la vista del menú al LinearLayout
             if (contador == 5) {
                 precioTotal += sumarPreciosMenu
                 linearLayout.addView(itemLayout)
             }
 
         }
-        calcularTotal(view)
+        calcularTotal(view)// Llama a una función para calcular el precio total general
     }
 
     private fun calcularTotal(view: View) {
+        // Busca y obtiene una referencia al TextView que muestra el precio total en la vista
         var precioTotalCarrito = view.findViewById<TextView>(R.id.precioTotalCarrito)
+
+        // Crea un formato decimal con dos decimales
         val df = DecimalFormat("#.##")
         df.roundingMode = java.math.RoundingMode.CEILING
+
+        // Formatea el precioTotal (variable global) con el formato decimal y lo asigna al TextView
         precioTotalCarrito.text = "${df.format(precioTotal)}€"
     }
 
 
+
     private fun cargarImagenFirebase(imagen: ImageView, nombre: String) {
+        // Obtiene una referencia al servicio de Firebase Storage
         val storage = Firebase.storage
         val storageReference = storage.reference
+
+        // Crea una referencia a la imagen en Firebase Storage utilizando el nombre proporcionado
         val imageRef = storageReference.child("${nombre}.jpg")
 
+        // Intenta descargar la URL de la imagen desde Firebase Storage
         imageRef.downloadUrl
             .addOnSuccessListener { uri ->
-                // uri contiene la URL de descarga de la imagen
+                // El bloque se ejecuta si la descarga de la URL es exitosa
+                // 'uri' contiene la URL de descarga de la imagen
+
+                // Convierte la URL en una cadena de texto
                 val imageUrl = uri.toString()
 
-                // Utiliza una biblioteca como Glide para cargar la imagen en un ImageView
+                // Utiliza una biblioteca llamada Glide para cargar la imagen desde la URL en el ImageView proporcionado
                 Glide.with(requireContext())
                     .load(imageUrl)
-                    .into(imagen) // 'imagen' es tu ImageView
+                    .into(imagen) // 'imagen' es el ImageView donde se mostrará la imagen
             }
             .addOnFailureListener { exception ->
-                // Manejar errores, por ejemplo, si la imagen no se pudo descargar
+                // El bloque se ejecuta si la descarga de la URL de la imagen falla
+                // Aquí puedes manejar los errores, como si la imagen no se pudo descargar
                 Log.e("FirebaseStorage", "Error al descargar la imagen: $exception")
             }
     }
 
 
+
     companion object {
+        // Esta es una función estática que se puede llamar en la clase 'Carrito' para crear una nueva instancia del fragmento.
         fun newInstance(
             param1: String,
             param2: String,
@@ -585,13 +612,25 @@ class Carrito(
             listaExtrasRe: ArrayList<Extra>
         ):
                 Carrito {
+            // Crea una nueva instancia del fragmento 'Carrito' con los parámetros proporcionados.
             val fragment = Carrito(carritoUsuarioRe, listaPlatosRe, listaExtrasRe)
+
+            // Asigna el valor del parámetro 'carritoUsuarioRe' al atributo 'carritoUsuario' de la instancia del fragmento.
             fragment.carritoUsuario = carritoUsuarioRe
+
+            // Crea un objeto Bundle para pasar datos a través de argumentos.
             val args = Bundle()
+
+            // Agrega los valores de los parámetros 'param1' y 'param2' al Bundle.
             args.putString(ARG_PARAM1, param1)
             args.putString(ARG_PARAM2, param2)
+
+            // Asigna los argumentos al fragmento.
             fragment.arguments = args
+
+            // Devuelve la instancia del fragmento 'Carrito' configurada con los parámetros.
             return fragment
         }
     }
+
 }
